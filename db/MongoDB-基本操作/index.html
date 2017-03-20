@@ -8,28 +8,36 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>MongoDB 基本操作 | SanNa&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="基本操作基本查询1db.number.find().pretty()
+  <meta name="description" content="基本操作基本查询
+以更美观的方式输出
+
+1db.number.find().pretty()
 获取数据库的所有聚合名称12&amp;gt; db.getCollectionNames();[ &amp;quot;phone_number&amp;quot;, &amp;quot;system.indexes&amp;quot; ]
 统计数据库特定聚合所有记录数量12db.phone_number.count()16119524
-获取数据库特定聚合的索引
-比如获">
+获取数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MongoDB 基本操作">
 <meta property="og:url" content="http://yoursite.com/db/MongoDB-基本操作/index.html">
 <meta property="og:site_name" content="SanNa's Blog">
-<meta property="og:description" content="基本操作基本查询1db.number.find().pretty()
+<meta property="og:description" content="基本操作基本查询
+以更美观的方式输出
+
+1db.number.find().pretty()
 获取数据库的所有聚合名称12&amp;gt; db.getCollectionNames();[ &amp;quot;phone_number&amp;quot;, &amp;quot;system.indexes&amp;quot; ]
 统计数据库特定聚合所有记录数量12db.phone_number.count()16119524
-获取数据库特定聚合的索引
-比如获">
-<meta property="og:updated_time" content="2017-03-20T05:53:04.000Z">
+获取数据">
+<meta property="og:image" content="https://ww4.sinaimg.cn/large/006tNc79gy1fdtcdrfxiej30mf0gswhj.jpg">
+<meta property="og:updated_time" content="2017-03-20T07:34:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MongoDB 基本操作">
-<meta name="twitter:description" content="基本操作基本查询1db.number.find().pretty()
+<meta name="twitter:description" content="基本操作基本查询
+以更美观的方式输出
+
+1db.number.find().pretty()
 获取数据库的所有聚合名称12&amp;gt; db.getCollectionNames();[ &amp;quot;phone_number&amp;quot;, &amp;quot;system.indexes&amp;quot; ]
 统计数据库特定聚合所有记录数量12db.phone_number.count()16119524
-获取数据库特定聚合的索引
-比如获">
+获取数据">
+<meta name="twitter:image" content="https://ww4.sinaimg.cn/large/006tNc79gy1fdtcdrfxiej30mf0gswhj.jpg">
   
     <link rel="alternative" href="/atom.xml" title="SanNa&#39;s Blog" type="application/atom+xml">
   
@@ -214,14 +222,17 @@ var _hmt = _hmt || [];
 
         
         <a href="/db/MongoDB-基本操作/" class="archive-article-date">
-  	<time datetime="2017-03-20T03:23:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-20</time>
+  	<time datetime="2016-05-20T03:23:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-05-20</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><h2 id="基本查询"><a href="#基本查询" class="headerlink" title="基本查询"></a>基本查询</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.number.find().pretty()</div></pre></td></tr></table></figure>
+        <h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><h2 id="基本查询"><a href="#基本查询" class="headerlink" title="基本查询"></a>基本查询</h2><blockquote>
+<p>以更美观的方式输出</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.number.find().pretty()</div></pre></td></tr></table></figure>
 <h2 id="获取数据库的所有聚合名称"><a href="#获取数据库的所有聚合名称" class="headerlink" title="获取数据库的所有聚合名称"></a>获取数据库的所有聚合名称</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt; db.getCollectionNames();</div><div class="line">[ &quot;phone_number&quot;, &quot;system.indexes&quot; ]</div></pre></td></tr></table></figure>
 <h2 id="统计数据库特定聚合所有记录数量"><a href="#统计数据库特定聚合所有记录数量" class="headerlink" title="统计数据库特定聚合所有记录数量"></a>统计数据库特定聚合所有记录数量</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">db.phone_number.count()</div><div class="line">16119524</div></pre></td></tr></table></figure>
 <h2 id="获取数据库特定聚合的索引"><a href="#获取数据库特定聚合的索引" class="headerlink" title="获取数据库特定聚合的索引"></a>获取数据库特定聚合的索引</h2><blockquote>
@@ -236,8 +247,10 @@ var _hmt = _hmt || [];
 <p>如果需要排序的话<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone.aggregate([&#123;$group:&#123;_id:&quot;$source&quot;, count:&#123;$sum:1&#125;&#125;&#125;,&#123;$sort:&#123;&quot;count&quot;:-1&#125;&#125;])</div><div class="line">&#123; &quot;_id&quot; : &quot;other&quot;, &quot;count&quot; : 6133225 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ly.com&quot;, &quot;count&quot; : 5235378 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;zmyzm.com&quot;, &quot;count&quot; : 1038465 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;f02.cn&quot;, &quot;count&quot; : 644959 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;shjmpt.com&quot;, &quot;count&quot; : 502440 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yzm1&quot;, &quot;count&quot; : 449854 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yma0.com&quot;, &quot;count&quot; : 417669 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;6yzm.com&quot;, &quot;count&quot; : 297152 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;taomapt.com&quot;, &quot;count&quot; : 187613 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;83r.com&quot;, &quot;count&quot; : 144898 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;kuaima9&quot;, &quot;count&quot; : 138903 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;creditease&quot;, &quot;count&quot; : 101747 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;tongdun&quot;, &quot;count&quot; : 95012 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;aliqin&quot;, &quot;count&quot; : 87845 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;maz8&quot;, &quot;count&quot; : 81461 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;xudan123.com&quot;, &quot;count&quot; : 74808 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ema6&quot;, &quot;count&quot; : 54819 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;feiq&quot;, &quot;count&quot; : 46670 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;sunvarma.com&quot;, &quot;count&quot; : 45164 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yayayama.com&quot;, &quot;count&quot; : 44941 &#125;</div></pre></td></tr></table></figure></p>
 </blockquote>
 <h2 id="MongoDB-唯一索引自动删除重复记录"><a href="#MongoDB-唯一索引自动删除重复记录" class="headerlink" title="MongoDB 唯一索引自动删除重复记录"></a>MongoDB 唯一索引自动删除重复记录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">coll.ensureIndex(&#123;productid:1&#125;) // 在productid上建立普通索引</div><div class="line">coll.ensureIndex(&#123;district:1, plate:1&#125;) // 多字段索引</div><div class="line">coll.ensureIndex(&#123;productid:1&#125;, &#123;unique:true&#125;) // 唯一索引</div><div class="line">coll.ensureIndex(&#123;productid:1&#125;, &#123;unique:true, dropDups:true&#125;) // 建索引时，如果遇到索引字段值已经出现过的情况，则删除重复记录</div><div class="line">coll.getIndexes() // 查看索引</div><div class="line">coll.dropIndex(&#123;productid:1&#125;) // 删除单个索</div></pre></td></tr></table></figure>
-<p>#Python 相关<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">import requests</div><div class="line">import json</div><div class="line">from datetime import datetime</div><div class="line">from pymongo import MongoClient</div><div class="line"></div><div class="line"></div><div class="line">&apos;&apos;&apos;连接到mongodb数据库&apos;&apos;&apos;</div><div class="line"># 使用默认链接</div><div class="line">client = MongoClient()</div><div class="line"># 数据库名为gznu_all_student_info</div><div class="line">db = client.gznu_all_student_info</div><div class="line"># 数据库中相关表记录</div><div class="line"></div><div class="line"># 学院相关信息</div><div class="line">college_collection = db.college</div><div class="line"># 班级相关信息</div><div class="line">class_collection = db.class_</div><div class="line">all_class_collection = db.all_class</div><div class="line"># 学生信息</div><div class="line">students_collection = db.students</div><div class="line"></div><div class="line">def _save_class_code(url, college_code):</div><div class="line">    &apos;&apos;&apos;将班级信息保持到数据库中&apos;&apos;&apos;</div><div class="line"></div><div class="line">    print &apos;[*] 正在将班级&#123;&#125;信息保存到数据库中&apos;.format(college_code)</div><div class="line">    info = get_info(url)</div><div class="line">    for i in json.loads(info):</div><div class="line">        for j in i[&apos;children&apos;]:</div><div class="line">            item = &#123;&#125;</div><div class="line">            item[&apos;class_code&apos;] = j[&apos;id&apos;]</div><div class="line">            item[&apos;text&apos;] = j[&apos;text&apos;]</div><div class="line">            item[&apos;college_code&apos;] = college_code</div><div class="line">            item[&apos;update&apos;] = datetime.now()</div><div class="line">            class_collection.insert(item)</div></pre></td></tr></table></figure></p>
+<h1 id="Python-相关"><a href="#Python-相关" class="headerlink" title="Python 相关"></a>Python 相关</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">import requests</div><div class="line">import json</div><div class="line">from datetime import datetime</div><div class="line">from pymongo import MongoClient</div><div class="line"></div><div class="line"></div><div class="line">&apos;&apos;&apos;连接到mongodb数据库&apos;&apos;&apos;</div><div class="line"># 使用默认链接</div><div class="line">client = MongoClient()</div><div class="line"># 数据库名为gznu_all_student_info</div><div class="line">db = client.gznu_all_student_info</div><div class="line"># 数据库中相关表记录</div><div class="line"></div><div class="line"># 学院相关信息</div><div class="line">college_collection = db.college</div><div class="line"># 班级相关信息</div><div class="line">class_collection = db.class_</div><div class="line">all_class_collection = db.all_class</div><div class="line"># 学生信息</div><div class="line">students_collection = db.students</div><div class="line"></div><div class="line">def _save_class_code(url, college_code):</div><div class="line">    &apos;&apos;&apos;将班级信息保持到数据库中&apos;&apos;&apos;</div><div class="line"></div><div class="line">    print &apos;[*] 正在将班级&#123;&#125;信息保存到数据库中&apos;.format(college_code)</div><div class="line">    info = get_info(url)</div><div class="line">    for i in json.loads(info):</div><div class="line">        for j in i[&apos;children&apos;]:</div><div class="line">            item = &#123;&#125;</div><div class="line">            item[&apos;class_code&apos;] = j[&apos;id&apos;]</div><div class="line">            item[&apos;text&apos;] = j[&apos;text&apos;]</div><div class="line">            item[&apos;college_code&apos;] = college_code</div><div class="line">            item[&apos;update&apos;] = datetime.now()</div><div class="line">            class_collection.insert(item)</div></pre></td></tr></table></figure>
 <h1 id="mongodb-config"><a href="#mongodb-config" class="headerlink" title="mongodb.config"></a>mongodb.config</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">port=27017</div><div class="line">dbpath=/data/db/</div><div class="line">fork=true</div><div class="line">logpath=/data/logs/mongodb.log</div><div class="line">logappend=true</div><div class="line">noauth=true</div><div class="line">nohttpinterface=true</div><div class="line">rest=false</div></pre></td></tr></table></figure>
+<h1 id="导入json文件数据"><a href="#导入json文件数据" class="headerlink" title="导入json文件数据"></a>导入json文件数据</h1><p>将json数据导入到blacklist的phone_number集合中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongoimport -h 127.0.0.1 -d blacklist -c phone_number --file blacklist3.json</div></pre></td></tr></table></figure></p>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtcdrfxiej30mf0gswhj.jpg" alt="mongoimport"></p>
 
       
 
@@ -357,9 +370,18 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
+    <a href="/virtualization/Docker笔记/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Docker 笔记
+        
+      </div>
+    </a>
   
-    <a href="/ml/TensorFlow环境搭建/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">TensorFlow环境搭建</div>
+  
+    <a href="/server/旁路镜像、端口镜像、旁路监控/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">旁路镜像、端口镜像、旁路监控</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -455,6 +477,14 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
@@ -472,6 +502,14 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">服务器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">流量控制</a>
               </li>
             
             <div class="clearfix"></div>
