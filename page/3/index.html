@@ -55,7 +55,7 @@ var _hmt = _hmt || [];
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfqqo84uj30cq0cyt9f.jpg" class="js-avatar">
+			<img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtkktyfd2j307305it8m.jpg" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">SanNa</a></h1>
@@ -117,7 +117,7 @@ var _hmt = _hmt || [];
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfqqo84uj30cq0cyt9f.jpg" class="js-avatar">
+				<img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtkktyfd2j307305it8m.jpg" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">SanNa</h1>
@@ -183,6 +183,212 @@ var _hmt = _hmt || [];
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-OSSIM-Add-Linux-Agent" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/OSSIM-Add-Linux-Agent/">OSSIM-Add-Linux-Agent</a>
+    </h1>
+  
+
+        
+        <a href="/sec/OSSIM-Add-Linux-Agent/" class="archive-article-date">
+  	<time datetime="2016-07-21T14:01:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>OSSIM 添加 Linux代理</p>
+</blockquote>
+<h1 id="Env-CentOS6-6"><a href="#Env-CentOS6-6" class="headerlink" title="Env CentOS6.6"></a>Env CentOS6.6</h1><blockquote>
+<p>操作方法见 <a href="https://www.alienvault.com/documentation/usm-v5/ids-configuration/deploying-alienvault-hids.htm" target="_blank" rel="external">官网</a><br>干净的CentOS需要 先安装好wget 和gcc</p>
+<h1 id="下载源码安装"><a href="#下载源码安装" class="headerlink" title="下载源码安装"></a>下载源码安装</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> wget https://bintray.com/artifact/download/ossec/ossec-hids/ossec-hids-2.8.3.tar.gz</div><div class="line">tar -zxvf ossec-hids-2.8.3.tar.gz</div><div class="line">cd ossec-hids-2.8.3</div><div class="line">bash install.sh</div></pre></td></tr></table></figure>
+<p>然后就是根据提示进行安装，</p>
+<p>提取Key到agent文件(/var/ossec/binmanage_agents)</p>
+</blockquote>
+<ol>
+<li>选择语言<br><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtez5msmgj30hi08w752.jpg" alt="选择语言"></li>
+<li>提示安装gcc<br><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtf02z6uej30gp05m0sv.jpg" alt="安装gcc"></li>
+<li>选择安装模式 agent<br><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtf0ormqgj30dg0210sj.jpg" alt="选择安装模式"><br>4.相关信息设置默认就好<br><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtf12z26gj30ag02oglh.jpg" alt="相关信息设置默认就好"><br>5.根据相关情况填入Service IP或者主机名<br>……<br>安装成功后会给出服务启动和关闭的一些命令信息<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- 已正确完成系统配置.</div><div class="line"></div><div class="line">- 要启动 OSSEC HIDS:</div><div class="line">	/var/ossec/bin/ossec-control start</div><div class="line"></div><div class="line">- 要停止 OSSEC HIDS:</div><div class="line">	/var/ossec/bin/ossec-control stop</div><div class="line"></div><div class="line">- 要查看或修改系统配置,请编辑  /var/ossec/etc/ossec.conf</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="在OSSIM-Web-端添加Agent"><a href="#在OSSIM-Web-端添加Agent" class="headerlink" title="在OSSIM Web 端添加Agent"></a>在OSSIM Web 端添加Agent</h1><blockquote>
+<p>Environment &gt; Detection&gt;HIDS &gt; Agents &gt; Agent Control &gt; Add Agent.<br>选择相应主机后 Save</p>
+</blockquote>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtf1jnsgej30fo0csdgb.jpg" alt=""></p>
+<blockquote>
+<p>提取Key到agent文件(/var/ossec/binmanage_agents)</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtf1wzmrpj30y804d3yu.jpg" alt=""></p>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtf251g2hj30dp051aa8.jpg" alt=""></p>
+<blockquote>
+<p>agent启动成功</p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtf2dfr6aj30d803374d.jpg" alt="">)</p>
+<blockquote>
+<p>然后可在OSSIM中看到该Agent相关信息</p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtf2lyaobj30ea0ar74p.jpg" alt=""></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">OSSIM</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/OSSIM-Add-Linux-Agent/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-OSSIM-GNOME-GUIDE" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/OSSIM-GNOME-GUIDE/">OSSIM-GNOME-GUIDE</a>
+    </h1>
+  
+
+        
+        <a href="/sec/OSSIM-GNOME-GUIDE/" class="archive-article-date">
+  	<time datetime="2016-07-20T11:57:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="修改源列表"><a href="#修改源列表" class="headerlink" title="修改源列表"></a>修改源列表</h1><blockquote>
+<p>由于Gnome较大，所以使用国内源，放在文件最前面</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/apt/sources.list</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">deb http://mirrors.ustc.edu.cn/debian jessie main contrib non-free</div><div class="line">deb-src http://mirrors.ustc.edu.cn/debian jessie main contrib non-free</div><div class="line">deb http://mirrors.ustc.edu.cn/debian jessie-proposed-updates main contrib non-free</div><div class="line">deb-src http://mirrors.ustc.edu.cn/debian jessie-proposed-updates main contrib non-free</div><div class="line">deb http://mirrors.ustc.edu.cn/debian jessie-updates main contrib non-free</div><div class="line">deb-src http://mirrors.ustc.edu.cn/debian jessie-updates main contrib non-free</div></pre></td></tr></table></figure>
+<h1 id="更新系统"><a href="#更新系统" class="headerlink" title="更新系统"></a>更新系统</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get update</div></pre></td></tr></table></figure>
+<h1 id="安装Gnome环境"><a href="#安装Gnome环境" class="headerlink" title="安装Gnome环境"></a>安装Gnome环境</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get install gnome</div><div class="line">apt-get install xserver-xorg</div></pre></td></tr></table></figure>
+<h1 id="安装FVWM环境"><a href="#安装FVWM环境" class="headerlink" title="安装FVWM环境"></a>安装FVWM环境</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install x-window-system-core fvwm</div></pre></td></tr></table></figure>
+<h1 id="解决单列用户模式"><a href="#解决单列用户模式" class="headerlink" title="解决单列用户模式"></a>解决单列用户模式</h1><blockquote>
+<p>vim /boot/grub/grub.cfg<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">修改 set timeout=0,值为5~10之间都OK</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="允许Root用户登录"><a href="#允许Root用户登录" class="headerlink" title="允许Root用户登录"></a>允许Root用户登录</h1><blockquote>
+<p>进入/etc/pam.d/gdm3目录 找到相应文件 注释掉如下两行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./gdm-autologin:3:auth	required	pam_succeed_if.so user != root quiet_success</div><div class="line">./gdm-password:3:auth	required	pam_succeed_if.so user != root quiet_success</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="启动图形界面"><a href="#启动图形界面" class="headerlink" title="启动图形界面"></a>启动图形界面</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">init 2</div><div class="line">service gdm3 restart</div><div class="line">service gdm3 start</div></pre></td></tr></table></figure>
+<h1 id="删除相应deb文件"><a href="#删除相应deb文件" class="headerlink" title="删除相应deb文件"></a>删除相应deb文件</h1><blockquote>
+<p>由于Gnome相关文件较大，安装结束后为了节省磁盘空间我们删除相关deb文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rm /var/cache/apt/archives/*.deb</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h1><blockquote>
+<p>磁盘空间<br>实际环境500GB 到2T<br>相关版本changelog<br><a href="https://www.alienvault.com/forums/discussion/7242/" target="_blank" rel="external">https://www.alienvault.com/forums/discussion/7242/</a></p>
+</blockquote>
+<p><a href="http://infosec.blog.51cto.com/226250/1554614" target="_blank" rel="external">汉化 </a><br><a href="http://chenguang.blog.51cto.com/350944/d-10" target="_blank" rel="external">李晨光-51CTO博客</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">OSSIM</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/OSSIM-GNOME-GUIDE/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   
     <article id="post-Linux取证分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -767,6 +973,83 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-kali-install-VPN-Client" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/others/kali-install-VPN-Client/">Kali install VPN Client</a>
+    </h1>
+  
+
+        
+        <a href="/others/kali-install-VPN-Client/" class="archive-article-date">
+  	<time datetime="2016-03-20T12:05:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-03-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">apt-get install network-manager-openvpn-gnome</div><div class="line">apt-get install network-manager-pptp</div><div class="line">apt-get install network-manager-pptp-gnome</div><div class="line">apt-get install network-manager-strongswan</div><div class="line">apt-get install network-manager-vpnc</div><div class="line">apt-get install network-manager-vpnc-gnome</div><div class="line">/etc/init.d/network-manager restart</div><div class="line"></div><div class="line">如果连接不上请注意VPN协议，连接PPTP协议可以试试将高级——使用点对点加密和发送PPP回响包勾选。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Kali 2.0源列表</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">deb http://http.kali.org/kali sana main non-free contrib</div><div class="line">deb http://security.kali.org/kali-security sana/updates main contrib non-free</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/others/kali-install-VPN-Client/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-旁路镜像、端口镜像、旁路监控" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1073,284 +1356,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Xen-Server安装教程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Xen-Server安装教程/">Xen Server安装教程</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Xen-Server安装教程/" class="archive-article-date">
-  	<time datetime="2015-12-20T12:14:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-12-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>安装环境VMware<br>首先下载 <a href="http://downloadns.citrix.com.edgesuite.net/11616/XenServer-7.0.0-main.iso" target="_blank" rel="external">IOS安装包</a></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">配置信息如下</div></pre></td></tr></table></figure>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1d" alt="配置信息"></p>
-<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">键盘选项默认，点OK继续</div></pre></td></tr></table></figure>
-<p>![<a href="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f19" target="_blank" rel="external">键盘</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">保持默认</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1c" alt="保持默认"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">accept 用户许可协议</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d28" alt="accept EULA"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">磁盘信息</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>默认虚拟存储为sda，点OK继续：</p>
-</blockquote>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d27" alt="磁盘信息"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">使用本地介质安装</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1a" alt="使用本地介质安装"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">不安装增强包</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d25" alt="不安装增强包"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">跳过测试</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=581560c4ab644162e1003f33" alt="跳过测试"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root密码</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=581560daab644164d4003d4d" alt="root密码"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">网络设置</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>测试使用，我就用DHCP了……</p>
-</blockquote>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1b" alt="图片标题"><br><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d26" alt="图片标题"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">时区设置</div><div class="line">asia</div><div class="line">shagnhai</div></pre></td></tr></table></figure>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58156109ab644162e1003f36" alt="时区设置"><br><img src="https://leanote.com/api/file/getImage?fileId=58156120ab644162e1003f3a" alt="时区设置"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">时间服务器</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58156134ab644162e1003f3e" alt="时间服务器"></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=5815613fab644162e1003f3f" alt="时间服务器"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">开始安装</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=5815614fab644162e1003f44" alt="开始安装"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">安装完成</div></pre></td></tr></table></figure>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58156196ab644164d4003d62" alt="安装完成"><br><img src="https://leanote.com/api/file/getImage?fileId=5815619eab644164d4003d63" alt="用户登录"><br><img src="https://leanote.com/api/file/getImage?fileId=581561a7ab644162e1003f48" alt="Web端显示"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Xen-Server安装教程/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Xen与Kvm" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Xen与Kvm/">Xen与Kvm</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Xen与Kvm/" class="archive-article-date">
-  	<time datetime="2015-11-14T14:07:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-11-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Xen"><a href="#Xen" class="headerlink" title="Xen"></a>Xen</h1><blockquote>
-<p>是半虚拟化技术，也叫做准虚拟化技术<br>从性能和成熟度上而言，XEN要优于KVM<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XEN是在全虚拟化的基础上，把客户操作系统进行了修改，增加了一个专门的API，使客户操作系统集成了虚拟化方面的代码，该方法无需重新编译或引起陷阱，因为操作系统自身能够与虚拟进程进行很好的协作</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h1 id="KVM"><a href="#KVM" class="headerlink" title="KVM"></a>KVM</h1><blockquote>
-<p>是完全虚拟化技术，又叫硬件辅助虚拟化技术<br>使用Linux内核集成的，所以速度较快<br>KVM最大的好处就在于它是与Linux内核集成的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">KVM是在虚拟机和硬件之间加了一个软件层--Hypervisor，或者叫做虚拟机管理程序（VMM），KVM的hypervisor是直接运行在物理硬件之上的</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h4 id="其他文章"><a href="#其他文章" class="headerlink" title="其他文章"></a>其他文章</h4><blockquote>
-<p><a href="http://mp.weixin.qq.com/s?src=3&amp;timestamp=1472202121&amp;ver=1&amp;signature=AukYgkzADsAPcorAY6IO3ic-Mmab2CZsAmGgj2rdY6rVieHuOA*23OUQIVitsyfbwvZ7Pvq16eoeYojt3MhygPRx7j14m43T8aylI6hAlBlGk7gnpdY7ZASUZWK0RlHtdqvEIIEVGO1LYPYW0GTlENfWXRyCyo1v6f7U4dJVhT8=" target="_blank" rel="external">虚拟化技术对比：Xen vs KVM</a></p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Xen与Kvm/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Perl-学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/others/Perl-学习笔记/">Perl 学习笔记</a>
-    </h1>
-  
-
-        
-        <a href="/others/Perl-学习笔记/" class="archive-article-date">
-  	<time datetime="2015-08-10T03:25:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-08-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="交互式环境"><a href="#交互式环境" class="headerlink" title="交互式环境"></a>交互式环境</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜  ~ perl -e</div><div class="line">No code specified for -e.</div><div class="line">➜  ~ perl -e &apos;print &quot;Hello World&quot;&apos;</div><div class="line">Hello World%                                                                    </div><div class="line">➜  ~ perl -e &apos;print &quot;Hello World\n&quot;&apos;</div><div class="line">Hello World</div></pre></td></tr></table></figure>
-<h1 id="脚本式编程与注射"><a href="#脚本式编程与注射" class="headerlink" title="脚本式编程与注射"></a>脚本式编程与注射</h1><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/perl</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#This is single-line comments.</span></div><div class="line"><span class="keyword">print</span> <span class="string">"Hello, World\n"</span>;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">=pod comments</span></div><div class="line">This is multiline comment</div><div class="line">This is multiline comment</div><div class="line">This is multiline comment</div><div class="line">This is multiline comment</div><div class="line">=cut</div></pre></td></tr></table></figure>
-<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><blockquote>
-<p>Perl 是一种弱类型语言，所以变量不需要指定类型，Perl 解释器会根据上下文自动选择匹配类型。<br>三个基本的数据类型：标量、数组、哈希<br>Perl 为每个变量类型设置了独立的命令空间，所以不同类型的变量可以使用相同的名称，如 $foo 和 @foo 是两个不同的变量。</p>
-<h2 id="标量"><a href="#标量" class="headerlink" title="标量"></a>标量</h2><p>在变量名前加$表示是标量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#number</div><div class="line">$my_number=123;</div><div class="line"></div><div class="line">#string</div><div class="line">$my_str=&quot;123&quot;;</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h3 id="标量运算"><a href="#标量运算" class="headerlink" title="标量运算"></a>标量运算</h3><blockquote>
-<p>.可以用来链接两个标量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">print ( &quot;$my_number . $my_str\n&quot;);</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h3 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h3><blockquote>
-<p>分别表示当前执行脚本的文件名，行号，包名。<br>这些特殊字符是单独的标记，不能写在字符串中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">print &quot;FileName:&quot; . &quot;\t&quot;.__FILE__.&quot;\n&quot;;</div><div class="line">print &quot;LineNumber:&quot; . &quot;\t&quot;.__LINE__.&quot;\n&quot;;</div><div class="line">print &quot;PackageName:&quot; . &quot;\t&quot;.__PACKAGE__.&quot;\n&quot;;</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">FileName:	run.pl</div><div class="line">LineNumber:	28</div><div class="line">PackageName:	main</div></pre></td></tr></table></figure>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><blockquote>
-<p>数组变量以字符”@”开头，索引从0开始<br>也可以以 qw 开始定义数组</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@arr=(2,3,5);</div><div class="line">print @arr[2];</div><div class="line">@array = qw/这是 一个 数组/;</div></pre></td></tr></table></figure>
-<h3 id="数组序列号"><a href="#数组序列号" class="headerlink" title="数组序列号"></a>数组序列号</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ perl -e &quot;print(&quot;1..10&quot;,&quot;\n&quot;)&quot;</div><div class="line">12345678910n%</div></pre></td></tr></table></figure>
-<h2 id="哈希"><a href="#哈希" class="headerlink" title="哈希"></a>哈希</h2><blockquote>
-<p>哈希是一个无序的 key/value 对集合。可以使用键作为下标获取值<br>类似Python的字典<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">%hash=(&apos;name&apos;=&gt;&apos;LongLi&apos;,&apos;age&apos;=&gt;18);</div><div class="line">print  (%hash&#123;&apos;name&apos;&#125;, &quot;\n&quot;);</div><div class="line">print  (%hash&#123;&apos;age&apos;&#125;, &quot;\n&quot;);</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  test  ./run.pl  </div><div class="line">Hello, World</div><div class="line">nameLongLi</div><div class="line">age18</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Perl</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/others/Perl-学习笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 
@@ -1441,14 +1449,6 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
@@ -1457,11 +1457,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
+                <a href="javascript:void(0)" class="js-tag color3">安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">LVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
               </li>
              
               <li class="article-tag-list-item">
