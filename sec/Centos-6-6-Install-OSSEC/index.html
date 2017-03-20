@@ -6,17 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2015/7 | SanNa&#39;s Blog</title>
+  <title>Centos 6.6 Install OSSEC | SanNa&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Pythoner|机器学习|数据挖掘|安全|运维|开发|Linuxer">
-<meta property="og:type" content="website">
-<meta property="og:title" content="SanNa's Blog">
-<meta property="og:url" content="http://yoursite.com/archives/2015/07/index.html">
+  <meta name="description" content="前言
+OSSEC是一款开源的基于主机的入侵检测系统，可以简称为HIDS。它具备日志分析，文件完整性检查，策略监控，rootkit检测，实时报警以及联动响应等功能。它支持多种操作系统：Linux、Windows、MacOS、Solaris、HP-UX、AIX。属于企业安全之利器。
+环境CentOS 6.6
+安装关联库和软件首先我们安装需要用到的关联库和软件，由于我们最终是需要把日志导入到MySQL中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Centos 6.6 Install OSSEC">
+<meta property="og:url" content="http://yoursite.com/sec/Centos-6-6-Install-OSSEC/index.html">
 <meta property="og:site_name" content="SanNa's Blog">
-<meta property="og:description" content="Pythoner|机器学习|数据挖掘|安全|运维|开发|Linuxer">
+<meta property="og:description" content="前言
+OSSEC是一款开源的基于主机的入侵检测系统，可以简称为HIDS。它具备日志分析，文件完整性检查，策略监控，rootkit检测，实时报警以及联动响应等功能。它支持多种操作系统：Linux、Windows、MacOS、Solaris、HP-UX、AIX。属于企业安全之利器。
+环境CentOS 6.6
+安装关联库和软件首先我们安装需要用到的关联库和软件，由于我们最终是需要把日志导入到MySQL中">
+<meta property="og:updated_time" content="2017-03-20T10:24:20.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SanNa's Blog">
-<meta name="twitter:description" content="Pythoner|机器学习|数据挖掘|安全|运维|开发|Linuxer">
+<meta name="twitter:title" content="Centos 6.6 Install OSSEC">
+<meta name="twitter:description" content="前言
+OSSEC是一款开源的基于主机的入侵检测系统，可以简称为HIDS。它具备日志分析，文件完整性检查，策略监控，rootkit检测，实时报警以及联动响应等功能。它支持多种操作系统：Linux、Windows、MacOS、Solaris、HP-UX、AIX。属于企业安全之利器。
+环境CentOS 6.6
+安装关联库和软件首先我们安装需要用到的关联库和软件，由于我们最终是需要把日志导入到MySQL中">
   
     <link rel="alternative" href="/atom.xml" title="SanNa&#39;s Blog" type="application/atom+xml">
   
@@ -182,75 +192,203 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Centos-6-6-Install-OSSEC" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/virtualization/Docker-跨主机连接/" class="archive-article-date">
-  	<time datetime="2015-07-03T11:47:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-07-03</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/virtualization/Docker-跨主机连接/">Docker-跨主机连接</a>
+    <h1 class="article-title" itemprop="name">
+      Centos 6.6 Install OSSEC
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/sec/Centos-6-6-Install-OSSEC/" class="archive-article-date">
+  	<time datetime="2016-08-20T10:22:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
+<p>OSSEC是一款开源的基于主机的入侵检测系统，可以简称为HIDS。它具备日志分析，文件完整性检查，策略监控，rootkit检测，实时报警以及联动响应等功能。它支持多种操作系统：Linux、Windows、MacOS、Solaris、HP-UX、AIX。属于企业安全之利器。</p>
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>CentOS 6.6</p>
+<h1 id="安装关联库和软件"><a href="#安装关联库和软件" class="headerlink" title="安装关联库和软件"></a>安装关联库和软件</h1><p>首先我们安装需要用到的关联库和软件，由于我们最终是需要把日志导入到MySQL中进行分析，以及需要通过web程序对报警结果进行展示，同时需要把本机当做SMTP，所以需要在本机安装MySQL、Apache和sendmail服务。在当前的终端中执行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install wget gcc make mysql mysql-server mysql-devel httpd php php-mysql sendmail</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@ossec-server ~]# /etc/init.d/httpd start</div><div class="line">[root@ossec-server ~]# /etc/init.d/mysqld start</div><div class="line">[root@ossec-server ~]# /etc/init.d/sendmail start</div></pre></td></tr></table></figure>
+<h2 id="Mysql相关配置"><a href="#Mysql相关配置" class="headerlink" title="Mysql相关配置"></a>Mysql相关配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@ossec-server ~]# mysql -uroot -p</div><div class="line">mysql&gt; create database ossec;</div><div class="line">mysql&gt; grant INSERT,SELECT,UPDATE,CREATE,DELETE,EXECUTE on ossec.* to ossec@localhost;</div><div class="line">mysql&gt; set password for ossec@localhost=PASSWORD(&apos;ossec&apos;);</div><div class="line">mysql&gt; flush privileges;</div><div class="line">mysql&gt; exit</div></pre></td></tr></table></figure>
+<h1 id="安装OSSEC服务端"><a href="#安装OSSEC服务端" class="headerlink" title="安装OSSEC服务端"></a>安装OSSEC服务端</h1><blockquote>
+<p>首先通过官网的链接下载当前的最新稳定版本 2.8.3 的服务端包，同时解压。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">wget https://akamai.bintray.com/87/87c7a1904d5c08c7cff3e42bd47c055b14b08faa?__gda__=exp=1465265745~hmac=3dacb2ddfc1c2aff8eeeff60f6c1ec8cbebf3dab98370b6894f3d87399be85ed&amp;response-content-disposition=attachment%3Bfilename%3D%22ossec-hids-2.8.3.tar.gz%22&amp;response-content-type=application%2Fgzip</div><div class="line"></div><div class="line">重命名文件</div><div class="line">mv 87c7a1904d5c08c7cff3e42bd47c055b14b08faa\?__gda__\=exp\=1465265745~hmac\=3dacb2ddfc1c2aff8eeeff60f6c1ec8cbebf3dab98370b6894f3d87399be85ed ossec.tar.gz</div><div class="line">解压</div><div class="line">[root@CentOS-6 ~]<span class="comment"># tar -zxf ossec.tar.gz</span></div><div class="line">[root@CentOS-6 ~]<span class="comment"># ls</span></div><div class="line">–                                         ossec-hids-2.8.3</div><div class="line">anaconda-ks.cfg                           ossec.tar.gz</div></pre></td></tr></table></figure>
+<blockquote>
+<p>为了使OSSEC支持MySQL，需要在安装前执行make setdb命令，如下</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 ossec-hids-2.8.3]<span class="comment"># cd src</span></div><div class="line">[root@CentOS-6 src]<span class="comment"># ls</span></div><div class="line">addagent      error_messages    LOCATION      os_crypto    os_regex   syscheckd</div><div class="line">agentlessd    external          logcollector  os_csyslogd  os_xml     tests</div><div class="line">analysisd     headers           Makeall       os_dbd       os_zlib    util</div><div class="line">client-agent  init              Makefile      os_execd     remoted    VERSION</div><div class="line">config        InstallAgent.sh   monitord      os_maild     rootcheck  win32</div><div class="line">Config.Make   InstallServer.sh  os_auth       os_net       shared</div><div class="line">[root@CentOS-6 src]<span class="comment"># make setdb</span></div><div class="line">Info: Compiled with MySQL support.</div><div class="line">Info: Compiled with PostgreSQL support.</div><div class="line">[root@CentOS-6 src]<span class="comment"># cd ..</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>执行安装脚本</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 ossec-hids-2.8.3]# ./install.sh</div><div class="line">which: no host in (/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)</div><div class="line"></div><div class="line">  ** Para instalação em português, escolha [br].</div><div class="line">  ** 要使用中文进行安装, 请选择 [cn].</div><div class="line">  ** Fur eine deutsche Installation wohlen Sie [de].</div><div class="line">  ** Για εγκατάσταση στα Ελληνικά, επιλέξτε [el].</div><div class="line">  ** For installation in English, choose [en].</div><div class="line">  ** Para instalar en Español , eliga [es].</div><div class="line">  ** Pour une installation en français, choisissez [fr]</div><div class="line">  ** A Magyar nyelvű telepítéshez válassza [hu].</div><div class="line">  ** Per l&apos;installazione in Italiano, scegli [it].</div><div class="line">  ** 日本語でインストールします．選択して下さい．[jp].</div><div class="line">  ** Voor installatie in het Nederlands, kies [nl].</div><div class="line">  ** Aby instalować w języku Polskim, wybierz [pl].</div><div class="line">  ** Для инструкций по установке на русском ,введите [ru].</div><div class="line">  ** Za instalaciju na srpskom, izaberi [sr].</div><div class="line">  ** Türkçe kurulum için seçin [tr].</div><div class="line">  (en/br/cn/de/el/es/fr/hu/it/jp/nl/pl/ru/sr/tr) [en]: cn</div><div class="line">which: no host in (/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>安装完成标识</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">感谢使用 OSSEC HIDS. 如果您有任何疑问,建议或您找到任何bug, 请通过　contact@ossec.net 或邮件列表 ossec-list@ossec.net 联系我们.</div><div class="line">( http://www.ossec.net/en/mailing_lists.html ).</div><div class="line"></div><div class="line">您可以在　http://www.ossec.net 获得更多信息</div><div class="line"></div><div class="line">--- 请按　ENTER 结束安装 (下面可能有更多信息). ---</div><div class="line"></div><div class="line">直到碰到上面内容，说明安装完成。</div></pre></td></tr></table></figure>
+<h1 id="配置服务端，使其工作正常"><a href="#配置服务端，使其工作正常" class="headerlink" title="配置服务端，使其工作正常"></a>配置服务端，使其工作正常</h1><blockquote>
+<p>执行下面命令启用数据库支持<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 bin]# /var/ossec/bin/ossec-control enable database</div></pre></td></tr></table></figure></p>
+<p>导入MySQL表结构到MySQL中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 bin]# mysql -uossec -p ossec &lt; ~/ossec-hids-2.8.3/src/os_dbd/mysql.schema</div></pre></td></tr></table></figure></p>
+<p>修改部分配置文件的权限，否则会启动服务失败：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 etc]# chmod u+w /var/ossec/etc/ossec.conf</div></pre></td></tr></table></figure></p>
+<p>启动服务</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 /]<span class="comment"># /etc/init.d/ossec-hids start</span></div><div class="line">Starting ossec-hids:                                       [确定]</div></pre></td></tr></table></figure>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtefu6qezj30b20czwf1.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">OSSEC</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/sec/Centos-6-6-Install-OSSEC/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/devops/FreeRADIUS/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          FreeRADIUS
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/sec/Demo-MSF检测指定服务的漏洞/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">[Demo] MSF检测指定服务的漏洞</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -273,8 +411,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

