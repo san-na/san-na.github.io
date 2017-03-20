@@ -776,6 +776,214 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-Docker-SSH" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/virtualization/Docker-SSH/">Docker-SSH</a>
+    </h1>
+  
+
+        
+        <a href="/virtualization/Docker-SSH/" class="archive-article-date">
+  	<time datetime="2016-01-20T11:55:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-01-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><blockquote>
+<p>使用一个ubuntu，配置好ssh服务再打包成image</p>
+<h1 id="使用commit构建"><a href="#使用commit构建" class="headerlink" title="使用commit构建"></a>使用commit构建</h1><h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>docker run -it ubuntu:14.04 /bin/bash<br>更新镜像并安装ssh-server<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get updte</div><div class="line">apt-get install openssh-server</div></pre></td></tr></table></figure></p>
+<p>配置ssh</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p /var/run/sshd</div><div class="line">/usr/sbin/sshd -D &amp;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>检查ssh是否运行成功的命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -tunlp</div></pre></td></tr></table></figure></p>
+<p>pam登录限制<br>vim /etc/pam.d/sshd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">注释掉</div><div class="line">session required pam_loginuid.so的</div></pre></td></tr></table></figure></p>
+<p>如果要使用密码进行ssh认证的话<br>vim /etc/ssh/sshd_config<br>取消注释<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PasswordAuthentication yes</div></pre></td></tr></table></figure></p>
+<p>使用密钥认证的话<br>在auchorized_keys文件中写入ssh client的id_rsa.pub内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /root/.ssh</div><div class="line">vi /root/.ssh/auchorized_keys</div></pre></td></tr></table></figure></p>
+<p>创建自动启动SSH脚本</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vi /run.sh</div><div class="line">chmod +x run.sh</div></pre></td></tr></table></figure>
+<blockquote>
+<p>文件内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">/usr/sbin/sshd -D</div></pre></td></tr></table></figure></p>
+<p>退出容器</p>
+<h2 id="保存镜像"><a href="#保存镜像" class="headerlink" title="保存镜像"></a>保存镜像</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker commit eb6bf1856445 sshd:ubuntu2</div></pre></td></tr></table></figure>
+<p>查看生成的镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  .ssh docker images sshd:ubuntu2</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">sshd                ubuntu2             d9a07f6fd3f8        34 minutes ago      283.6 MB</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="使用SSH-Server镜像"><a href="#使用SSH-Server镜像" class="headerlink" title="使用SSH Server镜像"></a>使用SSH Server镜像</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -p 10000:22 -d sshd:ubuntu2 /run.sh</div></pre></td></tr></table></figure>
+<blockquote>
+<p>镜像启动成功</p>
+<p>使用密码登录成功</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgpatq43j30jc0d90tu.jpg" alt="使用密码登录"></p>
+<blockquote>
+<p>使用密钥登录成功</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgpz1xerj30jv0dhwfw.jpg" alt="使用密钥登录成功"></p>
+<h1 id="使用Dockerfile构建"><a href="#使用Dockerfile构建" class="headerlink" title="使用Dockerfile构建"></a>使用Dockerfile构建</h1><blockquote>
+<p>在宿主主机中创建相关文件</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir test_ssh_in_docker</div><div class="line">cd test_ssh_in_docker</div><div class="line">touch Dockerfile run.sh</div></pre></td></tr></table></figure>
+<blockquote>
+<p>cat run.sh</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vi /run.sh</div><div class="line">chmod +x run.sh</div></pre></td></tr></table></figure>
+<blockquote>
+<p>cat Dockerfile</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">➜  test_ssh_in_docker cat Dockerfile</div><div class="line">FROM ubuntu:14.04</div><div class="line"></div><div class="line">MAINTAINER by tp.</div><div class="line"></div><div class="line">RUN apt-get -qq update -y</div><div class="line"></div><div class="line"><span class="comment">#install SSH-Server</span></div><div class="line">RUN apt-get -qq install openssh-server -y</div><div class="line">RUN mkdir -p /var/run/sshd</div><div class="line">RUN mkdir -p /root/.ssh</div><div class="line">RUN sed -ri <span class="string">'s/session required pam_loginuid.so/#session required pam.loginuid.so/g'</span> /etc/pam.d/sshd</div><div class="line"></div><div class="line"><span class="comment">#copy ssh server config file</span></div><div class="line">ADD authorized_keys /root/.ssh/authorized_keys</div><div class="line">ADD run.sh /run.sh</div><div class="line">RUN chmod 755 /run.sh</div><div class="line"></div><div class="line"><span class="comment">#open ssh port</span></div><div class="line">EXPOSE 22</div><div class="line"></div><div class="line"><span class="comment">#start sshd server</span></div><div class="line">CMD [<span class="string">"/run.sh"</span>]</div></pre></td></tr></table></figure>
+<blockquote>
+<p>目录下所有文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  test_ssh_in_docker ls</div><div class="line">authorized_keys  Dockerfile  run.sh</div></pre></td></tr></table></figure></p>
+<p>build镜像<br>➜  test_ssh_in_docker docker build -t sshd:dockerfile3 .</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgqdrgbzj30rh0kv75x.jpg" alt="build镜像"></p>
+<blockquote>
+<p>创建容器并SSH<br>docker run -d -p 10244:22 sshd:dockerfile3<br>ssh 127.0.0.1 -p 10244</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgqpn3s4j310l0dcq50.jpg" alt="ssh success"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/virtualization/Docker-SSH/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Xen与Kvm" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/virtualization/Xen与Kvm/">Xen与Kvm</a>
+    </h1>
+  
+
+        
+        <a href="/virtualization/Xen与Kvm/" class="archive-article-date">
+  	<time datetime="2015-11-14T14:07:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-11-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Xen"><a href="#Xen" class="headerlink" title="Xen"></a>Xen</h1><blockquote>
+<p>是半虚拟化技术，也叫做准虚拟化技术<br>从性能和成熟度上而言，XEN要优于KVM<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XEN是在全虚拟化的基础上，把客户操作系统进行了修改，增加了一个专门的API，使客户操作系统集成了虚拟化方面的代码，该方法无需重新编译或引起陷阱，因为操作系统自身能够与虚拟进程进行很好的协作</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="KVM"><a href="#KVM" class="headerlink" title="KVM"></a>KVM</h1><blockquote>
+<p>是完全虚拟化技术，又叫硬件辅助虚拟化技术<br>使用Linux内核集成的，所以速度较快<br>KVM最大的好处就在于它是与Linux内核集成的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">KVM是在虚拟机和硬件之间加了一个软件层--Hypervisor，或者叫做虚拟机管理程序（VMM），KVM的hypervisor是直接运行在物理硬件之上的</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h4 id="其他文章"><a href="#其他文章" class="headerlink" title="其他文章"></a>其他文章</h4><blockquote>
+<p><a href="http://mp.weixin.qq.com/s?src=3&amp;timestamp=1472202121&amp;ver=1&amp;signature=AukYgkzADsAPcorAY6IO3ic-Mmab2CZsAmGgj2rdY6rVieHuOA*23OUQIVitsyfbwvZ7Pvq16eoeYojt3MhygPRx7j14m43T8aylI6hAlBlGk7gnpdY7ZASUZWK0RlHtdqvEIIEVGO1LYPYW0GTlENfWXRyCyo1v6f7U4dJVhT8=" target="_blank" rel="external">虚拟化技术对比：Xen vs KVM</a></p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/virtualization/Xen与Kvm/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Perl-学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1001,196 +1209,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Docker-容器间通信" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker-容器间通信/">Docker-容器间通信</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker-容器间通信/" class="archive-article-date">
-  	<time datetime="2015-06-19T22:35:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="pipework"><a href="#pipework" class="headerlink" title="pipework"></a>pipework</h1><blockquote>
-<p><a href="https://github.com/jpetazzo/pipework" target="_blank" rel="external">https://github.com/jpetazzo/pipework</a></p>
-<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>在同一宿主主机中创建两台容器，通过pipework创建网桥进行通讯</p>
-<h4 id="c1"><a href="#c1" class="headerlink" title="c1"></a>c1</h4><p>docker run –name c1 -it ubuntu:14.04</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtfx8vx82j30hc0ad75b.jpg" alt="c1"></p>
-<h4 id="c2"><a href="#c2" class="headerlink" title="c2"></a>c2</h4><blockquote>
-<p>docker run –name c2 -it ubuntu:14.04</p>
-</blockquote>
-<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtfxkm169j30gy0abgmm.jpg" alt="c2"></p>
-<blockquote>
-<p>创建网桥<br>git clone <a href="https://github.com/jpetazzo/pipework.git" target="_blank" rel="external">https://github.com/jpetazzo/pipework.git</a></p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  pipework git:(master) ./pipework br1 c1 192.168.11.1/24</div><div class="line">➜  pipework git:(master) ./pipework br1 c2 192.168.11.2/24</div><div class="line"> brctl show</div></pre></td></tr></table></figure>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfxvtbynj30i20a0my7.jpg" alt="创建网桥"></p>
-<blockquote>
-<p>效果图</p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtfy8sij4j311n0hq0wt.jpg" alt="效果图"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker-容器间通信/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Docker构建镜像-Dockerfile" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker构建镜像-Dockerfile/">Docker构建镜像-Dockerfile</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker构建镜像-Dockerfile/" class="archive-article-date">
-  	<time datetime="2015-03-27T14:25:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="通过dockerfile构建镜像"><a href="#通过dockerfile构建镜像" class="headerlink" title="通过dockerfile构建镜像"></a>通过dockerfile构建镜像</h1><blockquote>
-<p>Docker提供了一种标准化的DSL，你只需要编写一个Dockerfile，运行docker build指令，就可以构建自己的Image<br>Dockerfile指令<br><a href="https://docs.docker.com/engine/reference/builder/" target="_blank" rel="external">https://docs.docker.com/engine/reference/builder/</a></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo cat Dockerfile</div><div class="line">FROM debian</div><div class="line">RUN echo &quot;Hello docker!&quot;</div><div class="line">RUN apt-get update &amp;&amp; apt-get install -y \</div><div class="line">nginx</div><div class="line">RUN echo &apos;Nginx install success&apos; &gt; /var/www/html/index.html</div><div class="line">EXPOSE 80</div></pre></td></tr></table></figure>
-<blockquote>
-<p>构建镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo docker build -t=&quot;debian/nginx:2&quot; .</div><div class="line">Sending build context to Docker daemon 2.048 kB</div><div class="line">Step 1 : FROM debian</div><div class="line"> ---&gt; 1b01529cc499</div><div class="line">Step 2 : RUN echo &quot;Hello docker!&quot;</div><div class="line"> ---&gt; Using cache</div><div class="line"> ---&gt; 3791785c0268</div><div class="line">Step 3 : RUN apt-get update &amp;&amp; apt-get install -y nginx</div><div class="line"> ---&gt; Using cache</div><div class="line"> ---&gt; 47fcc445f762</div><div class="line">****************************************</div><div class="line">Successfully built 26eee4e7b4e4</div></pre></td></tr></table></figure></p>
-<p>查看构建成功后的镜像<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo docker images debian/nginx:2</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">debian/nginx        2                   26eee4e7b4e4        6 minutes ago       196.4 MB</div></pre></td></tr></table></figure></p>
-<p>使用该 镜像创建容器<br>-d 告诉容器以分离的方式在后台运行<br>nginx -g “daemon off;” 以前台的方式启动Nginx，作为Web容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker run -itd  -p 80 debian/nginx:2 nginx -g &quot;daemon off;&quot;</div><div class="line">b329360da168141902fc623b71f5cc79540bdffad26b1802e504988925ffec54</div><div class="line">➜  ~ docker port b329360da168141902fc623b71f5cc79540bdffad26b1802e504988925ffec54</div><div class="line">80/tcp -&gt; 0.0.0.0:32769</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="推送镜像至仓库"><a href="#推送镜像至仓库" class="headerlink" title="推送镜像至仓库"></a>推送镜像至仓库</h2><blockquote>
-<p>以docker hub为例</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker push r65q89/test</div></pre></td></tr></table></figure>
-<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><h3 id="查看镜像构建历史"><a href="#查看镜像构建历史" class="headerlink" title="查看镜像构建历史"></a>查看镜像构建历史</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="built_in">history</span> debian/nginx:2</div><div class="line">IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT</div><div class="line">26eee4e7b4e4        10 minutes ago      /bin/sh -c <span class="comment">#(nop)  EXPOSE 80/tcp                0 B                 </span></div><div class="line">fe16089c6b6f        11 minutes ago      /bin/sh -c <span class="built_in">echo</span> <span class="string">'Nginx install success'</span> &gt; /va   22 B                </div><div class="line">5c40a6f4eee9        11 minutes ago      /bin/sh -c service nginx start                  3 B                 </div><div class="line">47fcc445f762        12 minutes ago      /bin/sh -c apt-get update &amp;&amp; apt-get install    71.29 MB            </div><div class="line">3791785c0268        17 minutes ago      /bin/sh -c <span class="built_in">echo</span> <span class="string">"Hello docker!"</span>                 0 B                 </div><div class="line">1b01529cc499        3 weeks ago         /bin/sh -c <span class="comment">#(nop) CMD ["/bin/bash"]             0 B                 </span></div><div class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c <span class="comment">#(nop) ADD file:0e0565652aa852f620   125.1 MB</span></div></pre></td></tr></table></figure>
-<h3 id="查看某容器端口映射情况"><a href="#查看某容器端口映射情况" class="headerlink" title="查看某容器端口映射情况"></a>查看某容器端口映射情况</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker port 容器id</div></pre></td></tr></table></figure>
-<blockquote>
-<p>或者这样查看所有docker映射的端口</p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtft761tij30p9026glm.jpg" alt="端口映射"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker构建镜像-Dockerfile/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1276,15 +1294,15 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
