@@ -184,6 +184,589 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Linux取证分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Linux取证分析/">Linux取证分析</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Linux取证分析/" class="archive-article-date">
+  	<time datetime="2016-06-26T13:26:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="进程隐藏相关原理"><a href="#进程隐藏相关原理" class="headerlink" title="进程隐藏相关原理"></a>进程隐藏相关原理</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><blockquote>
+<p>目前在 Linux 上隐藏进程的技术主要有两种</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( 1) 类似于 ps、top 等的命令能够列出包括 init 在内的所有重要的系统进程, 通过对他们的实现过程进行改造来实现进程隐藏, 具体做法是“劫持”ps 的关键系统调用 sys_getdents( ), 从而无法查看包含进程信息的目录。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( 2) ps 命令实际是通过读取 proc文件系统来向用户返回进程信息的, 而 proc 文件系统是通过文件系统( VFS) 接口来实现的, 因此通过劫持文件系统操作函数集( inode_operation 和 file_operations) 中的有关函数, 使得进程信息无法通过文件系统接口输出给用户。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>以上两种方法虽然都可实现进程隐藏, 但均是在较高的层次上实现的,<br>方法 1 虽然在 ps 时看似隐藏了某个进程, 但在 proc中该进程仍然对用户可见<br> 方法 2 是在 VFS 层对内核函数的劫持, 意味着需要先判断输出的系统信息是与进程有关的还是与进程无关的( 与进程无关的并无隐藏的必要)<br>并且这两种方法都无法满足仅对进程部分信息隐藏的需求, 在实际应用中不够灵活。实际上, 用户对进程信息的访问, 都是通过proc 文件系统完成的, 因此, 实现进程隐藏的根本途径是从 proc 入手, 准确地找出进程信息产生的关键点, 在这些关键点上做一些特殊的处理, 从而达到实现进程隐藏的目的。</p>
+</blockquote>
+<h2 id="Proc文件系统简介"><a href="#Proc文件系统简介" class="headerlink" title="Proc文件系统简介"></a>Proc文件系统简介</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">proc 文件系统是一个伪文件系统，它只存在内存当中，而不占用外存空间。它以文件系统的方式为访问系统内核数据的操作提供接口。用户和应用程序可以通过 proc 得到系统的信息，并可以改变内核的某些参数。由于系统的信息，如进程，是动态改变的，所以用户或应用程序读取 proc 文件时，proc 文件系统是动态从系统内核读出所需信息并提交的。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">基于/proc 文件系统如上所述的特殊性，其内的文件也常被称作虚拟文件，并具有一些独特的特点。例如，其中有些文件虽然使用查看命令查看时会返回大量信息，但文件本身的大小却会显示为 0 字节。此外，这些特殊文件中大多数文件的时间及日期属性通常为当前系统时间和日期，这跟它们随时会被刷新（存储于 RAM 中）有关。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">为了查看及使用上的方便，这些文件通常会按照相关性进行分类存储于不同的目录甚至子目录中，如/proc/scsi 目录中存储的就是当前系统上所有 SCSI 设备的相关信息，/proc/N 中存储的则是系统当前正在运行的进程的相关信息，其中 N 为正在运行的进程（可以想象得到，在某进程结束后其相关目录则会消失）。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">大多数虚拟文件可以使用文件查看命令如 cat、more 或者 less 进行查看，有些文件信息表述的内容可以一目了然，但也有文件的信息却不怎么具有可读性。不过，这些可读性较差的文件在使用一些命令如 apm、free、lspci 或 top 查看时却可以有着不错的表现。</div></pre></td></tr></table></figure>
+<h2 id="Proc文件系统目录结构"><a href="#Proc文件系统目录结构" class="headerlink" title="Proc文件系统目录结构"></a>Proc文件系统目录结构</h2><table>
+<thead>
+<tr>
+<th>目录名称</th>
+<th style="text-align:center">目录内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>apm</td>
+<td style="text-align:center">高级电源管理信息</td>
+</tr>
+<tr>
+<td>cmdline</td>
+<td style="text-align:center">内核命令行</td>
+</tr>
+<tr>
+<td>Cpuinfo</td>
+<td style="text-align:center">关于 Cpu 信息</td>
+</tr>
+<tr>
+<td>Devices</td>
+<td style="text-align:center">可以用到的设备（块设备/字符设备）</td>
+</tr>
+<tr>
+<td>Dma Used</td>
+<td style="text-align:center">DMS channels</td>
+</tr>
+<tr>
+<td>Filesystems</td>
+<td style="text-align:center">支持的文件系统</td>
+</tr>
+<tr>
+<td>Interrupts</td>
+<td style="text-align:center">中断的使用</td>
+</tr>
+<tr>
+<td>Ioports</td>
+<td style="text-align:center">I/O 端口的使用</td>
+</tr>
+<tr>
+<td>Kcore</td>
+<td style="text-align:center">内核核心印象</td>
+</tr>
+<tr>
+<td>Kmsg</td>
+<td style="text-align:center">内核消息</td>
+</tr>
+<tr>
+<td>Ksyms</td>
+<td style="text-align:center">内核符号表</td>
+</tr>
+<tr>
+<td>Loadavg</td>
+<td style="text-align:center">负载均衡</td>
+</tr>
+<tr>
+<td>Locks</td>
+<td style="text-align:center">内核锁</td>
+</tr>
+<tr>
+<td>Meminfo</td>
+<td style="text-align:center">内存信息</td>
+</tr>
+<tr>
+<td>Misc</td>
+<td style="text-align:center">Miscellaneous</td>
+</tr>
+<tr>
+<td>Modules</td>
+<td style="text-align:center">加载模块列表</td>
+</tr>
+<tr>
+<td>Mounts</td>
+<td style="text-align:center">加载的文件系统</td>
+</tr>
+<tr>
+<td>Partitions</td>
+<td style="text-align:center">系统识别的分区表</td>
+</tr>
+<tr>
+<td>Rtc</td>
+<td style="text-align:center">Real time clock</td>
+</tr>
+<tr>
+<td>Slabinfo</td>
+<td style="text-align:center">Slab pool info</td>
+</tr>
+<tr>
+<td>Stat</td>
+<td style="text-align:center">全面统计状态表 s</td>
+</tr>
+<tr>
+<td>Swaps</td>
+<td style="text-align:center">对换空间的利用情况</td>
+</tr>
+<tr>
+<td>Version</td>
+<td style="text-align:center">内核版本</td>
+</tr>
+<tr>
+<td>Uptime</td>
+<td style="text-align:center">系统正常运行时间</td>
+</tr>
+</tbody>
+</table>
+<h2 id="进程信息的创建过程"><a href="#进程信息的创建过程" class="headerlink" title="进程信息的创建过程"></a>进程信息的创建过程</h2><blockquote>
+<p>结合实际情况, 一个用户查看某个进程的信息有两种情形</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">( 1) 用 cat 之类的命令直接读取进程目录下的节点文件</div><div class="line">( 2) 用 ls 之类的命令列举所有的进程目录</div><div class="line">proc 对于这两种方式分别有不同的处理对于 ls 命令是调用 VFS 的 readdir( ) , 而对于cat 命令则会发生对一系列 lookup 函数的调用。</div></pre></td></tr></table></figure>
+<h2 id="进程隐藏的实现"><a href="#进程隐藏的实现" class="headerlink" title="进程隐藏的实现"></a>进程隐藏的实现</h2><blockquote>
+<p>通过以上对 proc 文件系统中生成进程信息实现过程的分析, 我们发现由于 Linux 缺乏模块化,难以找到一个统一的入口, 准确地对进程信息实现隐藏, 必须对实际应用中可能出现的情形 用 cat之类的命令直接读取进程目录下的节点文件和用 ls之类的命令列举所有的进程目录, 分别加以考虑。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">对函数 proc_pid_lookup 进行修改: 在步骤a 的末尾添加代码, 用于判断该进程号是否为隐藏进程的进程号, 如果是, 则跳转到我们定制的一个函数, 该函数可打印出? 该进程无法查看?之类的调试信息后返回上层调用者; 如果否, 则照常执行步骤b、c</div></pre></td></tr></table></figure></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">对函数 proc_pid_readdir 进行修改: 在步骤b 中, 当获取一个进程后, 先判断该进程是否为隐藏进程, 如果是则跳转到我们定制的一个函数, 打印出? 该进程无法查看?之类的调试信息后返回上层调用者; 如果否, 则照常执行步骤 b、c。对于进程部分信息的隐藏, 通过文章第 2 部分的分析, 实际上是选择数组 tgid_base_stuff 中哪些节点不被创建的问题, 对它的实现也要包括以下两部分:</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( 1) 对函数 proc_pident_lookup 进行修改: 在步骤 a 开始前添加代码, 用于判断要创建的节点是否为需隐藏的节点, 如果是, 则跳转到我们定制的一个函数, 打印出? 该节点无法查看?之类的调试信息后返回上层调用者; 如果否, 则照常执行步骤 b。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( 2) 对函数 proc_pident_readdir 进行修改: 在步骤 a 的末尾添加代码, 用于判断要创建的节点是否为需隐藏的节点, 如果是, 则跳转到我们定制的一个函数, 打印出? 该节点无法查看?之类的调试信息后转到步骤 c; 如果否, 则照常执行步骤 b、c。</div></pre></td></tr></table></figure>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">进程隐藏是实现进程保护的一种简单可行的方法之一, 虽然可以在从 proc 到 vfs 的各个层次上容易实现对某个进程的隐藏, 但是如果需要对进程部分信息灵活地进行隐藏, 必须在 proc 层准确地找出进程目录以及其下节点生成的关键点, 在这些关键点上来实现进程隐藏。由于 Linux 缺乏模块化的缺点, 在列举目录和查看节点文件时没有统一的入口点, 而这两种对进程信息的访问都会涉及到进程信的生成, 因此, 需要在内核中对每个进程目录或节点文件生成的地方一一做处理。本方法在内核级上分别实现了对进程全部信息以及进程部分信息的隐藏, 如能根据实际需求, 结合一定的隐藏策略, 比如指定某个系统中哪些进程应该被隐藏, 则在实际应用中更具价值。</div></pre></td></tr></table></figure>
+<h1 id="网络异常排查方法"><a href="#网络异常排查方法" class="headerlink" title="网络异常排查方法"></a>网络异常排查方法</h1><h2 id="Windows排查"><a href="#Windows排查" class="headerlink" title="Windows排查"></a>Windows排查</h2><blockquote>
+<p>查看目前的网络连接情况，定位可疑网络连接（结合业务访问排查）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -b -n (管理员权限)</div></pre></td></tr></table></figure></p>
+<p>通过网络连接进一步确认可疑连接的PID</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -ano</div></pre></td></tr></table></figure>
+<blockquote>
+<p>根据PID确定是那个进程</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tasklist | findstr xxx</div></pre></td></tr></table></figure>
+<blockquote>
+<p>确定此进程的用途以及可否杀死</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">taskkill /T /F /PID 3036</div></pre></td></tr></table></figure>
+<blockquote>
+<p>其他</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">若以上几步没有解决，使用PC Hunter（基于XueTr源码重新开发）工具对其进行深度排查</div></pre></td></tr></table></figure>
+<h2 id="Linux排查"><a href="#Linux排查" class="headerlink" title="Linux排查"></a>Linux排查</h2><blockquote>
+<p>确定系统自身的命令是否被恶意替换，如ls、netstat</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">使用chkrootkit、rkhunter类工具检查下是否存在恶意程序及恶意替换</div></pre></td></tr></table></figure>
+<blockquote>
+<p>查看linux自身的网络连接，并定位可疑程序的PID</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat  -antpl</div></pre></td></tr></table></figure>
+<blockquote>
+<p>根据pid查找执行文件的及其路径</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lsof -p PID</div></pre></td></tr></table></figure>
+<blockquote>
+<p>进一步排查</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /proc/pidnumber</div><div class="line">ls -ail</div></pre></td></tr></table></figure>
+<blockquote>
+<p>杀掉对应恶意程序或进程</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1 可将/proc/pidnumber 下的恶意程序直接rm –rf</div><div class="line">2 根据进程号直接杀死进程 kill -9 pidnumber</div></pre></td></tr></table></figure>
+<blockquote>
+<p>其他一些可能用到的命令</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1 分析access.log获得访问前10位的ip地址</div><div class="line">awk &apos;&#123;print $1&#125;&apos; access.log |sort|uniq -c|sort -nr|head -10</div><div class="line">2 查看连接某服务端口最多的的IP地址</div><div class="line">netstat -nat | grep &quot;192.168.1.15:1234&quot; |awk &apos;&#123;print $5&#125;&apos;|awk -F: &apos;&#123;print $1&#125;&apos;|sort|uniq -c|sort -nr|head -20</div></pre></td></tr></table></figure>
+<h1 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h1><h2 id="一些框架-工具"><a href="#一些框架-工具" class="headerlink" title="一些框架(工具)"></a>一些框架(工具)</h2><h3 id="内存取证工具"><a href="#内存取证工具" class="headerlink" title="内存取证工具"></a>内存取证工具</h3><blockquote>
+<p>Volatility  <a href="https://github.com/volatilityfoundation/volatility" target="_blank" rel="external">Github</a><br>介绍：<a href="http://www.freebuf.com/articles/system/26763.html" target="_blank" rel="external">http://www.freebuf.com/articles/system/26763.html</a></p>
+<h3 id="获取木马配置文件"><a href="#获取木马配置文件" class="headerlink" title="获取木马配置文件"></a>获取木马配置文件</h3><p>通过python脚本来获取木马中的配置文件，诸如ftp、ssh等信息，反向对黑客进行攻击。目前支持Adwind、Adzok、Albertino Advanced RAT等40多个木马。<br>RATDecoders  <a href="https://github.com/kevthehermit/RATDecoders" target="_blank" rel="external">Github</a></p>
+<h3 id="远程现场取证的事件应急响应框架"><a href="#远程现场取证的事件应急响应框架" class="headerlink" title="远程现场取证的事件应急响应框架"></a>远程现场取证的事件应急响应框架</h3><p>一个被安装在目标系统的Python 代理客户端，可以对Python基础设施进行管理和交流。<br>GRR Rapid Response    <a href="https://github.com/google/grr/tree/gh-pages" target="_blank" rel="external">Github</a></p>
+<h3 id="隐藏进程检测工具"><a href="#隐藏进程检测工具" class="headerlink" title="隐藏进程检测工具"></a>隐藏进程检测工具</h3><p><a href="https://security.tencent.com/index.php/opensource/detail/16" target="_blank" rel="external">Linux Rootkit (vfs hook) </a>是一个linux内核模块，是用于检测rootkit的一个小demo。通过读取此内核模块创建的虚拟文件，可检测通过Hook vfs 函数来隐藏的进程。大家可把他作为一个单一的检测工具，也可以集成到诸如OSSEC等HIDS里，通过周期性任务触发来检测并上报可疑事件。</p>
+<h3 id="使用方法："><a href="#使用方法：" class="headerlink" title="使用方法："></a>使用方法：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">照例就是解压之后 编译加载就好。</div><div class="line">unzip process_list.zip;cd process_list;make;make install</div></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><h3 id="系统："><a href="#系统：" class="headerlink" title="系统："></a>系统：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">uname -a     查看内核/操作系统/CPU信息</div><div class="line">cat /etc/issue</div><div class="line">cat /etc/redhat-release   查看操作系统版本</div><div class="line">cat /proc/cpuinfo    查看CPU信息</div><div class="line">hostname     查看计算机名</div><div class="line">lspci -tv     列出所有PCI设备</div><div class="line">lsusb -tv     列出所有USB设备</div><div class="line">lsmod      列出加载的内核模块</div><div class="line">env      查看环境变量</div></pre></td></tr></table></figure>
+<h3 id="资源："><a href="#资源：" class="headerlink" title="资源："></a>资源：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">free -m     查看内存使用量和交换区使用量</div><div class="line">df -h      查看各分区使用情况</div><div class="line">du -sh &lt;目录名&gt;    查看指定目录的大小</div><div class="line">grep MemTotal /proc/meminfo   查看内存总量</div><div class="line">grep MemFree /proc/meminfo   查看空闲内存量</div><div class="line">uptime     查看系统运行时间、用户数、负载</div><div class="line">cat /proc/loadavg    查看系统负载</div></pre></td></tr></table></figure>
+<h3 id="磁盘和分区："><a href="#磁盘和分区：" class="headerlink" title="磁盘和分区："></a>磁盘和分区：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mount | column -t    查看挂接的分区状态</div><div class="line">fdisk -l     查看所有分区</div><div class="line">swapon -s     查看所有交换分区</div><div class="line">hdparm -i /dev/hda    查看磁盘参数(仅适用于IDE设备)</div><div class="line">dmesg | grep IDE    查看启动时IDE设备检测状况</div></pre></td></tr></table></figure>
+<h3 id="网络："><a href="#网络：" class="headerlink" title="网络："></a>网络：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ifconfig     查看所有网络接口的属性</div><div class="line">iptables -L     查看防火墙设置</div><div class="line">route -n     查看路由表</div><div class="line">netstat -lntp     查看所有监听端口</div><div class="line">netstat -antp     查看所有已经建立的连接</div><div class="line">netstat -s     查看网络统计信息</div></pre></td></tr></table></figure>
+<h3 id="进程："><a href="#进程：" class="headerlink" title="进程："></a>进程：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ps -ef     查看所有进程</div><div class="line">top      实时显示进程状态（另一篇文章里面有详细的介绍）</div></pre></td></tr></table></figure>
+<blockquote>
+<p>ps命令可以列出正在运行的进程。以下命令可以列出当前系统上所有正在运行的进程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -A</div></pre></td></tr></table></figure></p>
+<p>这个命令列出的信息也许太多，不便于查看。你可以使用less命令通过一个管道输出，分页查看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -A | less</div></pre></td></tr></table></figure></p>
+<p>你也可以使用grep来对来做管道输出，查找出某个进程。例如，查找Firefox进程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -A | grep firefox</div></pre></td></tr></table></figure></p>
+<p>以树形显示进程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pstree命令同样可以显示进程信息，不过它是以树形式显示进程。</div></pre></td></tr></table></figure></p>
+<p>pgrep<br>给定一个搜索关键词，pgrep命令会返回所有匹配这个关键词的进程ID。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"> pgrep iceweasel    </div><div class="line">2074</div></pre></td></tr></table></figure></p>
+<p>也可以将这个命令与kill命令结合起来干掉一个特定的进程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~  kill $(pgrep iceweasel)</div><div class="line">➜  ~</div></pre></td></tr></table></figure></p>
+<p>或者使用</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~  pkill iceweasel</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+<h3 id="用户："><a href="#用户：" class="headerlink" title="用户："></a>用户：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">w      查看活动用户</div><div class="line">id &lt;用户名&gt;     查看指定用户信息</div><div class="line">last      查看用户登录日志</div><div class="line">cut -d: -f1 /etc/passwd   查看系统所有用户</div><div class="line">cut -d: -f1 /etc/group   查看系统所有组</div><div class="line">crontab -l     查看当前用户的计划任务</div></pre></td></tr></table></figure>
+<h3 id="服务："><a href="#服务：" class="headerlink" title="服务："></a>服务：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chkconfig –list    列出所有系统服务</div><div class="line">chkconfig –list | grep on   列出所有启动的系统服务</div></pre></td></tr></table></figure>
+<h3 id="程序："><a href="#程序：" class="headerlink" title="程序："></a>程序：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -qa     查看所有安装的软件包</div></pre></td></tr></table></figure>
+<h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><p><a href="http://www.freebuf.com/articles/system/50728.html" target="_blank" rel="external"> Linux入侵取证：从一次应急事件讲起 </a><br><a href="http://drops.wooyun.org/tips/4731" target="_blank" rel="external">Linux下基于内存分析的Rootkit检测方法</a><br><a href="http://mp.weixin.qq.com/s?src=3&amp;timestamp=1465201686&amp;ver=1&amp;signature=L1C7usG9nhuvVUS9dkoQ4L0C3uwt3mRI*sGWWChs3izNvMLlZGsDu6vZp0gpTnKRGlexFK16AZvIYiAcmOMATagCQk5ztoAKSux1OYqJv8O-28xlFiKm-aSQHMK3NzaG3sxjhjvZ1StjpW10xW28IA==" target="_blank" rel="external"> 如何分析 Linux 日志 </a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Linux取证分析/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Node-js学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/others/Node-js学习笔记/">Node.js学习笔记</a>
+    </h1>
+  
+
+        
+        <a href="/others/Node-js学习笔记/" class="archive-article-date">
+  	<time datetime="2016-06-03T14:00:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="新建http服务"><a href="#新建http服务" class="headerlink" title="新建http服务"></a>新建http服务</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)  </span>&#123;</div><div class="line">    response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">    <span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'访问'</span>);</div><div class="line">        response.write(<span class="string">'hello,world'</span>);</div><div class="line">        response.end(<span class="string">"response.end"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure>
+<h1 id="使用function"><a href="#使用function" class="headerlink" title="使用function"></a>使用function</h1><blockquote>
+<p>目录结构</p>
+<p>tp@V:/mnt/d/Node.js$ tree<br>.<br>├── hello.js<br>├── models<br>│   └── otherfuns.js<br>└── n2_funcall.js<br>n2_funcall.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> otherfun = <span class="built_in">require</span>(<span class="string">"./models/otherfuns.js"</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">		response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		otherfun[<span class="string">'fun3'</span>](response);</div><div class="line">		otherfun[<span class="string">'fun2'</span>](response);<span class="comment">//也可以用otherfun.fun2(response)</span></div><div class="line">		response.end(<span class="string">"response.end"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure>
+<blockquote>
+<p>otherfuns.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">fun2</span>:<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"我是fun2"</span>);</div><div class="line">		res.write(<span class="string">"Hello, I am fun2"</span>);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">fun3</span>:<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"I am fun3"</span>);</div><div class="line">		res.write(<span class="string">"Hello, I am fun3"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>效果</p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtdapfssuj30cw061dfw.jpg" alt=""></p>
+<h1 id="使用模块"><a href="#使用模块" class="headerlink" title="使用模块"></a>使用模块</h1><blockquote>
+<p>models/User.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">User</span>(<span class="params">id, name, age</span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.id=id;</div><div class="line">	<span class="keyword">this</span>.name=name;</div><div class="line">	<span class="keyword">this</span>.age=age;</div><div class="line">	<span class="keyword">this</span>.enter=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name+<span class="string">"进入图书馆"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = User;</div></pre></td></tr></table></figure>
+<blockquote>
+<blockquote>
+<p>models/Teacher.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> User = <span class="built_in">require</span>(<span class="string">'./User'</span>);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Teacher</span>(<span class="params">id,name,age</span>)</span>&#123;</div><div class="line">	User.apply(<span class="keyword">this</span>,[id,name,age]);</div><div class="line">	<span class="keyword">this</span>.teach=<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">		res.write(<span class="keyword">this</span>.name+<span class="string">"讲课"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = Teacher;</div><div class="line"><span class="string">``</span><span class="string">`JavaScript</span></div><div class="line">&gt;n3_modelcall.js</div></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+<p>var http = require(‘http’);</p>
+<p>// var User = require(“./models/User”);<br>var Teacher = require(“./models/Teacher”)</p>
+<p>http.createServer(function (request, response){<br>    response.writeHead(200, {‘Content-Type’: ‘text/html; charset=utf-8’});<br>    if(request.url!==”/favicon.ico”){<br>        //funname = ‘fun3’;<br>        teacher = new Teacher(1,’我来’,18);<br>        // user.id =1;<br>        // user.name=’我来’;<br>        // user.age=18;<br>        teacher.enter();<br>        teacher.teach(response);<br>        response.end(“response.end”);<br>    }</p>
+<p>}).listen(8000);<br>console.log(“Server running at <a href="http://127.0.0.1:8000/" target="_blank" rel="external">http://127.0.0.1:8000/</a>“);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">![](https://ww2.sinaimg.cn/large/006tNc79gy1fdtdb7fgu8j30b8058gln.jpg)</div><div class="line"></div><div class="line"># 使用路由</div><div class="line">&gt;models/route.js</div><div class="line">```JavaScript</div><div class="line">module.exports=&#123;</div><div class="line">	login:function(req, res)&#123;</div><div class="line">		res.write(&quot;I am login module.&quot;);</div><div class="line">	&#125;,</div><div class="line">	admin:function(req, res)&#123;</div><div class="line">		res.write(&quot;I am admin module.&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>n4_rout.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line">		response.end(<span class="string">"response.end"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtdd3yrcwj30b8058gln.jpg" alt=""></p>
+<h1 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h1><blockquote>
+<p>models/route.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./optfile'</span>);</div><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">login</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/login.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">admin</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/admin.html'</span>, recall);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>models/optfile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">readfileSync</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path</span>)</span>&#123;<span class="comment">//同步读取</span></div><div class="line">		<span class="keyword">var</span> data = fs.readFileSync(path, <span class="string">'utf-8'</span>);</div><div class="line">		<span class="built_in">console</span>.log(data);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'同步方法执行完毕'</span>);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">readfile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, recall</span>)</span>&#123;<span class="comment">//异步读取</span></div><div class="line">		fs.readFile(path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(err)&#123;</div><div class="line">				<span class="built_in">console</span>.log(err);</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			<span class="built_in">console</span>.log(data.toString());</div><div class="line">			recall(data);</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'异步方法执行完毕'</span>);</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>n5_readfile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line"><span class="comment">//var optfile = require('./models/optfile');</span></div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+<p>views/login.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">This is login page.</div></pre></td></tr></table></figure></p>
+<p>views/admin.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">This is admin page.</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtdbleg2tj30pz082jrt.jpg" alt="读文件"></p>
+<h1 id="写文件"><a href="#写文件" class="headerlink" title="写文件"></a>写文件</h1><blockquote>
+<p>models/optfile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data, recall</span>)</span>&#123;<span class="comment">//异步方式</span></div><div class="line">		fs.writeFile(path, data, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="keyword">throw</span> err;</div><div class="line">			&#125;</div><div class="line">			<span class="built_in">console</span>.log(<span class="string">'It\'s Saved!'</span>);<span class="comment">//文件被保存</span></div><div class="line">			recall(<span class="string">"write file success."</span>);</div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writeFileSync</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data</span>)</span>&#123;<span class="comment">//同步方式</span></div><div class="line">		fs.writeFileSync(path, data);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"同步写文件完成"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>models/route.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./optfile'</span>);</div><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">login</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/login.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">admin</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/admin.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.writefile(<span class="string">'./views/test.txt'</span>, <span class="string">'write file ok1.'</span>, recall);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>n6_writefile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line"><span class="comment">//var optfile = require('./models/optfile');</span></div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtddiqzcwj30sy0740ss.jpg" alt="写文件"></p>
+<h1 id="读取图片"><a href="#读取图片" class="headerlink" title="读取图片"></a>读取图片</h1><blockquote>
+<p>models/optfile.js<br>仅能显示图片<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">readImg</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, res</span>)</span>&#123;</div><div class="line">		fs.readFile(path, <span class="string">'binary'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, file</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="built_in">console</span>.log(err);</div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">'输出文件'</span>);</div><div class="line">				res.write(file, <span class="string">'binary'</span>);</div><div class="line">				res.end();</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>n7_readimg.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./models/optfile'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'image/jpeg'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'访问'</span>);</div><div class="line">    optfile.readImg(<span class="string">'./images/1.png'</span>, response);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"move on"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtde06l42j30pa0c2gmo.jpg" alt="读取图片"></p>
+<h1 id="路由改造"><a href="#路由改造" class="headerlink" title="路由改造"></a>路由改造</h1><blockquote>
+<p>models/optfile.js<br>可显示文本和图片<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data, recall</span>)</span>&#123;<span class="comment">//异步方式</span></div><div class="line">		fs.writeFile(path, data, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="keyword">throw</span> err;</div><div class="line">			&#125;</div><div class="line">			<span class="built_in">console</span>.log(<span class="string">'It\'s Saved!'</span>);<span class="comment">//文件被保存</span></div><div class="line">			recall(<span class="string">"write file success."</span>);</div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writeFileSync</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data</span>)</span>&#123;<span class="comment">//同步方式</span></div><div class="line">		fs.writeFileSync(path, data);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"同步写文件完成"</span>);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">readImg</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, res</span>)</span>&#123;</div><div class="line">		fs.readFile(path, <span class="string">'binary'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, file</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="built_in">console</span>.log(err);</div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">'输出文件'</span>);</div><div class="line">				res.write(file, <span class="string">'binary'</span>);</div><div class="line">				res.end();</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">readfile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, recall</span>)</span>&#123;<span class="comment">//异步读取</span></div><div class="line">			fs.readFile(path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">					<span class="keyword">if</span>(err)&#123;</div><div class="line">							<span class="built_in">console</span>.log(err);</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">					<span class="built_in">console</span>.log(data.toString());</div><div class="line">					recall(data);</div><div class="line">			&#125;</div><div class="line">	&#125;);</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'异步方法执行完毕'</span>);</div><div class="line">&#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>models/route.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./optfile'</span>);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRecall</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">		res.write(data);</div><div class="line">		res.end(<span class="string">" "</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> recall;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">login</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		recall = getRecall(req, res);</div><div class="line">		optfile.readfile(<span class="string">'./views/login.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line"></div><div class="line">	<span class="attr">admin</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/admin.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.writefile(<span class="string">'./views/test.txt'</span>, <span class="string">'write file ok1.'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">showimg</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'image/jpeg'</span>&#125;);</div><div class="line">		optfile.readImg(<span class="string">'./images/1.png'</span>, res);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>n8_routhtml.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtdefobhpj30ig0epq3q.jpg" alt="路由改造效果图"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Node.js</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/others/Node-js学习笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-MongoDB-基本操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/db/MongoDB-基本操作/">MongoDB 基本操作</a>
+    </h1>
+  
+
+        
+        <a href="/db/MongoDB-基本操作/" class="archive-article-date">
+  	<time datetime="2016-05-20T03:23:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-05-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><h2 id="基本查询"><a href="#基本查询" class="headerlink" title="基本查询"></a>基本查询</h2><blockquote>
+<p>以更美观的方式输出</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.number.find().pretty()</div></pre></td></tr></table></figure>
+<h2 id="获取数据库的所有聚合名称"><a href="#获取数据库的所有聚合名称" class="headerlink" title="获取数据库的所有聚合名称"></a>获取数据库的所有聚合名称</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt; db.getCollectionNames();</div><div class="line">[ &quot;phone_number&quot;, &quot;system.indexes&quot; ]</div></pre></td></tr></table></figure>
+<h2 id="统计数据库特定聚合所有记录数量"><a href="#统计数据库特定聚合所有记录数量" class="headerlink" title="统计数据库特定聚合所有记录数量"></a>统计数据库特定聚合所有记录数量</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">db.phone_number.count()</div><div class="line">16119524</div></pre></td></tr></table></figure>
+<h2 id="获取数据库特定聚合的索引"><a href="#获取数据库特定聚合的索引" class="headerlink" title="获取数据库特定聚合的索引"></a>获取数据库特定聚合的索引</h2><blockquote>
+<p>比如获取phone_number聚合的所有索引<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone_number.getIndexes()</div><div class="line">[</div><div class="line">	&#123;</div><div class="line">		&quot;v&quot; : 1,</div><div class="line">		&quot;key&quot; : &#123;</div><div class="line">			&quot;_id&quot; : 1</div><div class="line">		&#125;,</div><div class="line">		&quot;name&quot; : &quot;_id_&quot;,</div><div class="line">		&quot;ns&quot; : &quot;blacklist.phone_number&quot;</div><div class="line">	&#125;</div><div class="line">]</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="添加索引"><a href="#添加索引" class="headerlink" title="添加索引"></a>添加索引</h2><blockquote>
+<p>为phone_number的phone字段添加索引<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone_number.ensureIndex(&#123;&quot;phone&quot;:1&#125;)</div><div class="line">&#123;</div><div class="line">	&quot;createdCollectionAutomatically&quot; : false,</div><div class="line">	&quot;numIndexesBefore&quot; : 1,</div><div class="line">	&quot;numIndexesAfter&quot; : 2,</div><div class="line">	&quot;ok&quot; : 1</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>再查看索引情况验证一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone_number.getIndexes()</div><div class="line">[</div><div class="line">	&#123;</div><div class="line">		&quot;v&quot; : 1,</div><div class="line">		&quot;key&quot; : &#123;</div><div class="line">			&quot;_id&quot; : 1</div><div class="line">		&#125;,</div><div class="line">		&quot;name&quot; : &quot;_id_&quot;,</div><div class="line">		&quot;ns&quot; : &quot;blacklist.phone_number&quot;</div><div class="line">	&#125;,</div><div class="line">	&#123;</div><div class="line">		&quot;v&quot; : 1,</div><div class="line">		&quot;key&quot; : &#123;</div><div class="line">			&quot;phone&quot; : 1</div><div class="line">		&#125;,</div><div class="line">		&quot;name&quot; : &quot;phone_1&quot;,</div><div class="line">		&quot;ns&quot; : &quot;blacklist.phone_number&quot;</div><div class="line">	&#125;</div><div class="line">]</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="分组查询group-count"><a href="#分组查询group-count" class="headerlink" title="分组查询group count"></a>分组查询group count</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone.aggregate([&#123;$group:&#123;_id:&quot;$source&quot;, num_tutorial:&#123;$sum:1&#125;&#125;&#125;])</div><div class="line">&#123; &quot;_id&quot; : &quot;youm&quot;, &quot;num_tutorial&quot; : 449 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;tianma168&quot;, &quot;num_tutorial&quot; : 349 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;dingdkj&quot;, &quot;num_tutorial&quot; : 3259 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ypyun&quot;, &quot;num_tutorial&quot; : 10192 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ilezan&quot;, &quot;num_tutorial&quot; : 43685 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ism168&quot;, &quot;num_tutorial&quot; : 2856 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;iyylw&quot;, &quot;num_tutorial&quot; : 16284 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;iqiyi&quot;, &quot;num_tutorial&quot; : 1 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;xudan123.com&quot;, &quot;num_tutorial&quot; : 74808 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;vim6&quot;, &quot;num_tutorial&quot; : 26927 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yzm1&quot;, &quot;num_tutorial&quot; : 449854 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;feiq&quot;, &quot;num_tutorial&quot; : 46670 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;83r.com&quot;, &quot;num_tutorial&quot; : 144898 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;maz8&quot;, &quot;num_tutorial&quot; : 81461 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;kuaima9&quot;, &quot;num_tutorial&quot; : 138903 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;bmyzm&quot;, &quot;num_tutorial&quot; : 6015 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;sunvarma.com&quot;, &quot;num_tutorial&quot; : 45164 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ema6&quot;, &quot;num_tutorial&quot; : 54819 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yma0.com&quot;, &quot;num_tutorial&quot; : 417669 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;creditease&quot;, &quot;num_tutorial&quot; : 101747 &#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>如果需要排序的话<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone.aggregate([&#123;$group:&#123;_id:&quot;$source&quot;, count:&#123;$sum:1&#125;&#125;&#125;,&#123;$sort:&#123;&quot;count&quot;:-1&#125;&#125;])</div><div class="line">&#123; &quot;_id&quot; : &quot;other&quot;, &quot;count&quot; : 6133225 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ly.com&quot;, &quot;count&quot; : 5235378 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;zmyzm.com&quot;, &quot;count&quot; : 1038465 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;f02.cn&quot;, &quot;count&quot; : 644959 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;shjmpt.com&quot;, &quot;count&quot; : 502440 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yzm1&quot;, &quot;count&quot; : 449854 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yma0.com&quot;, &quot;count&quot; : 417669 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;6yzm.com&quot;, &quot;count&quot; : 297152 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;taomapt.com&quot;, &quot;count&quot; : 187613 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;83r.com&quot;, &quot;count&quot; : 144898 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;kuaima9&quot;, &quot;count&quot; : 138903 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;creditease&quot;, &quot;count&quot; : 101747 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;tongdun&quot;, &quot;count&quot; : 95012 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;aliqin&quot;, &quot;count&quot; : 87845 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;maz8&quot;, &quot;count&quot; : 81461 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;xudan123.com&quot;, &quot;count&quot; : 74808 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ema6&quot;, &quot;count&quot; : 54819 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;feiq&quot;, &quot;count&quot; : 46670 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;sunvarma.com&quot;, &quot;count&quot; : 45164 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yayayama.com&quot;, &quot;count&quot; : 44941 &#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="MongoDB-唯一索引自动删除重复记录"><a href="#MongoDB-唯一索引自动删除重复记录" class="headerlink" title="MongoDB 唯一索引自动删除重复记录"></a>MongoDB 唯一索引自动删除重复记录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">coll.ensureIndex(&#123;productid:1&#125;) // 在productid上建立普通索引</div><div class="line">coll.ensureIndex(&#123;district:1, plate:1&#125;) // 多字段索引</div><div class="line">coll.ensureIndex(&#123;productid:1&#125;, &#123;unique:true&#125;) // 唯一索引</div><div class="line">coll.ensureIndex(&#123;productid:1&#125;, &#123;unique:true, dropDups:true&#125;) // 建索引时，如果遇到索引字段值已经出现过的情况，则删除重复记录</div><div class="line">coll.getIndexes() // 查看索引</div><div class="line">coll.dropIndex(&#123;productid:1&#125;) // 删除单个索</div></pre></td></tr></table></figure>
+<h1 id="Python-相关"><a href="#Python-相关" class="headerlink" title="Python 相关"></a>Python 相关</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">import requests</div><div class="line">import json</div><div class="line">from datetime import datetime</div><div class="line">from pymongo import MongoClient</div><div class="line"></div><div class="line"></div><div class="line">&apos;&apos;&apos;连接到mongodb数据库&apos;&apos;&apos;</div><div class="line"># 使用默认链接</div><div class="line">client = MongoClient()</div><div class="line"># 数据库名为gznu_all_student_info</div><div class="line">db = client.gznu_all_student_info</div><div class="line"># 数据库中相关表记录</div><div class="line"></div><div class="line"># 学院相关信息</div><div class="line">college_collection = db.college</div><div class="line"># 班级相关信息</div><div class="line">class_collection = db.class_</div><div class="line">all_class_collection = db.all_class</div><div class="line"># 学生信息</div><div class="line">students_collection = db.students</div><div class="line"></div><div class="line">def _save_class_code(url, college_code):</div><div class="line">    &apos;&apos;&apos;将班级信息保持到数据库中&apos;&apos;&apos;</div><div class="line"></div><div class="line">    print &apos;[*] 正在将班级&#123;&#125;信息保存到数据库中&apos;.format(college_code)</div><div class="line">    info = get_info(url)</div><div class="line">    for i in json.loads(info):</div><div class="line">        for j in i[&apos;children&apos;]:</div><div class="line">            item = &#123;&#125;</div><div class="line">            item[&apos;class_code&apos;] = j[&apos;id&apos;]</div><div class="line">            item[&apos;text&apos;] = j[&apos;text&apos;]</div><div class="line">            item[&apos;college_code&apos;] = college_code</div><div class="line">            item[&apos;update&apos;] = datetime.now()</div><div class="line">            class_collection.insert(item)</div></pre></td></tr></table></figure>
+<h1 id="mongodb-config"><a href="#mongodb-config" class="headerlink" title="mongodb.config"></a>mongodb.config</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">port=27017</div><div class="line">dbpath=/data/db/</div><div class="line">fork=true</div><div class="line">logpath=/data/logs/mongodb.log</div><div class="line">logappend=true</div><div class="line">noauth=true</div><div class="line">nohttpinterface=true</div><div class="line">rest=false</div></pre></td></tr></table></figure>
+<h1 id="导入json文件数据"><a href="#导入json文件数据" class="headerlink" title="导入json文件数据"></a>导入json文件数据</h1><p>将json数据导入到blacklist的phone_number集合中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongoimport -h 127.0.0.1 -d blacklist -c phone_number --file blacklist3.json</div></pre></td></tr></table></figure></p>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtcdrfxiej30mf0gswhj.jpg" alt="mongoimport"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MongoDB</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/db/" class="article-tag-list-link color3">db</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/db/MongoDB-基本操作/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-杂谈-远程管理、SELinux、Raid等" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/杂谈-远程管理、SELinux、Raid等/">[杂谈]远程管理、SELinux、Raid等</a>
+    </h1>
+  
+
+        
+        <a href="/devops/杂谈-远程管理、SELinux、Raid等/" class="archive-article-date">
+  	<time datetime="2016-04-20T11:49:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-04-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="常见远程管理工具方式"><a href="#常见远程管理工具方式" class="headerlink" title="常见远程管理工具方式"></a>常见远程管理工具方式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">RDP: remote desktop protocol 协议，Windows远程桌面管理</div><div class="line">telnet: CLI 界面下的远程管理，几乎所有操作系统都有，不过内容是明文传送</div><div class="line">SSH: secure shell CLI界面下的远程管理，几乎所有操作系统都有，内容加密传送，类UNIX系统下主要的远程管理方式(Linux BSD MaxOS X)</div><div class="line">RFB remote framebuffer,图形化远程管理协议，VNC--Virtual Network Computing 使用的协议，主要为类UNIX系统下主要的图形化远程管理方式</div></pre></td></tr></table></figure>
+<h1 id="SELinux"><a href="#SELinux" class="headerlink" title="SELinux"></a>SELinux</h1><blockquote>
+<p>Secure Enhandced Linux 安全增强Linux是由NSA针对及时基础结构安全开发的一个全新的Linux安全策略机制。SELinux允许管理员更加灵鹤的定义安全策略。<br>SELinux是一个内核级的安全机制，从2.6内核之后集成在内核当中，对其修改一般需要去重启才能生效</p>
+</blockquote>
+<h2 id="基本概览"><a href="#基本概览" class="headerlink" title="基本概览"></a>基本概览</h2><blockquote>
+<p>所有的安全机制都是对两样东西做出限制：进程和系统资源(文件、网络套接字、系统调用等)。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SELinux针对这两种类型定义了两个基本概念：域(domain)和上下文(context)</div><div class="line">前者针对进程进行限制</div><div class="line">后者针对系统资源进行限制</div></pre></td></tr></table></figure>
+<blockquote>
+<p>ps -Z可以查看进程的域<br>ls -Z 可以查看文件的上下文信息</p>
+</blockquote>
+<h1 id="RAID"><a href="#RAID" class="headerlink" title="RAID"></a>RAID</h1><blockquote>
+<p>现代硬盘的缺陷 IO性能极弱 稳定性极差<br>RAID廉价磁盘冗余阵列技术是通过多磁盘并行运行来提高计算机的存储IO性能<br>RAID分为很多种类，称之为RAID级别，</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">RAID 0  读写性能</div><div class="line">RAID 1 读取性能、冗余性</div><div class="line">RAID 5 读写性能、冗余性(1块硬盘)</div><div class="line">RAID 6 读写性能、冗余性(2块硬盘)</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/devops/杂谈-远程管理、SELinux、Raid等/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-旁路镜像、端口镜像、旁路监控" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -765,420 +1348,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Docker-跨主机连接" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker-跨主机连接/">Docker-跨主机连接</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker-跨主机连接/" class="archive-article-date">
-  	<time datetime="2015-07-03T11:47:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-07-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="使用网桥"><a href="#使用网桥" class="headerlink" title="使用网桥"></a>使用网桥</h1><blockquote>
-<p>配置简单、不依赖第三方软件；将容器和物理机放在同一网段</p>
-</blockquote>
-<h2 id="网络设置"><a href="#网络设置" class="headerlink" title="网络设置"></a>网络设置</h2><blockquote>
-<p>vim /etc/network/interfaces</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">auto br0</div><div class="line">iface br0 inet static</div><div class="line">netmask 255.255.255.0</div><div class="line">gateway 101.210.55.1</div><div class="line">bridge_ports eth0</div></pre></td></tr></table></figure>
-<blockquote>
-<p>Docker网络设置<br>vim /etc/default/docker</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-b指定使用自定义网桥</div><div class="line">-b=br0</div><div class="line">--fixed-cidr限制ip地址分配范围</div><div class="line">host1: 101.211.55.64/26</div><div class="line">101.211.55.65~101.211.55.126</div></pre></td></tr></table></figure>
-<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><blockquote>
-<p>使用自定义网桥<br>在启动docker服务的时候，使用-b BEIDGE 或者–bridge=BEIDGE来指定使用的网桥</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#停止服务并删除旧的网桥</div><div class="line">service docker stop</div><div class="line">brctl delbr docker0</div><div class="line">#创建新的网桥</div><div class="line">brctl addbr bridge0</div><div class="line">ip addr add 192.168.5.1/24 dev bridge0</div></pre></td></tr></table></figure>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtg9gcy3yj30h106fgm0.jpg" alt="使用自定义网桥"></p>
-<blockquote>
-<p>ip addr show bridge0</p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtg9tule6j30j708pt9p.jpg" alt="网桥创建成功"></p>
-<blockquote>
-<p>配置Docker服务<br>默认桥接到创建的网桥上<br>echo ‘DOCKER_OPTS=”-b=bridge0”‘ &gt;&gt; /etc/default/docker<br>service docker start<br>新建容器进行测试</p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtga8c8msj30hk0cggmt.jpg" alt="独立网桥测试成功"></p>
-<h1 id="使用Open-vSwitch"><a href="#使用Open-vSwitch" class="headerlink" title="使用Open vSwitch"></a>使用Open vSwitch</h1><blockquote>
-<p>高质量、多层虚拟交换机 使用GRE协议<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GRE 通用路由协议封装</div><div class="line">隧道技术是一种通过使用互联网络的基础设施在网络之间传递数据的方式，使用隧道传送的数据可以是不同协议的数据帧或包，隧道协议将其它协议的数据帧或包重新封装然后通过隧道发送；新的帧头提供路由信息，以便通过互联网传递被封装的负载数据。</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><blockquote>
-<p>apt-get install openvswitch-switch<br>apt-get install bridge-utils</p>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>pc1=192.168.1.110<br>pc2=192.168.1.55<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#建立网桥</div><div class="line">ovs-vsctl add-br obr0</div><div class="line">#添加GRE连接</div><div class="line">ovs-vsctl add-port obr0 gre0</div><div class="line">#配置Docker容器虚拟网桥</div><div class="line">set interface gre0 type=gre options:remote_ip=192.168.1.55</div><div class="line">root@tp-ubuntu:/etc/default# ovs-vsctl show</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">brctl addbr br0</div><div class="line">ifconfig br0 192.168.11.1 netmask 255.255.255.0</div><div class="line">brctl addif br0 obr0</div><div class="line">sudo brctl show</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">58fa415c-67aa-477d-93b7-6ac0f32fe49d</div><div class="line">    Bridge &quot;obr0&quot;</div><div class="line">        Port &quot;gre0&quot;</div><div class="line">            Interface &quot;gre0&quot;</div><div class="line">                type: gre</div><div class="line">                options: &#123;remote_ip=&quot;192.168.1.55&quot;&#125;</div><div class="line">        Port &quot;obr0&quot;</div><div class="line">            Interface &quot;obr0&quot;</div><div class="line">                type: internal</div><div class="line">    ovs_version: &quot;2.5.0&quot;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>修改Docker配置文件<br>为虚拟网桥添加ovs接口<br>vim /etc/default/docker<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">BRIDGE=br0</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h1 id="使用weave"><a href="#使用weave" class="headerlink" title="使用weave"></a>使用weave</h1><blockquote>
-<p>原理：建立一个虚拟的网络，用于将运行在不同主机的Docker容器连接起来</p>
-<h2 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget -O /usr/bin/weave https://raw.githubusercontent.com/zettio/weave/master/weave &amp;&amp; chmod a+x /usr/bin/weave</div></pre></td></tr></table></figure>
-<p>weave操作</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">安装weave</div><div class="line">启动weave</div><div class="line">    weave launch</div><div class="line">连接不同主机</div><div class="line">通过weave 启动容器</div></pre></td></tr></table></figure>
-<h1 id="启动虚拟机"><a href="#启动虚拟机" class="headerlink" title="启动虚拟机"></a>启动虚拟机</h1><blockquote>
-<p>客户机1<br>192.168.1.110<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave luanch</div></pre></td></tr></table></figure></p>
-<p>客户机2</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave launch 192.168.1.110</div></pre></td></tr></table></figure>
-<blockquote>
-<p>虚拟机1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave run 192.168.11.2/24 -it ubuntu:14.04 /bin/bash</div></pre></td></tr></table></figure></p>
-<p>虚拟机2</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave run 192.168.11.3/24 -it ubuntu:14.04 /bin/bash</div></pre></td></tr></table></figure>
-<blockquote>
-<p>查看weave路由状态<br>weave ps<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">容器重启问题</div><div class="line">如果使用weave，则就不能再使用docker自带的auto-restart feature（如docker run –restart=always redis），因为weave是在docker之外为容器配置的网络，容器重启的时候docker本身不会做这些事情。因而，还需额外的工具来管理容器的状态（比如systemd, upstart等），这些工具要调用weave命令（weave run/start/attach）来启动容器。</div></pre></td></tr></table></figure></p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker-跨主机连接/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Docker-容器间通信" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker-容器间通信/">Docker-容器间通信</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker-容器间通信/" class="archive-article-date">
-  	<time datetime="2015-06-19T22:35:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="pipework"><a href="#pipework" class="headerlink" title="pipework"></a>pipework</h1><blockquote>
-<p><a href="https://github.com/jpetazzo/pipework" target="_blank" rel="external">https://github.com/jpetazzo/pipework</a></p>
-<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>在同一宿主主机中创建两台容器，通过pipework创建网桥进行通讯</p>
-<h4 id="c1"><a href="#c1" class="headerlink" title="c1"></a>c1</h4><p>docker run –name c1 -it ubuntu:14.04</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtfx8vx82j30hc0ad75b.jpg" alt="c1"></p>
-<h4 id="c2"><a href="#c2" class="headerlink" title="c2"></a>c2</h4><blockquote>
-<p>docker run –name c2 -it ubuntu:14.04</p>
-</blockquote>
-<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtfxkm169j30gy0abgmm.jpg" alt="c2"></p>
-<blockquote>
-<p>创建网桥<br>git clone <a href="https://github.com/jpetazzo/pipework.git" target="_blank" rel="external">https://github.com/jpetazzo/pipework.git</a></p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  pipework git:(master) ./pipework br1 c1 192.168.11.1/24</div><div class="line">➜  pipework git:(master) ./pipework br1 c2 192.168.11.2/24</div><div class="line"> brctl show</div></pre></td></tr></table></figure>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfxvtbynj30i20a0my7.jpg" alt="创建网桥"></p>
-<blockquote>
-<p>效果图</p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtfy8sij4j311n0hq0wt.jpg" alt="效果图"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker-容器间通信/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Docker构建镜像-Dockerfile" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker构建镜像-Dockerfile/">Docker构建镜像-Dockerfile</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker构建镜像-Dockerfile/" class="archive-article-date">
-  	<time datetime="2015-03-27T14:25:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="通过dockerfile构建镜像"><a href="#通过dockerfile构建镜像" class="headerlink" title="通过dockerfile构建镜像"></a>通过dockerfile构建镜像</h1><blockquote>
-<p>Docker提供了一种标准化的DSL，你只需要编写一个Dockerfile，运行docker build指令，就可以构建自己的Image<br>Dockerfile指令<br><a href="https://docs.docker.com/engine/reference/builder/" target="_blank" rel="external">https://docs.docker.com/engine/reference/builder/</a></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo cat Dockerfile</div><div class="line">FROM debian</div><div class="line">RUN echo &quot;Hello docker!&quot;</div><div class="line">RUN apt-get update &amp;&amp; apt-get install -y \</div><div class="line">nginx</div><div class="line">RUN echo &apos;Nginx install success&apos; &gt; /var/www/html/index.html</div><div class="line">EXPOSE 80</div></pre></td></tr></table></figure>
-<blockquote>
-<p>构建镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo docker build -t=&quot;debian/nginx:2&quot; .</div><div class="line">Sending build context to Docker daemon 2.048 kB</div><div class="line">Step 1 : FROM debian</div><div class="line"> ---&gt; 1b01529cc499</div><div class="line">Step 2 : RUN echo &quot;Hello docker!&quot;</div><div class="line"> ---&gt; Using cache</div><div class="line"> ---&gt; 3791785c0268</div><div class="line">Step 3 : RUN apt-get update &amp;&amp; apt-get install -y nginx</div><div class="line"> ---&gt; Using cache</div><div class="line"> ---&gt; 47fcc445f762</div><div class="line">****************************************</div><div class="line">Successfully built 26eee4e7b4e4</div></pre></td></tr></table></figure></p>
-<p>查看构建成功后的镜像<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo docker images debian/nginx:2</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">debian/nginx        2                   26eee4e7b4e4        6 minutes ago       196.4 MB</div></pre></td></tr></table></figure></p>
-<p>使用该 镜像创建容器<br>-d 告诉容器以分离的方式在后台运行<br>nginx -g “daemon off;” 以前台的方式启动Nginx，作为Web容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker run -itd  -p 80 debian/nginx:2 nginx -g &quot;daemon off;&quot;</div><div class="line">b329360da168141902fc623b71f5cc79540bdffad26b1802e504988925ffec54</div><div class="line">➜  ~ docker port b329360da168141902fc623b71f5cc79540bdffad26b1802e504988925ffec54</div><div class="line">80/tcp -&gt; 0.0.0.0:32769</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="推送镜像至仓库"><a href="#推送镜像至仓库" class="headerlink" title="推送镜像至仓库"></a>推送镜像至仓库</h2><blockquote>
-<p>以docker hub为例</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker push r65q89/test</div></pre></td></tr></table></figure>
-<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><h3 id="查看镜像构建历史"><a href="#查看镜像构建历史" class="headerlink" title="查看镜像构建历史"></a>查看镜像构建历史</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="built_in">history</span> debian/nginx:2</div><div class="line">IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT</div><div class="line">26eee4e7b4e4        10 minutes ago      /bin/sh -c <span class="comment">#(nop)  EXPOSE 80/tcp                0 B                 </span></div><div class="line">fe16089c6b6f        11 minutes ago      /bin/sh -c <span class="built_in">echo</span> <span class="string">'Nginx install success'</span> &gt; /va   22 B                </div><div class="line">5c40a6f4eee9        11 minutes ago      /bin/sh -c service nginx start                  3 B                 </div><div class="line">47fcc445f762        12 minutes ago      /bin/sh -c apt-get update &amp;&amp; apt-get install    71.29 MB            </div><div class="line">3791785c0268        17 minutes ago      /bin/sh -c <span class="built_in">echo</span> <span class="string">"Hello docker!"</span>                 0 B                 </div><div class="line">1b01529cc499        3 weeks ago         /bin/sh -c <span class="comment">#(nop) CMD ["/bin/bash"]             0 B                 </span></div><div class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c <span class="comment">#(nop) ADD file:0e0565652aa852f620   125.1 MB</span></div></pre></td></tr></table></figure>
-<h3 id="查看某容器端口映射情况"><a href="#查看某容器端口映射情况" class="headerlink" title="查看某容器端口映射情况"></a>查看某容器端口映射情况</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker port 容器id</div></pre></td></tr></table></figure>
-<blockquote>
-<p>或者这样查看所有docker映射的端口</p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtft761tij30p9026glm.jpg" alt="端口映射"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker构建镜像-Dockerfile/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Docker构建镜像-commit" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker构建镜像-commit/">Docker构建镜像-commit</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker构建镜像-commit/" class="archive-article-date">
-  	<time datetime="2015-03-22T13:23:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="docker-commit"><a href="#docker-commit" class="headerlink" title="docker commit"></a>docker commit</h1><blockquote>
-<p>先创建一个容器，并在容器里做出修改,最后commit修改<br>类似github的使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker run -i -t --name test-docker-commit debian /bin/bash</div><div class="line">root@8b20759d9e60:/#</div><div class="line">root@8b20759d9e60:/# apt-get -yqq update</div><div class="line">root@8b20759d9e60:/# apt-get -yqq install ipython</div></pre></td></tr></table></figure></p>
-<p>commit修改</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@8b20759d9e60:/# exit</div><div class="line">exit</div><div class="line">➜  ~ docker commit test-docker-commit debian/ipython</div><div class="line">sha256:dd7440e1f33791270b82010396b02b8522899619f9336bc998835733b988cd76</div></pre></td></tr></table></figure>
-<blockquote>
-<p>查看新创建的镜像</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker images debian/ipython</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">debian/ipython      latest              dd7440e1f337        2 minutes ago       173.9 MB</div></pre></td></tr></table></figure>
-<blockquote>
-<p>可通过docker inspect查看镜像详细详细</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker inspect debian/ipython:v1</div><div class="line">[</div><div class="line">    &#123;</div><div class="line">        <span class="string">"Id"</span>: <span class="string">"sha256:05fc24b025ad3ad61a121785e53e7748cfd415b6fbb0aad630ae5844e4bd5607"</span>,</div><div class="line">        <span class="string">"RepoTags"</span>: [</div><div class="line">            <span class="string">"debian/ipython:v1"</span></div><div class="line">        ],</div><div class="line">        <span class="string">"RepoDigests"</span>: [],</div><div class="line">        <span class="string">"Parent"</span>: <span class="string">"sha256:1b01529cc499d51767c62f9fc8083043610546b4e050898809ec54e00dbb1a34"</span>,</div><div class="line">        <span class="string">"Comment"</span>: <span class="string">"base image is debian"</span>,</div><div class="line">        <span class="string">"Created"</span>: <span class="string">"2016-08-25T05:54:03.366052897Z"</span>,</div><div class="line">        <span class="string">"Container"</span>: <span class="string">"8b20759d9e601a78a1baa8441238297e35a51c95b35fb17f3a1e6399cb540f1a"</span>,</div><div class="line">        <span class="string">"ContainerConfig"</span>: &#123;</div><div class="line">            <span class="string">"Hostname"</span>: <span class="string">"8b20759d9e60"</span>,</div><div class="line">            <span class="string">"Domainname"</span>: <span class="string">""</span>,</div><div class="line">………………………………</div></pre></td></tr></table></figure>
-<blockquote>
-<p>docker commit 的一些参数</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker commit --help</div><div class="line"></div><div class="line">Usage:	docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]</div><div class="line"></div><div class="line">Create a new image from a container<span class="string">'s changes</span></div><div class="line"></div><div class="line">Options:</div><div class="line">  -a, --author string    Author (e.g., "John Hannibal Smith &lt;hannibal@a-team.com&gt;")</div><div class="line">  -c, --change value     Apply Dockerfile instruction to the created image (default [])</div><div class="line">      --help             Print usage</div><div class="line">  -m, --message string   Commit message</div><div class="line">  -p, --pause            Pause container during commit (default true)</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker构建镜像-commit/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1325,6 +1494,14 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">hydra</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">

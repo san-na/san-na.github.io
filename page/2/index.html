@@ -184,6 +184,475 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-LVM相关介绍" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/LVM相关介绍/">LVM相关介绍</a>
+    </h1>
+  
+
+        
+        <a href="/devops/LVM相关介绍/" class="archive-article-date">
+  	<time datetime="2016-09-20T14:54:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="LVM概念"><a href="#LVM概念" class="headerlink" title="LVM概念"></a>LVM概念</h1><blockquote>
+<p>Logical Volume Manager 逻辑卷管理</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">通过将底层物理硬盘抽象封装起来，以逻辑卷的形式表现给上层系统，逻辑卷的大小可以动态调整，而且不会丢失现有数据。新加入的硬盘也不会改变现有上层的逻辑卷。</div><div class="line">作为一种多台磁盘管理机制，逻辑卷技术大大提高了磁盘管理的灵活性。</div></pre></td></tr></table></figure>
+<h2 id="LVM的4个基本概念"><a href="#LVM的4个基本概念" class="headerlink" title="LVM的4个基本概念"></a>LVM的4个基本概念</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">① PE　　(Physical Extend)　　物理拓展</div><div class="line"></div><div class="line">② PV　　(Physical Volume)　　物理卷</div><div class="line"></div><div class="line">③ VG　　(Volume Group)　　卷组</div><div class="line"></div><div class="line">④ LV　　(Logical Volume)　　逻辑卷</div></pre></td></tr></table></figure>
+<blockquote>
+<p>PE逻辑卷空间管理的最基本单位。1个PE默认是4M大小<br>VG的作用是用来装PV的–空间池</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtd144awyj30dz09maa8.jpg" alt=""></p>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtd1e7fvuj30es0akjrr.jpg" alt=""></p>
+<h1 id="创建LVM"><a href="#创建LVM" class="headerlink" title="创建LVM"></a>创建LVM</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">➜  ~ fdisk <span class="_">-l</span></div><div class="line"></div><div class="line">Disk /dev/sda: 300 GiB, 322122547200 bytes, 629145600 sectors</div><div class="line">Units: sectors of 1 * 512 = 512 bytes</div><div class="line">Sector size (logical/physical): 512 bytes / 512 bytes</div><div class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</div><div class="line">Disklabel <span class="built_in">type</span>: dos</div><div class="line">Disk identifier: 0xc1<span class="built_in">fc</span>20ae</div><div class="line"></div><div class="line">Device     Boot     Start       End   Sectors  Size Id Type</div><div class="line">/dev/sda1  *         2048 612370431 612368384  292G 83 Linux</div><div class="line">/dev/sda2       612372478 629143551  16771074    8G  5 Extended</div><div class="line">/dev/sda5       612372480 629143551  16771072    8G 82 Linux swap / Solaris</div><div class="line"></div><div class="line">Disk /dev/sdb: 50 GiB, 53687091200 bytes, 104857600 sectors</div><div class="line">Units: sectors of 1 * 512 = 512 bytes</div><div class="line">Sector size (logical/physical): 512 bytes / 512 bytes</div><div class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</div></pre></td></tr></table></figure>
+<ol>
+<li>将物理磁盘设备初始化为物理卷<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvcreate /dev/sdb</div><div class="line">  Physical volume &quot;/dev/sdb&quot; successfully created</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>查看物理卷信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvs</div><div class="line">  PV         VG   Fmt  Attr PSize  PFree</div><div class="line">  /dev/sdb        lvm2 ---  50.00g 50.00g</div></pre></td></tr></table></figure></p>
+</blockquote>
+<ol>
+<li>创建卷组，并将PV加入卷组中<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;名字为lvmtest， 可任意</div><div class="line">➜  ~ vgcreate lvmtest /dev/sdb</div><div class="line">  Volume group &quot;lvmtest&quot; successfully created</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgs</div><div class="line">  VG      <span class="comment">#PV #LV #SN Attr   VSize  VFree</span></div><div class="line">  lvmtest   1   0   0 wz--n- 50.00g 50.00g</div><div class="line">&gt;查看卷组信息</div><div class="line">➜  ~ vgdisplay</div><div class="line">  --- Volume group ---</div><div class="line">  VG Name               lvmtest</div><div class="line">  System ID             </div><div class="line">  Format                lvm2</div><div class="line">  Metadata Areas        1</div><div class="line">  Metadata Sequence No  1</div><div class="line">  VG Access             <span class="built_in">read</span>/write</div><div class="line">  VG Status             resizable</div><div class="line">  MAX LV                0</div><div class="line">  Cur LV                0</div><div class="line">  Open LV               0</div><div class="line">  Max PV                0</div><div class="line">  Cur PV                1</div><div class="line">  Act PV                1</div><div class="line">  VG Size               50.00 GiB</div><div class="line">  PE Size               4.00 MiB</div><div class="line">  Total PE              12799</div><div class="line">  Alloc PE / Size       0 / 0   </div><div class="line">  Free  PE / Size       12799 / 50.00 GiB</div><div class="line">  VG UUID               cxMG1m-pMAE-Suk5-bM69-1sB3-W7YB-WXmmGh</div></pre></td></tr></table></figure>
+<ol>
+<li>基于卷组创建逻辑卷<blockquote>
+<p>这里我从lvmtest拿了20G空间来创建了一个名为lv1的逻辑卷</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvcreate -n lv1 -L 20G lvmtest</div><div class="line">  Logical volume <span class="string">"lv1"</span> created</div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>查看逻辑卷信息<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvs</div><div class="line">  LV   VG      Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert</div><div class="line">  lv1  lvmtest -wi<span class="_">-a</span>----- 20.00g                                                    </div><div class="line">➜  ~ lvdisplay</div><div class="line">  --- Logical volume ---</div><div class="line">  LV Path                /dev/lvmtest/lv1</div><div class="line">  LV Name                lv1</div><div class="line">  VG Name                lvmtest</div><div class="line">  LV UUID                Q4UIbv-yWhL-Bl5A-ywTN-1HJo-TE5r-TKBPfQ</div><div class="line">  LV Write Access        <span class="built_in">read</span>/write</div><div class="line">  LV Creation host, time kali, 2016-08-03 08:44:31 +0800</div><div class="line">  LV Status              available</div><div class="line">  <span class="comment"># open                 0</span></div><div class="line">  LV Size                20.00 GiB</div><div class="line">  Current LE             5120</div><div class="line">  Segments               1</div><div class="line">  Allocation             inherit</div><div class="line">  Read ahead sectors     auto</div><div class="line">  - currently <span class="built_in">set</span> to     256</div><div class="line">  Block device           254:0</div></pre></td></tr></table></figure></p>
+</blockquote>
+<ol>
+<li><p>为创建好的逻辑卷创建文件系统</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  ~ mkfs.ext4 /dev/lvmtest/lv1</div><div class="line">mke2fs 1.42.12 (29-Aug-2014)</div><div class="line">Creating filesystem with 5242880 4k blocks and 1310720 inodes</div><div class="line">Filesystem UUID: 5130e6e1-8293-4fcb-b580-5091f3840f99</div><div class="line">Superblock backups stored on blocks:</div><div class="line">	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,</div><div class="line">	4096000</div><div class="line"></div><div class="line">Allocating group tables: done                            </div><div class="line">Writing inode tables: done                            </div><div class="line">Creating journal (32768 blocks): done</div><div class="line">Writing superblocks and filesystem accounting information: done</div></pre></td></tr></table></figure>
+</li>
+<li><p>将格式化好的逻辑卷挂载使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ mount /dev/lvmtest/lv1 /mnt/</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>查看<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  /mnt mount | tail -n 1</div><div class="line">/dev/mapper/lvmtest-lv1 on /mnt type ext4 (rw,relatime,data=ordered)</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="删除LVM"><a href="#删除LVM" class="headerlink" title="删除LVM"></a>删除LVM</h1><blockquote>
+<p>先把相应的东西umount掉<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ umount /mnt</div></pre></td></tr></table></figure></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ mount | tail -n 1</div><div class="line">/dev/sr0 on /media/cdrom0 type iso9660 (ro,nosuid,nodev,noexec,relatime,user)</div></pre></td></tr></table></figure>
+<ol>
+<li><p>删除LV</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvremove /dev/lvmtest/lv1</div><div class="line">Do you really want to remove active logical volume lv1? [y/n]: y</div><div class="line">  Logical volume &quot;lv1&quot; successfully removed</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除VG</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgremove lvmtest</div><div class="line">  Volume group &quot;lvmtest&quot; successfully removed</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除物理卷</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvremove /dev/sdb</div><div class="line">  Labels on physical volume &quot;/dev/sdb&quot; successfully wiped</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="扩充逻辑卷容量"><a href="#扩充逻辑卷容量" class="headerlink" title="扩充逻辑卷容量"></a>扩充逻辑卷容量</h1><blockquote>
+<p>逻辑卷的拉伸操作可以在线执行，不需要卸载逻辑卷</p>
+</blockquote>
+<ol>
+<li>保证VG中有足够的空闲空间</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgs</div><div class="line">  VG   #PV #LV #SN Attr   VSize  VFree</div><div class="line">  vg     1   1   0 wz--n- 50.00g 30.00g</div></pre></td></tr></table></figure>
+<ol>
+<li><p>扩充逻辑卷</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvextend  -L +1G /dev/vg/lv</div><div class="line">  Size of logical volume vg/lv changed from 20.00 GiB (5120 extents) to 21.00 GiB (5376 extents).</div><div class="line">  Logical volume lv successfully resized</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看扩充后LV大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvdisplay</div><div class="line">  --- Logical volume ---</div><div class="line">  LV Path                /dev/vg/lv</div><div class="line">  LV Name                lv</div><div class="line">  VG Name                vg</div><div class="line">  LV UUID                5q9mCJ-7Y3f-dEo7-xlDz-lJAW-Oczm-RuCeIE</div><div class="line">  LV Write Access        read/write</div><div class="line">  LV Creation host, time kali, 2016-08-03 09:51:18 +0800</div><div class="line">  LV Status              available</div><div class="line">  # open                 0</div><div class="line">  LV Size                21.00 GiB</div><div class="line">  Current LE             5376</div><div class="line">  Segments               1</div><div class="line">  Allocation             inherit</div><div class="line">  Read ahead sectors     auto</div><div class="line">  - currently set to     256</div><div class="line">  Block device           254:0</div></pre></td></tr></table></figure>
+</li>
+<li><p>更新文件系统</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  ~ resize2fs /dev/vg/lv</div><div class="line">resize2fs 1.42.12 (29-Aug-2014)</div><div class="line">Filesystem at /dev/vg/lv is mounted on /mnt; on-line resizing required</div><div class="line">old_desc_blocks = 2, new_desc_blocks = 2</div><div class="line">The filesystem on /dev/vg/lv is now 5505024 (4k) blocks long.</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看更新后文件系统</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  ~ df -h</div><div class="line">Filesystem         Size  Used Avail Use% Mounted on</div><div class="line">udev                10M     0   10M   0% /dev</div><div class="line">tmpfs              792M  9.1M  783M   2% /run</div><div class="line">/dev/sda1          288G   16G  257G   6% /</div><div class="line">tmpfs              2.0G  208K  2.0G   1% /dev/shm</div><div class="line">tmpfs              5.0M     0  5.0M   0% /run/lock</div><div class="line">tmpfs              2.0G     0  2.0G   0% /sys/fs/cgroup</div><div class="line">tmpfs              396M  8.0K  396M   1% /run/user/132</div><div class="line">tmpfs              396M   12K  396M   1% /run/user/0</div><div class="line">/dev/sr0           3.1G  3.1G     0 100% /media/cdrom0</div><div class="line">/dev/mapper/vg-lv   21G   44M   20G   1% /mnt</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="扩充卷组容量"><a href="#扩充卷组容量" class="headerlink" title="扩充卷组容量"></a>扩充卷组容量</h1><ol>
+<li><p>将要添加到VG的硬盘格式化为PV</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvcreate /dev/sdc</div><div class="line">  Physical volume &quot;/dev/sdc&quot; successfully created</div></pre></td></tr></table></figure>
+</li>
+<li><p>将新的PV添加到指定卷组中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgextend vg /dev/sdc</div><div class="line">  Volume group &quot;vg&quot; successfully extended</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看扩充后VG大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgs</div><div class="line">  VG   #PV #LV #SN Attr   VSize  VFree</div><div class="line">  vg     2   1   0 wz--n- 69.99g 48.99g</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="缩小逻辑卷容量"><a href="#缩小逻辑卷容量" class="headerlink" title="缩小逻辑卷容量"></a>缩小逻辑卷容量</h1><blockquote>
+<p>逻辑卷的缩小操作必须离线执行，要卸载逻辑卷</p>
+</blockquote>
+<ol>
+<li><p>卸载一键挂载的逻辑卷</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ umount /dev/mapper/vg-lv</div></pre></td></tr></table></figure>
+</li>
+<li><p>缩小文件系统</p>
+<blockquote>
+<p>缩小为10G</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">➜  ~ resize2fs /dev/vg/lv 10G</div><div class="line">resize2fs 1.42.12 (29-Aug-2014)</div><div class="line">Please run &apos;e2fsck -f /dev/vg/lv&apos; first.</div><div class="line"></div><div class="line">➜  ~ resize2fs /dev/mapper/vg-lv 10G</div><div class="line">resize2fs 1.42.12 (29-Aug-2014)</div><div class="line">Please run &apos;e2fsck -f /dev/mapper/vg-lv&apos; first.</div><div class="line"></div><div class="line">➜  ~ e2fsck -f /dev/mapper/vg-lv</div><div class="line">e2fsck 1.42.12 (29-Aug-2014)</div><div class="line">Pass 1: Checking inodes, blocks, and sizes</div><div class="line">Pass 2: Checking directory structure</div><div class="line">Pass 3: Checking directory connectivity</div><div class="line">Pass 4: Checking reference counts</div><div class="line">Pass 5: Checking group summary information</div><div class="line">/dev/mapper/vg-lv: 11/1376256 files (0.0% non-contiguous), 130401/5505024 blocks</div><div class="line">➜  ~ resize2fs /dev/mapper/vg-lv 10G</div><div class="line">resize2fs 1.42.12 (29-Aug-2014)</div><div class="line">Resizing the filesystem on /dev/mapper/vg-lv to 2621440 (4k) blocks.</div><div class="line">The filesystem on /dev/mapper/vg-lv is now 2621440 (4k) blocks long.</div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>缩小LV</p>
+<blockquote>
+<p>缩小的容量为之前的容量减去文件系统容量<br>21-10=11</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvreduce -L -11G /dev/vg/lv</div><div class="line">  WARNING: Reducing active logical volume to 10.00 GiB</div><div class="line">  THIS MAY DESTROY YOUR DATA (filesystem etc.)</div><div class="line">Do you really want to reduce lv? [y/n]: y</div><div class="line">  Size of logical volume vg/lv changed from 21.00 GiB (5376 extents) to 10.00 GiB (2560 extents).</div><div class="line">  Logical volume lv successfully resized</div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>查看缩小后的LV</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvdisplay</div><div class="line">  --- Logical volume ---</div><div class="line">  LV Path                /dev/vg/lv</div><div class="line">  LV Name                lv</div><div class="line">  VG Name                vg</div><div class="line">  LV UUID                5q9mCJ-7Y3f-dEo7-xlDz-lJAW-Oczm-RuCeIE</div><div class="line">  LV Write Access        read/write</div><div class="line">  LV Creation host, time kali, 2016-08-03 09:51:18 +0800</div><div class="line">  LV Status              available</div><div class="line">  # open                 0</div><div class="line">  LV Size                10.00 GiB</div><div class="line">  Current LE             2560</div><div class="line">  Segments               1</div><div class="line">  Allocation             inherit</div><div class="line">  Read ahead sectors     auto</div><div class="line">  - currently set to     256</div><div class="line">  Block device           254:0</div></pre></td></tr></table></figure>
+</li>
+<li><p>挂载</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ mount /dev/vg/lv /mnt</div><div class="line">➜  ~ mount | tail -n 1</div><div class="line">/dev/mapper/vg-lv on /mnt type ext4 (rw,relatime,data=ordered)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="缩小卷组"><a href="#缩小卷组" class="headerlink" title="缩小卷组"></a>缩小卷组</h1><ol>
+<li><p>将一个PV从制定卷组中移除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgreduce vg /dev/sdc</div><div class="line">  Removed &quot;/dev/sdc&quot; from volume group &quot;vg&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看缩小后的卷组大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">~ vgdisplay</div><div class="line">--- Volume group ---</div><div class="line">VG Name               vg</div><div class="line">System ID             </div><div class="line">Format                lvm2</div><div class="line">Metadata Areas        1</div><div class="line">Metadata Sequence No  8</div><div class="line">VG Access             read/write</div><div class="line">VG Status             resizable</div><div class="line">MAX LV                0</div><div class="line">Cur LV                1</div><div class="line">Open LV               1</div><div class="line">Max PV                0</div><div class="line">Cur PV                1</div><div class="line">Act PV                1</div><div class="line">VG Size               50.00 GiB</div><div class="line">PE Size               4.00 MiB</div><div class="line">Total PE              12799</div><div class="line">Alloc PE / Size       2560 / 10.00 GiB</div><div class="line">Free  PE / Size       10239 / 40.00 GiB</div><div class="line">VG UUID               E32ZJW-3NqL-jpr2-1KYN-QWDh-dZhJ-1ZxZ2i</div></pre></td></tr></table></figure>
+</li>
+<li><p>移除物理卷</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvs</div><div class="line">  PV         VG   Fmt  Attr PSize  PFree</div><div class="line">  /dev/sdb   vg   lvm2 a--  50.00g 40.00g</div><div class="line">  /dev/sdc        lvm2 ---  20.00g 20.00g</div><div class="line">➜  ~ pvremove /dev/sdc</div><div class="line">  Labels on physical volume &quot;/dev/sdc&quot; successfully wiped</div><div class="line">➜  ~ pvs</div><div class="line">  PV         VG   Fmt  Attr PSize  PFree</div><div class="line">  /dev/sdb   vg   lvm2 a--  50.00g 40.00g</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">LVM</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/devops/LVM相关介绍/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-hydra-折腾笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/hydra-折腾笔记/">hydra 折腾笔记</a>
+    </h1>
+  
+
+        
+        <a href="/sec/hydra-折腾笔记/" class="archive-article-date">
+  	<time datetime="2016-09-20T10:18:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">output =subprocess.Popen(<span class="string">"hydra -l ftp -P wooyun.txt 192.168.1.20 ftp"</span>, shell=True,stdout=subprocess.PIPE).communicate()[0]</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">In [62]: &apos;successfully&apos; in output</div><div class="line"></div><div class="line">Out[62]: True</div></pre></td></tr></table></figure>
+<h1 id="相关文档"><a href="#相关文档" class="headerlink" title="相关文档"></a>相关文档</h1><blockquote>
+<p><a href="http://www.cnblogs.com/mchina/archive/2013/01/01/2840815.html" target="_blank" rel="external">http://www.cnblogs.com/mchina/archive/2013/01/01/2840815.html</a></p>
+</blockquote>
+<h1 id="备选方案"><a href="#备选方案" class="headerlink" title="备选方案"></a>备选方案</h1><blockquote>
+<p>全能暴力破解测试工具——Patator v0.5<br><a href="https://github.com/lanjelot/patator" target="_blank" rel="external">https://github.com/lanjelot/patator</a></p>
+</blockquote>
+<h1 id="python-捕获-shell-脚本的输出结果"><a href="#python-捕获-shell-脚本的输出结果" class="headerlink" title="python 捕获 shell 脚本的输出结果"></a>python 捕获 shell 脚本的输出结果</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line">output =Popen([<span class="string">"mycmd"</span>,<span class="string">"myarg"</span>], stdout=PIPE).communicate()[<span class="number">0</span>]</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line">p = subprocess.Popen([<span class="string">'ls'</span>,<span class="string">'-a'</span>], stdout=subprocess.PIPE, stderr=subprocess.PIPE)</div><div class="line">out, err = p.communicate()</div><div class="line"><span class="keyword">print</span> out</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># work on Unix/Linux only</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> commands</div><div class="line"><span class="keyword">print</span> commands.getstatusoutput(<span class="string">'wc -l file'</span>)[<span class="number">1</span>]</div></pre></td></tr></table></figure>
+<h1 id="Demo-Py-hydra"><a href="#Demo-Py-hydra" class="headerlink" title="[Demo] Py-hydra"></a>[Demo] Py-hydra</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line">通过Python操作Hydra进行相关服务弱口令扫描</div><div class="line">相关结果以json的形式返回</div><div class="line">'''</div><div class="line"></div><div class="line">__author__ = <span class="string">"SanNa"</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">import</span> signal</div><div class="line"></div><div class="line"><span class="comment"># 设置超时时间</span></div><div class="line">TIME_OUT = <span class="number">20</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_hydra</span><span class="params">(ip, service, username, password)</span>:</span></div><div class="line">    <span class="string">'''调用hydra进行破解</span></div><div class="line"></div><div class="line">    :param ip: 目标ip</div><div class="line">    :param service: 服务类型</div><div class="line">    :param username: 用户字典</div><div class="line">    :param password: 密码字典</div><div class="line"></div><div class="line">    :return str</div><div class="line">    '''</div><div class="line">    kwargs = &#123;</div><div class="line">            <span class="string">'ip'</span>: ip,</div><div class="line">            <span class="string">'service'</span>: service,</div><div class="line">            <span class="string">'username'</span>: username,</div><div class="line">            <span class="string">'password'</span>: password,</div><div class="line">            &#125;</div><div class="line">    command_str = <span class="string">"hydra -L &#123;username&#125; -P &#123;password&#125; &#123;ip&#125; &#123;service&#125;"</span></div><div class="line">    result = subprocess.Popen(command_str.format(**kwargs),</div><div class="line">                    shell=<span class="keyword">True</span>, stdout=subprocess.PIPE).communicate()[<span class="number">0</span>]</div><div class="line">    <span class="keyword">return</span> result</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">return_json</span><span class="params">(result)</span>:</span></div><div class="line">    <span class="string">'''从扫描结果中提出相关信息</span></div><div class="line"></div><div class="line">    :param result: 扫描结果</div><div class="line"></div><div class="line">    :return json</div><div class="line">    '''</div><div class="line">    ok_flag = <span class="string">'target successfully completed'</span></div><div class="line">    fail_flag = <span class="string">'0 valid passwords found'</span></div><div class="line">    data = &#123;</div><div class="line">            <span class="string">'login'</span>: <span class="keyword">None</span>,</div><div class="line">            <span class="string">'password'</span>: <span class="keyword">None</span>,</div><div class="line">            &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ok_flag <span class="keyword">in</span> result:</div><div class="line">        data[<span class="string">'status'</span>]  =  <span class="string">'success'</span></div><div class="line">        item = result.split(<span class="string">'\n'</span>)[<span class="number">5</span>]</div><div class="line">        data[<span class="string">'login'</span>] = item.split(<span class="string">' '</span>)[<span class="number">6</span>]</div><div class="line">        data[<span class="string">'password'</span>] = item.split(<span class="string">' '</span>)[<span class="number">10</span>]</div><div class="line">    <span class="keyword">elif</span> fail_flag <span class="keyword">in</span> result:</div><div class="line">        data[<span class="string">'status'</span>] = <span class="string">'fail'</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        data[<span class="string">'status'</span>] = <span class="string">'unknown error.'</span></div><div class="line">    <span class="keyword">return</span> json.dumps([data])</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">handler</span><span class="params">(signum, frame)</span>:</span></div><div class="line">    <span class="keyword">raise</span> AssertionError</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    ip = sys.argv[<span class="number">1</span>]</div><div class="line">    service = sys.argv[<span class="number">2</span>]</div><div class="line">    username = <span class="string">'username.txt'</span></div><div class="line">    password = <span class="string">'password.txt'</span></div><div class="line">    <span class="comment"># try:</span></div><div class="line">    <span class="comment">#     username = sys.argv[3]</span></div><div class="line">    <span class="comment"># except:</span></div><div class="line">    <span class="comment">#     username = 'ftp'</span></div><div class="line">    <span class="comment"># try:</span></div><div class="line">    <span class="comment">#     password = sys.argv[4]</span></div><div class="line">    <span class="comment"># except:</span></div><div class="line">    <span class="comment">#     password = 'ftp'</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'[*] Place wait...'</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="comment"># 超时设置</span></div><div class="line">        signal.signal(signal.SIGALRM, handler)</div><div class="line">        signal.alarm(TIME_OUT)</div><div class="line"></div><div class="line">        result = start_hydra(ip, service, username, password)</div><div class="line">        <span class="keyword">print</span> result</div><div class="line">        data = return_json(result)</div><div class="line">    <span class="keyword">except</span> AssertionError:</div><div class="line">        <span class="keyword">print</span> <span class="string">"TIMEOUT!"</span></div></pre></td></tr></table></figure>
+<h1 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  hydar  python test.py 192.168.1.55 ftp</div><div class="line">[*] Place wait...</div><div class="line">Hydra v8.1 (c) 2014 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes.</div><div class="line"></div><div class="line">Hydra (http://www.thc.org/thc-hydra) starting at 2016-06-02 12:41:32</div><div class="line">[DATA] max 16 tasks per 1 server, overall 64 tasks, 22425 login tries (l:69/p:325), ~21 tries per task</div><div class="line">[DATA] attacking service ftp on port 21</div><div class="line">[21][ftp] host: 192.168.1.55   login: ftp   password: ftp</div><div class="line">1 of 1 target successfully completed, 1 valid password found</div><div class="line">Hydra (http://www.thc.org/thc-hydra) finished at 2016-06-02 12:41:37</div><div class="line"></div><div class="line">[&#123;&quot;status&quot;: &quot;success&quot;, &quot;login&quot;: &quot;ftp&quot;, &quot;password&quot;: &quot;ftp&quot;&#125;]</div></pre></td></tr></table></figure>
+<h1 id="备选方案-1"><a href="#备选方案-1" class="headerlink" title="备选方案"></a>备选方案</h1><blockquote>
+<p>全能暴力破解测试工具——Patator v0.5<br><a href="https://github.com/lanjelot/patator" target="_blank" rel="external">https://github.com/lanjelot/patator</a></p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">hydra</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/hydra-折腾笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-MongoDB-开机自启动" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/db/MongoDB-开机自启动/">MongoDB 开机自启动</a>
+    </h1>
+  
+
+        
+        <a href="/db/MongoDB-开机自启动/" class="archive-article-date">
+  	<time datetime="2016-09-20T08:18:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="mongodb"><a href="#mongodb" class="headerlink" title="mongodb"></a>mongodb</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/rc.d/init.d/mongodb</div></pre></td></tr></table></figure>
+<blockquote>
+<p>如果需要后台的方式启动，则为<br>/dat0/mongodb/bin/mongod –dbpath=/data/db/ –fork –logpath=/data/logs/mongodb.log</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh  </span></div><div class="line"><span class="comment">#  </span></div><div class="line"><span class="comment">#chkconfig: 2345 80 90  </span></div><div class="line"><span class="comment">#description: mongodb  </span></div><div class="line"><span class="function"><span class="title">start</span></span>() &#123;  </div><div class="line">  /dat0/mongodb/bin/mongod</div><div class="line">&#125;  </div><div class="line"></div><div class="line"><span class="function"><span class="title">stop</span></span>() &#123;  </div><div class="line">   /dat0/mongodb/bin/mongod  --shutdown  </div><div class="line">&#125;  </div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span>  </div><div class="line">  start)  </div><div class="line"> start  </div><div class="line"> ;;  </div><div class="line">  stop)  </div><div class="line"> stop  </div><div class="line"> ;;  </div><div class="line">  restart)  </div><div class="line"> stop  </div><div class="line"> start  </div><div class="line"> ;;  </div><div class="line">  *)  </div><div class="line"> <span class="built_in">echo</span> $<span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart&#125;"</span>  </div><div class="line"> <span class="built_in">exit</span> 1  </div><div class="line"><span class="keyword">esac</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">chkconfig --add mongodb  </div><div class="line">chmod +x  mongodb  </div><div class="line">chkconfig mongodb on</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MongoDB</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/db/" class="article-tag-list-link color3">db</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/db/MongoDB-开机自启动/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-FreeRADIUS" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/FreeRADIUS/">FreeRADIUS</a>
+    </h1>
+  
+
+        
+        <a href="/devops/FreeRADIUS/" class="archive-article-date">
+  	<time datetime="2016-09-18T12:30:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Radius"><a href="#Radius" class="headerlink" title="Radius"></a>Radius</h1><blockquote>
+<p>Remote Authentication Dial In User Service 远程访问拨号用户服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">RADIUS是一种C/S结构的协议，它的客户端最初就是NAS（Net Access Server）服务器，任何运行RADIUS客户端软件的计算机都可以成为RADIUS的客户端。RADIUS协议认证机制灵活，可以采用PAP、CHAP或者Unix登录认证等多种方式。RADIUS是一种可扩展的协议，它进行的全部工作都是基于Attribute-Length-Value的向量进行的。RADIUS也支持厂商扩充厂家专有属性。</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="Freeradius-Install"><a href="#Freeradius-Install" class="headerlink" title="Freeradius Install"></a>Freeradius Install</h2><blockquote>
+<p>Ubuntu.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-3.0.11.tar.gz</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar zxf freeradius-server-3.0.11.tar.gz</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd freeradius-server-3.0.11/</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Bug Fix<br>在configure时可能会出现<br>failed linking to libcrypto. Use –with-openssl-lib-dir=<path></path>, or –with-openssl=no (builds without OpenSSL)<br>解决办法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Red Hat, Fedora, CentOS - openssl-devel</div><div class="line">Debian, Ubuntu - libssl-dev</div><div class="line">Arch - openssl</div></pre></td></tr></table></figure></p>
+<p>error: FreeRADIUS requires libtalloc</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install libtalloc-devel -y</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">radiusd -X</div></pre></td></tr></table></figure>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adtest hello hello localhost 0 testing123</div></pre></td></tr></table></figure>
+<h3 id="To-Do"><a href="#To-Do" class="headerlink" title="To Do"></a>To Do</h3><blockquote>
+<p>修改的模块是modules里面的rlm_realm，这个module完成了Proxy的相关业务逻辑，我们需要开发HUE的rlm_realm，并打包。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./src/modules/rlm_realm/rlm_realm.c</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="PAM"><a href="#PAM" class="headerlink" title="PAM"></a>PAM</h1><blockquote>
+<p>Pluggable Authentication Modules 可插拔认证模块<br><a href="http://www.ibm.com/developerworks/cn/linux/l-pam/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/linux/l-pam/</a></p>
+</blockquote>
+<h1 id="PAM的文件"><a href="#PAM的文件" class="headerlink" title="PAM的文件"></a>PAM的文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/etc/pam.conf或者/etc/pam.d/ PAM配置文件</div><div class="line">/usr/lib/security/pam_*.so 可动态加载的PAM service module</div><div class="line">对于RedHat，其目录不是/usr/lib，而是/lib</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">FreeRADIUS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/devops/FreeRADIUS/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Centos-6-6-Install-OSSEC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -745,589 +1214,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Linux取证分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/sec/Linux取证分析/">Linux取证分析</a>
-    </h1>
-  
-
-        
-        <a href="/sec/Linux取证分析/" class="archive-article-date">
-  	<time datetime="2016-06-26T13:26:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="进程隐藏相关原理"><a href="#进程隐藏相关原理" class="headerlink" title="进程隐藏相关原理"></a>进程隐藏相关原理</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><blockquote>
-<p>目前在 Linux 上隐藏进程的技术主要有两种</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( 1) 类似于 ps、top 等的命令能够列出包括 init 在内的所有重要的系统进程, 通过对他们的实现过程进行改造来实现进程隐藏, 具体做法是“劫持”ps 的关键系统调用 sys_getdents( ), 从而无法查看包含进程信息的目录。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( 2) ps 命令实际是通过读取 proc文件系统来向用户返回进程信息的, 而 proc 文件系统是通过文件系统( VFS) 接口来实现的, 因此通过劫持文件系统操作函数集( inode_operation 和 file_operations) 中的有关函数, 使得进程信息无法通过文件系统接口输出给用户。</div></pre></td></tr></table></figure>
-<blockquote>
-<p>以上两种方法虽然都可实现进程隐藏, 但均是在较高的层次上实现的,<br>方法 1 虽然在 ps 时看似隐藏了某个进程, 但在 proc中该进程仍然对用户可见<br> 方法 2 是在 VFS 层对内核函数的劫持, 意味着需要先判断输出的系统信息是与进程有关的还是与进程无关的( 与进程无关的并无隐藏的必要)<br>并且这两种方法都无法满足仅对进程部分信息隐藏的需求, 在实际应用中不够灵活。实际上, 用户对进程信息的访问, 都是通过proc 文件系统完成的, 因此, 实现进程隐藏的根本途径是从 proc 入手, 准确地找出进程信息产生的关键点, 在这些关键点上做一些特殊的处理, 从而达到实现进程隐藏的目的。</p>
-</blockquote>
-<h2 id="Proc文件系统简介"><a href="#Proc文件系统简介" class="headerlink" title="Proc文件系统简介"></a>Proc文件系统简介</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">proc 文件系统是一个伪文件系统，它只存在内存当中，而不占用外存空间。它以文件系统的方式为访问系统内核数据的操作提供接口。用户和应用程序可以通过 proc 得到系统的信息，并可以改变内核的某些参数。由于系统的信息，如进程，是动态改变的，所以用户或应用程序读取 proc 文件时，proc 文件系统是动态从系统内核读出所需信息并提交的。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">基于/proc 文件系统如上所述的特殊性，其内的文件也常被称作虚拟文件，并具有一些独特的特点。例如，其中有些文件虽然使用查看命令查看时会返回大量信息，但文件本身的大小却会显示为 0 字节。此外，这些特殊文件中大多数文件的时间及日期属性通常为当前系统时间和日期，这跟它们随时会被刷新（存储于 RAM 中）有关。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">为了查看及使用上的方便，这些文件通常会按照相关性进行分类存储于不同的目录甚至子目录中，如/proc/scsi 目录中存储的就是当前系统上所有 SCSI 设备的相关信息，/proc/N 中存储的则是系统当前正在运行的进程的相关信息，其中 N 为正在运行的进程（可以想象得到，在某进程结束后其相关目录则会消失）。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">大多数虚拟文件可以使用文件查看命令如 cat、more 或者 less 进行查看，有些文件信息表述的内容可以一目了然，但也有文件的信息却不怎么具有可读性。不过，这些可读性较差的文件在使用一些命令如 apm、free、lspci 或 top 查看时却可以有着不错的表现。</div></pre></td></tr></table></figure>
-<h2 id="Proc文件系统目录结构"><a href="#Proc文件系统目录结构" class="headerlink" title="Proc文件系统目录结构"></a>Proc文件系统目录结构</h2><table>
-<thead>
-<tr>
-<th>目录名称</th>
-<th style="text-align:center">目录内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>apm</td>
-<td style="text-align:center">高级电源管理信息</td>
-</tr>
-<tr>
-<td>cmdline</td>
-<td style="text-align:center">内核命令行</td>
-</tr>
-<tr>
-<td>Cpuinfo</td>
-<td style="text-align:center">关于 Cpu 信息</td>
-</tr>
-<tr>
-<td>Devices</td>
-<td style="text-align:center">可以用到的设备（块设备/字符设备）</td>
-</tr>
-<tr>
-<td>Dma Used</td>
-<td style="text-align:center">DMS channels</td>
-</tr>
-<tr>
-<td>Filesystems</td>
-<td style="text-align:center">支持的文件系统</td>
-</tr>
-<tr>
-<td>Interrupts</td>
-<td style="text-align:center">中断的使用</td>
-</tr>
-<tr>
-<td>Ioports</td>
-<td style="text-align:center">I/O 端口的使用</td>
-</tr>
-<tr>
-<td>Kcore</td>
-<td style="text-align:center">内核核心印象</td>
-</tr>
-<tr>
-<td>Kmsg</td>
-<td style="text-align:center">内核消息</td>
-</tr>
-<tr>
-<td>Ksyms</td>
-<td style="text-align:center">内核符号表</td>
-</tr>
-<tr>
-<td>Loadavg</td>
-<td style="text-align:center">负载均衡</td>
-</tr>
-<tr>
-<td>Locks</td>
-<td style="text-align:center">内核锁</td>
-</tr>
-<tr>
-<td>Meminfo</td>
-<td style="text-align:center">内存信息</td>
-</tr>
-<tr>
-<td>Misc</td>
-<td style="text-align:center">Miscellaneous</td>
-</tr>
-<tr>
-<td>Modules</td>
-<td style="text-align:center">加载模块列表</td>
-</tr>
-<tr>
-<td>Mounts</td>
-<td style="text-align:center">加载的文件系统</td>
-</tr>
-<tr>
-<td>Partitions</td>
-<td style="text-align:center">系统识别的分区表</td>
-</tr>
-<tr>
-<td>Rtc</td>
-<td style="text-align:center">Real time clock</td>
-</tr>
-<tr>
-<td>Slabinfo</td>
-<td style="text-align:center">Slab pool info</td>
-</tr>
-<tr>
-<td>Stat</td>
-<td style="text-align:center">全面统计状态表 s</td>
-</tr>
-<tr>
-<td>Swaps</td>
-<td style="text-align:center">对换空间的利用情况</td>
-</tr>
-<tr>
-<td>Version</td>
-<td style="text-align:center">内核版本</td>
-</tr>
-<tr>
-<td>Uptime</td>
-<td style="text-align:center">系统正常运行时间</td>
-</tr>
-</tbody>
-</table>
-<h2 id="进程信息的创建过程"><a href="#进程信息的创建过程" class="headerlink" title="进程信息的创建过程"></a>进程信息的创建过程</h2><blockquote>
-<p>结合实际情况, 一个用户查看某个进程的信息有两种情形</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">( 1) 用 cat 之类的命令直接读取进程目录下的节点文件</div><div class="line">( 2) 用 ls 之类的命令列举所有的进程目录</div><div class="line">proc 对于这两种方式分别有不同的处理对于 ls 命令是调用 VFS 的 readdir( ) , 而对于cat 命令则会发生对一系列 lookup 函数的调用。</div></pre></td></tr></table></figure>
-<h2 id="进程隐藏的实现"><a href="#进程隐藏的实现" class="headerlink" title="进程隐藏的实现"></a>进程隐藏的实现</h2><blockquote>
-<p>通过以上对 proc 文件系统中生成进程信息实现过程的分析, 我们发现由于 Linux 缺乏模块化,难以找到一个统一的入口, 准确地对进程信息实现隐藏, 必须对实际应用中可能出现的情形 用 cat之类的命令直接读取进程目录下的节点文件和用 ls之类的命令列举所有的进程目录, 分别加以考虑。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">对函数 proc_pid_lookup 进行修改: 在步骤a 的末尾添加代码, 用于判断该进程号是否为隐藏进程的进程号, 如果是, 则跳转到我们定制的一个函数, 该函数可打印出? 该进程无法查看?之类的调试信息后返回上层调用者; 如果否, 则照常执行步骤b、c</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">对函数 proc_pid_readdir 进行修改: 在步骤b 中, 当获取一个进程后, 先判断该进程是否为隐藏进程, 如果是则跳转到我们定制的一个函数, 打印出? 该进程无法查看?之类的调试信息后返回上层调用者; 如果否, 则照常执行步骤 b、c。对于进程部分信息的隐藏, 通过文章第 2 部分的分析, 实际上是选择数组 tgid_base_stuff 中哪些节点不被创建的问题, 对它的实现也要包括以下两部分:</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( 1) 对函数 proc_pident_lookup 进行修改: 在步骤 a 开始前添加代码, 用于判断要创建的节点是否为需隐藏的节点, 如果是, 则跳转到我们定制的一个函数, 打印出? 该节点无法查看?之类的调试信息后返回上层调用者; 如果否, 则照常执行步骤 b。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( 2) 对函数 proc_pident_readdir 进行修改: 在步骤 a 的末尾添加代码, 用于判断要创建的节点是否为需隐藏的节点, 如果是, 则跳转到我们定制的一个函数, 打印出? 该节点无法查看?之类的调试信息后转到步骤 c; 如果否, 则照常执行步骤 b、c。</div></pre></td></tr></table></figure>
-<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">进程隐藏是实现进程保护的一种简单可行的方法之一, 虽然可以在从 proc 到 vfs 的各个层次上容易实现对某个进程的隐藏, 但是如果需要对进程部分信息灵活地进行隐藏, 必须在 proc 层准确地找出进程目录以及其下节点生成的关键点, 在这些关键点上来实现进程隐藏。由于 Linux 缺乏模块化的缺点, 在列举目录和查看节点文件时没有统一的入口点, 而这两种对进程信息的访问都会涉及到进程信的生成, 因此, 需要在内核中对每个进程目录或节点文件生成的地方一一做处理。本方法在内核级上分别实现了对进程全部信息以及进程部分信息的隐藏, 如能根据实际需求, 结合一定的隐藏策略, 比如指定某个系统中哪些进程应该被隐藏, 则在实际应用中更具价值。</div></pre></td></tr></table></figure>
-<h1 id="网络异常排查方法"><a href="#网络异常排查方法" class="headerlink" title="网络异常排查方法"></a>网络异常排查方法</h1><h2 id="Windows排查"><a href="#Windows排查" class="headerlink" title="Windows排查"></a>Windows排查</h2><blockquote>
-<p>查看目前的网络连接情况，定位可疑网络连接（结合业务访问排查）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -b -n (管理员权限)</div></pre></td></tr></table></figure></p>
-<p>通过网络连接进一步确认可疑连接的PID</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -ano</div></pre></td></tr></table></figure>
-<blockquote>
-<p>根据PID确定是那个进程</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tasklist | findstr xxx</div></pre></td></tr></table></figure>
-<blockquote>
-<p>确定此进程的用途以及可否杀死</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">taskkill /T /F /PID 3036</div></pre></td></tr></table></figure>
-<blockquote>
-<p>其他</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">若以上几步没有解决，使用PC Hunter（基于XueTr源码重新开发）工具对其进行深度排查</div></pre></td></tr></table></figure>
-<h2 id="Linux排查"><a href="#Linux排查" class="headerlink" title="Linux排查"></a>Linux排查</h2><blockquote>
-<p>确定系统自身的命令是否被恶意替换，如ls、netstat</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">使用chkrootkit、rkhunter类工具检查下是否存在恶意程序及恶意替换</div></pre></td></tr></table></figure>
-<blockquote>
-<p>查看linux自身的网络连接，并定位可疑程序的PID</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat  -antpl</div></pre></td></tr></table></figure>
-<blockquote>
-<p>根据pid查找执行文件的及其路径</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lsof -p PID</div></pre></td></tr></table></figure>
-<blockquote>
-<p>进一步排查</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /proc/pidnumber</div><div class="line">ls -ail</div></pre></td></tr></table></figure>
-<blockquote>
-<p>杀掉对应恶意程序或进程</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1 可将/proc/pidnumber 下的恶意程序直接rm –rf</div><div class="line">2 根据进程号直接杀死进程 kill -9 pidnumber</div></pre></td></tr></table></figure>
-<blockquote>
-<p>其他一些可能用到的命令</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1 分析access.log获得访问前10位的ip地址</div><div class="line">awk &apos;&#123;print $1&#125;&apos; access.log |sort|uniq -c|sort -nr|head -10</div><div class="line">2 查看连接某服务端口最多的的IP地址</div><div class="line">netstat -nat | grep &quot;192.168.1.15:1234&quot; |awk &apos;&#123;print $5&#125;&apos;|awk -F: &apos;&#123;print $1&#125;&apos;|sort|uniq -c|sort -nr|head -20</div></pre></td></tr></table></figure>
-<h1 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h1><h2 id="一些框架-工具"><a href="#一些框架-工具" class="headerlink" title="一些框架(工具)"></a>一些框架(工具)</h2><h3 id="内存取证工具"><a href="#内存取证工具" class="headerlink" title="内存取证工具"></a>内存取证工具</h3><blockquote>
-<p>Volatility  <a href="https://github.com/volatilityfoundation/volatility" target="_blank" rel="external">Github</a><br>介绍：<a href="http://www.freebuf.com/articles/system/26763.html" target="_blank" rel="external">http://www.freebuf.com/articles/system/26763.html</a></p>
-<h3 id="获取木马配置文件"><a href="#获取木马配置文件" class="headerlink" title="获取木马配置文件"></a>获取木马配置文件</h3><p>通过python脚本来获取木马中的配置文件，诸如ftp、ssh等信息，反向对黑客进行攻击。目前支持Adwind、Adzok、Albertino Advanced RAT等40多个木马。<br>RATDecoders  <a href="https://github.com/kevthehermit/RATDecoders" target="_blank" rel="external">Github</a></p>
-<h3 id="远程现场取证的事件应急响应框架"><a href="#远程现场取证的事件应急响应框架" class="headerlink" title="远程现场取证的事件应急响应框架"></a>远程现场取证的事件应急响应框架</h3><p>一个被安装在目标系统的Python 代理客户端，可以对Python基础设施进行管理和交流。<br>GRR Rapid Response    <a href="https://github.com/google/grr/tree/gh-pages" target="_blank" rel="external">Github</a></p>
-<h3 id="隐藏进程检测工具"><a href="#隐藏进程检测工具" class="headerlink" title="隐藏进程检测工具"></a>隐藏进程检测工具</h3><p><a href="https://security.tencent.com/index.php/opensource/detail/16" target="_blank" rel="external">Linux Rootkit (vfs hook) </a>是一个linux内核模块，是用于检测rootkit的一个小demo。通过读取此内核模块创建的虚拟文件，可检测通过Hook vfs 函数来隐藏的进程。大家可把他作为一个单一的检测工具，也可以集成到诸如OSSEC等HIDS里，通过周期性任务触发来检测并上报可疑事件。</p>
-<h3 id="使用方法："><a href="#使用方法：" class="headerlink" title="使用方法："></a>使用方法：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">照例就是解压之后 编译加载就好。</div><div class="line">unzip process_list.zip;cd process_list;make;make install</div></pre></td></tr></table></figure>
-</blockquote>
-<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><h3 id="系统："><a href="#系统：" class="headerlink" title="系统："></a>系统：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">uname -a     查看内核/操作系统/CPU信息</div><div class="line">cat /etc/issue</div><div class="line">cat /etc/redhat-release   查看操作系统版本</div><div class="line">cat /proc/cpuinfo    查看CPU信息</div><div class="line">hostname     查看计算机名</div><div class="line">lspci -tv     列出所有PCI设备</div><div class="line">lsusb -tv     列出所有USB设备</div><div class="line">lsmod      列出加载的内核模块</div><div class="line">env      查看环境变量</div></pre></td></tr></table></figure>
-<h3 id="资源："><a href="#资源：" class="headerlink" title="资源："></a>资源：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">free -m     查看内存使用量和交换区使用量</div><div class="line">df -h      查看各分区使用情况</div><div class="line">du -sh &lt;目录名&gt;    查看指定目录的大小</div><div class="line">grep MemTotal /proc/meminfo   查看内存总量</div><div class="line">grep MemFree /proc/meminfo   查看空闲内存量</div><div class="line">uptime     查看系统运行时间、用户数、负载</div><div class="line">cat /proc/loadavg    查看系统负载</div></pre></td></tr></table></figure>
-<h3 id="磁盘和分区："><a href="#磁盘和分区：" class="headerlink" title="磁盘和分区："></a>磁盘和分区：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mount | column -t    查看挂接的分区状态</div><div class="line">fdisk -l     查看所有分区</div><div class="line">swapon -s     查看所有交换分区</div><div class="line">hdparm -i /dev/hda    查看磁盘参数(仅适用于IDE设备)</div><div class="line">dmesg | grep IDE    查看启动时IDE设备检测状况</div></pre></td></tr></table></figure>
-<h3 id="网络："><a href="#网络：" class="headerlink" title="网络："></a>网络：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ifconfig     查看所有网络接口的属性</div><div class="line">iptables -L     查看防火墙设置</div><div class="line">route -n     查看路由表</div><div class="line">netstat -lntp     查看所有监听端口</div><div class="line">netstat -antp     查看所有已经建立的连接</div><div class="line">netstat -s     查看网络统计信息</div></pre></td></tr></table></figure>
-<h3 id="进程："><a href="#进程：" class="headerlink" title="进程："></a>进程：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ps -ef     查看所有进程</div><div class="line">top      实时显示进程状态（另一篇文章里面有详细的介绍）</div></pre></td></tr></table></figure>
-<blockquote>
-<p>ps命令可以列出正在运行的进程。以下命令可以列出当前系统上所有正在运行的进程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -A</div></pre></td></tr></table></figure></p>
-<p>这个命令列出的信息也许太多，不便于查看。你可以使用less命令通过一个管道输出，分页查看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -A | less</div></pre></td></tr></table></figure></p>
-<p>你也可以使用grep来对来做管道输出，查找出某个进程。例如，查找Firefox进程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -A | grep firefox</div></pre></td></tr></table></figure></p>
-<p>以树形显示进程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pstree命令同样可以显示进程信息，不过它是以树形式显示进程。</div></pre></td></tr></table></figure></p>
-<p>pgrep<br>给定一个搜索关键词，pgrep命令会返回所有匹配这个关键词的进程ID。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"> pgrep iceweasel    </div><div class="line">2074</div></pre></td></tr></table></figure></p>
-<p>也可以将这个命令与kill命令结合起来干掉一个特定的进程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~  kill $(pgrep iceweasel)</div><div class="line">➜  ~</div></pre></td></tr></table></figure></p>
-<p>或者使用</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~  pkill iceweasel</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
-<h3 id="用户："><a href="#用户：" class="headerlink" title="用户："></a>用户：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">w      查看活动用户</div><div class="line">id &lt;用户名&gt;     查看指定用户信息</div><div class="line">last      查看用户登录日志</div><div class="line">cut -d: -f1 /etc/passwd   查看系统所有用户</div><div class="line">cut -d: -f1 /etc/group   查看系统所有组</div><div class="line">crontab -l     查看当前用户的计划任务</div></pre></td></tr></table></figure>
-<h3 id="服务："><a href="#服务：" class="headerlink" title="服务："></a>服务：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chkconfig –list    列出所有系统服务</div><div class="line">chkconfig –list | grep on   列出所有启动的系统服务</div></pre></td></tr></table></figure>
-<h3 id="程序："><a href="#程序：" class="headerlink" title="程序："></a>程序：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -qa     查看所有安装的软件包</div></pre></td></tr></table></figure>
-<h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><p><a href="http://www.freebuf.com/articles/system/50728.html" target="_blank" rel="external"> Linux入侵取证：从一次应急事件讲起 </a><br><a href="http://drops.wooyun.org/tips/4731" target="_blank" rel="external">Linux下基于内存分析的Rootkit检测方法</a><br><a href="http://mp.weixin.qq.com/s?src=3&amp;timestamp=1465201686&amp;ver=1&amp;signature=L1C7usG9nhuvVUS9dkoQ4L0C3uwt3mRI*sGWWChs3izNvMLlZGsDu6vZp0gpTnKRGlexFK16AZvIYiAcmOMATagCQk5ztoAKSux1OYqJv8O-28xlFiKm-aSQHMK3NzaG3sxjhjvZ1StjpW10xW28IA==" target="_blank" rel="external"> 如何分析 Linux 日志 </a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/sec/Linux取证分析/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Node-js学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/others/Node-js学习笔记/">Node.js学习笔记</a>
-    </h1>
-  
-
-        
-        <a href="/others/Node-js学习笔记/" class="archive-article-date">
-  	<time datetime="2016-06-03T14:00:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="新建http服务"><a href="#新建http服务" class="headerlink" title="新建http服务"></a>新建http服务</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)  </span>&#123;</div><div class="line">    response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">    <span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'访问'</span>);</div><div class="line">        response.write(<span class="string">'hello,world'</span>);</div><div class="line">        response.end(<span class="string">"response.end"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure>
-<h1 id="使用function"><a href="#使用function" class="headerlink" title="使用function"></a>使用function</h1><blockquote>
-<p>目录结构</p>
-<p>tp@V:/mnt/d/Node.js$ tree<br>.<br>├── hello.js<br>├── models<br>│   └── otherfuns.js<br>└── n2_funcall.js<br>n2_funcall.js</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> otherfun = <span class="built_in">require</span>(<span class="string">"./models/otherfuns.js"</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">		response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		otherfun[<span class="string">'fun3'</span>](response);</div><div class="line">		otherfun[<span class="string">'fun2'</span>](response);<span class="comment">//也可以用otherfun.fun2(response)</span></div><div class="line">		response.end(<span class="string">"response.end"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure>
-<blockquote>
-<p>otherfuns.js</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">fun2</span>:<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"我是fun2"</span>);</div><div class="line">		res.write(<span class="string">"Hello, I am fun2"</span>);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">fun3</span>:<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"I am fun3"</span>);</div><div class="line">		res.write(<span class="string">"Hello, I am fun3"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>效果</p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtdapfssuj30cw061dfw.jpg" alt=""></p>
-<h1 id="使用模块"><a href="#使用模块" class="headerlink" title="使用模块"></a>使用模块</h1><blockquote>
-<p>models/User.js</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">User</span>(<span class="params">id, name, age</span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.id=id;</div><div class="line">	<span class="keyword">this</span>.name=name;</div><div class="line">	<span class="keyword">this</span>.age=age;</div><div class="line">	<span class="keyword">this</span>.enter=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name+<span class="string">"进入图书馆"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = User;</div></pre></td></tr></table></figure>
-<blockquote>
-<blockquote>
-<p>models/Teacher.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> User = <span class="built_in">require</span>(<span class="string">'./User'</span>);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Teacher</span>(<span class="params">id,name,age</span>)</span>&#123;</div><div class="line">	User.apply(<span class="keyword">this</span>,[id,name,age]);</div><div class="line">	<span class="keyword">this</span>.teach=<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">		res.write(<span class="keyword">this</span>.name+<span class="string">"讲课"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = Teacher;</div><div class="line"><span class="string">``</span><span class="string">`JavaScript</span></div><div class="line">&gt;n3_modelcall.js</div></pre></td></tr></table></figure></p>
-</blockquote>
-</blockquote>
-<p>var http = require(‘http’);</p>
-<p>// var User = require(“./models/User”);<br>var Teacher = require(“./models/Teacher”)</p>
-<p>http.createServer(function (request, response){<br>    response.writeHead(200, {‘Content-Type’: ‘text/html; charset=utf-8’});<br>    if(request.url!==”/favicon.ico”){<br>        //funname = ‘fun3’;<br>        teacher = new Teacher(1,’我来’,18);<br>        // user.id =1;<br>        // user.name=’我来’;<br>        // user.age=18;<br>        teacher.enter();<br>        teacher.teach(response);<br>        response.end(“response.end”);<br>    }</p>
-<p>}).listen(8000);<br>console.log(“Server running at <a href="http://127.0.0.1:8000/" target="_blank" rel="external">http://127.0.0.1:8000/</a>“);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">![](https://ww2.sinaimg.cn/large/006tNc79gy1fdtdb7fgu8j30b8058gln.jpg)</div><div class="line"></div><div class="line"># 使用路由</div><div class="line">&gt;models/route.js</div><div class="line">```JavaScript</div><div class="line">module.exports=&#123;</div><div class="line">	login:function(req, res)&#123;</div><div class="line">		res.write(&quot;I am login module.&quot;);</div><div class="line">	&#125;,</div><div class="line">	admin:function(req, res)&#123;</div><div class="line">		res.write(&quot;I am admin module.&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>n4_rout.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line">		response.end(<span class="string">"response.end"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtdd3yrcwj30b8058gln.jpg" alt=""></p>
-<h1 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h1><blockquote>
-<p>models/route.js</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./optfile'</span>);</div><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">login</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/login.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">admin</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/admin.html'</span>, recall);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>models/optfile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">readfileSync</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path</span>)</span>&#123;<span class="comment">//同步读取</span></div><div class="line">		<span class="keyword">var</span> data = fs.readFileSync(path, <span class="string">'utf-8'</span>);</div><div class="line">		<span class="built_in">console</span>.log(data);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'同步方法执行完毕'</span>);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">readfile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, recall</span>)</span>&#123;<span class="comment">//异步读取</span></div><div class="line">		fs.readFile(path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(err)&#123;</div><div class="line">				<span class="built_in">console</span>.log(err);</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			<span class="built_in">console</span>.log(data.toString());</div><div class="line">			recall(data);</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'异步方法执行完毕'</span>);</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>n5_readfile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line"><span class="comment">//var optfile = require('./models/optfile');</span></div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
-<p>views/login.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">This is login page.</div></pre></td></tr></table></figure></p>
-<p>views/admin.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">This is admin page.</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtdbleg2tj30pz082jrt.jpg" alt="读文件"></p>
-<h1 id="写文件"><a href="#写文件" class="headerlink" title="写文件"></a>写文件</h1><blockquote>
-<p>models/optfile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data, recall</span>)</span>&#123;<span class="comment">//异步方式</span></div><div class="line">		fs.writeFile(path, data, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="keyword">throw</span> err;</div><div class="line">			&#125;</div><div class="line">			<span class="built_in">console</span>.log(<span class="string">'It\'s Saved!'</span>);<span class="comment">//文件被保存</span></div><div class="line">			recall(<span class="string">"write file success."</span>);</div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writeFileSync</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data</span>)</span>&#123;<span class="comment">//同步方式</span></div><div class="line">		fs.writeFileSync(path, data);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"同步写文件完成"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>models/route.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./optfile'</span>);</div><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">login</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/login.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">admin</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/admin.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.writefile(<span class="string">'./views/test.txt'</span>, <span class="string">'write file ok1.'</span>, recall);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>n6_writefile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line"><span class="comment">//var optfile = require('./models/optfile');</span></div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtddiqzcwj30sy0740ss.jpg" alt="写文件"></p>
-<h1 id="读取图片"><a href="#读取图片" class="headerlink" title="读取图片"></a>读取图片</h1><blockquote>
-<p>models/optfile.js<br>仅能显示图片<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">readImg</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, res</span>)</span>&#123;</div><div class="line">		fs.readFile(path, <span class="string">'binary'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, file</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="built_in">console</span>.log(err);</div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">'输出文件'</span>);</div><div class="line">				res.write(file, <span class="string">'binary'</span>);</div><div class="line">				res.end();</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>n7_readimg.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./models/optfile'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'image/jpeg'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'访问'</span>);</div><div class="line">    optfile.readImg(<span class="string">'./images/1.png'</span>, response);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"move on"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtde06l42j30pa0c2gmo.jpg" alt="读取图片"></p>
-<h1 id="路由改造"><a href="#路由改造" class="headerlink" title="路由改造"></a>路由改造</h1><blockquote>
-<p>models/optfile.js<br>可显示文本和图片<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data, recall</span>)</span>&#123;<span class="comment">//异步方式</span></div><div class="line">		fs.writeFile(path, data, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="keyword">throw</span> err;</div><div class="line">			&#125;</div><div class="line">			<span class="built_in">console</span>.log(<span class="string">'It\'s Saved!'</span>);<span class="comment">//文件被保存</span></div><div class="line">			recall(<span class="string">"write file success."</span>);</div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writeFileSync</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data</span>)</span>&#123;<span class="comment">//同步方式</span></div><div class="line">		fs.writeFileSync(path, data);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"同步写文件完成"</span>);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">readImg</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, res</span>)</span>&#123;</div><div class="line">		fs.readFile(path, <span class="string">'binary'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, file</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="built_in">console</span>.log(err);</div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">'输出文件'</span>);</div><div class="line">				res.write(file, <span class="string">'binary'</span>);</div><div class="line">				res.end();</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">readfile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, recall</span>)</span>&#123;<span class="comment">//异步读取</span></div><div class="line">			fs.readFile(path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">					<span class="keyword">if</span>(err)&#123;</div><div class="line">							<span class="built_in">console</span>.log(err);</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">					<span class="built_in">console</span>.log(data.toString());</div><div class="line">					recall(data);</div><div class="line">			&#125;</div><div class="line">	&#125;);</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'异步方法执行完毕'</span>);</div><div class="line">&#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>models/route.js</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./optfile'</span>);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRecall</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">		res.write(data);</div><div class="line">		res.end(<span class="string">" "</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> recall;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">login</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		recall = getRecall(req, res);</div><div class="line">		optfile.readfile(<span class="string">'./views/login.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line"></div><div class="line">	<span class="attr">admin</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/admin.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.writefile(<span class="string">'./views/test.txt'</span>, <span class="string">'write file ok1.'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">showimg</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'image/jpeg'</span>&#125;);</div><div class="line">		optfile.readImg(<span class="string">'./images/1.png'</span>, res);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>n8_routhtml.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtdefobhpj30ig0epq3q.jpg" alt="路由改造效果图"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Node.js</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/others/Node-js学习笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-MongoDB-基本操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/db/MongoDB-基本操作/">MongoDB 基本操作</a>
-    </h1>
-  
-
-        
-        <a href="/db/MongoDB-基本操作/" class="archive-article-date">
-  	<time datetime="2016-05-20T03:23:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-05-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><h2 id="基本查询"><a href="#基本查询" class="headerlink" title="基本查询"></a>基本查询</h2><blockquote>
-<p>以更美观的方式输出</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.number.find().pretty()</div></pre></td></tr></table></figure>
-<h2 id="获取数据库的所有聚合名称"><a href="#获取数据库的所有聚合名称" class="headerlink" title="获取数据库的所有聚合名称"></a>获取数据库的所有聚合名称</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt; db.getCollectionNames();</div><div class="line">[ &quot;phone_number&quot;, &quot;system.indexes&quot; ]</div></pre></td></tr></table></figure>
-<h2 id="统计数据库特定聚合所有记录数量"><a href="#统计数据库特定聚合所有记录数量" class="headerlink" title="统计数据库特定聚合所有记录数量"></a>统计数据库特定聚合所有记录数量</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">db.phone_number.count()</div><div class="line">16119524</div></pre></td></tr></table></figure>
-<h2 id="获取数据库特定聚合的索引"><a href="#获取数据库特定聚合的索引" class="headerlink" title="获取数据库特定聚合的索引"></a>获取数据库特定聚合的索引</h2><blockquote>
-<p>比如获取phone_number聚合的所有索引<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone_number.getIndexes()</div><div class="line">[</div><div class="line">	&#123;</div><div class="line">		&quot;v&quot; : 1,</div><div class="line">		&quot;key&quot; : &#123;</div><div class="line">			&quot;_id&quot; : 1</div><div class="line">		&#125;,</div><div class="line">		&quot;name&quot; : &quot;_id_&quot;,</div><div class="line">		&quot;ns&quot; : &quot;blacklist.phone_number&quot;</div><div class="line">	&#125;</div><div class="line">]</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="添加索引"><a href="#添加索引" class="headerlink" title="添加索引"></a>添加索引</h2><blockquote>
-<p>为phone_number的phone字段添加索引<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone_number.ensureIndex(&#123;&quot;phone&quot;:1&#125;)</div><div class="line">&#123;</div><div class="line">	&quot;createdCollectionAutomatically&quot; : false,</div><div class="line">	&quot;numIndexesBefore&quot; : 1,</div><div class="line">	&quot;numIndexesAfter&quot; : 2,</div><div class="line">	&quot;ok&quot; : 1</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>再查看索引情况验证一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone_number.getIndexes()</div><div class="line">[</div><div class="line">	&#123;</div><div class="line">		&quot;v&quot; : 1,</div><div class="line">		&quot;key&quot; : &#123;</div><div class="line">			&quot;_id&quot; : 1</div><div class="line">		&#125;,</div><div class="line">		&quot;name&quot; : &quot;_id_&quot;,</div><div class="line">		&quot;ns&quot; : &quot;blacklist.phone_number&quot;</div><div class="line">	&#125;,</div><div class="line">	&#123;</div><div class="line">		&quot;v&quot; : 1,</div><div class="line">		&quot;key&quot; : &#123;</div><div class="line">			&quot;phone&quot; : 1</div><div class="line">		&#125;,</div><div class="line">		&quot;name&quot; : &quot;phone_1&quot;,</div><div class="line">		&quot;ns&quot; : &quot;blacklist.phone_number&quot;</div><div class="line">	&#125;</div><div class="line">]</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h1 id="分组查询group-count"><a href="#分组查询group-count" class="headerlink" title="分组查询group count"></a>分组查询group count</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone.aggregate([&#123;$group:&#123;_id:&quot;$source&quot;, num_tutorial:&#123;$sum:1&#125;&#125;&#125;])</div><div class="line">&#123; &quot;_id&quot; : &quot;youm&quot;, &quot;num_tutorial&quot; : 449 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;tianma168&quot;, &quot;num_tutorial&quot; : 349 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;dingdkj&quot;, &quot;num_tutorial&quot; : 3259 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ypyun&quot;, &quot;num_tutorial&quot; : 10192 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ilezan&quot;, &quot;num_tutorial&quot; : 43685 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ism168&quot;, &quot;num_tutorial&quot; : 2856 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;iyylw&quot;, &quot;num_tutorial&quot; : 16284 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;iqiyi&quot;, &quot;num_tutorial&quot; : 1 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;xudan123.com&quot;, &quot;num_tutorial&quot; : 74808 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;vim6&quot;, &quot;num_tutorial&quot; : 26927 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yzm1&quot;, &quot;num_tutorial&quot; : 449854 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;feiq&quot;, &quot;num_tutorial&quot; : 46670 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;83r.com&quot;, &quot;num_tutorial&quot; : 144898 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;maz8&quot;, &quot;num_tutorial&quot; : 81461 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;kuaima9&quot;, &quot;num_tutorial&quot; : 138903 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;bmyzm&quot;, &quot;num_tutorial&quot; : 6015 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;sunvarma.com&quot;, &quot;num_tutorial&quot; : 45164 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ema6&quot;, &quot;num_tutorial&quot; : 54819 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yma0.com&quot;, &quot;num_tutorial&quot; : 417669 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;creditease&quot;, &quot;num_tutorial&quot; : 101747 &#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>如果需要排序的话<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone.aggregate([&#123;$group:&#123;_id:&quot;$source&quot;, count:&#123;$sum:1&#125;&#125;&#125;,&#123;$sort:&#123;&quot;count&quot;:-1&#125;&#125;])</div><div class="line">&#123; &quot;_id&quot; : &quot;other&quot;, &quot;count&quot; : 6133225 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ly.com&quot;, &quot;count&quot; : 5235378 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;zmyzm.com&quot;, &quot;count&quot; : 1038465 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;f02.cn&quot;, &quot;count&quot; : 644959 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;shjmpt.com&quot;, &quot;count&quot; : 502440 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yzm1&quot;, &quot;count&quot; : 449854 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yma0.com&quot;, &quot;count&quot; : 417669 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;6yzm.com&quot;, &quot;count&quot; : 297152 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;taomapt.com&quot;, &quot;count&quot; : 187613 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;83r.com&quot;, &quot;count&quot; : 144898 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;kuaima9&quot;, &quot;count&quot; : 138903 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;creditease&quot;, &quot;count&quot; : 101747 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;tongdun&quot;, &quot;count&quot; : 95012 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;aliqin&quot;, &quot;count&quot; : 87845 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;maz8&quot;, &quot;count&quot; : 81461 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;xudan123.com&quot;, &quot;count&quot; : 74808 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ema6&quot;, &quot;count&quot; : 54819 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;feiq&quot;, &quot;count&quot; : 46670 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;sunvarma.com&quot;, &quot;count&quot; : 45164 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yayayama.com&quot;, &quot;count&quot; : 44941 &#125;</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="MongoDB-唯一索引自动删除重复记录"><a href="#MongoDB-唯一索引自动删除重复记录" class="headerlink" title="MongoDB 唯一索引自动删除重复记录"></a>MongoDB 唯一索引自动删除重复记录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">coll.ensureIndex(&#123;productid:1&#125;) // 在productid上建立普通索引</div><div class="line">coll.ensureIndex(&#123;district:1, plate:1&#125;) // 多字段索引</div><div class="line">coll.ensureIndex(&#123;productid:1&#125;, &#123;unique:true&#125;) // 唯一索引</div><div class="line">coll.ensureIndex(&#123;productid:1&#125;, &#123;unique:true, dropDups:true&#125;) // 建索引时，如果遇到索引字段值已经出现过的情况，则删除重复记录</div><div class="line">coll.getIndexes() // 查看索引</div><div class="line">coll.dropIndex(&#123;productid:1&#125;) // 删除单个索</div></pre></td></tr></table></figure>
-<h1 id="Python-相关"><a href="#Python-相关" class="headerlink" title="Python 相关"></a>Python 相关</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">import requests</div><div class="line">import json</div><div class="line">from datetime import datetime</div><div class="line">from pymongo import MongoClient</div><div class="line"></div><div class="line"></div><div class="line">&apos;&apos;&apos;连接到mongodb数据库&apos;&apos;&apos;</div><div class="line"># 使用默认链接</div><div class="line">client = MongoClient()</div><div class="line"># 数据库名为gznu_all_student_info</div><div class="line">db = client.gznu_all_student_info</div><div class="line"># 数据库中相关表记录</div><div class="line"></div><div class="line"># 学院相关信息</div><div class="line">college_collection = db.college</div><div class="line"># 班级相关信息</div><div class="line">class_collection = db.class_</div><div class="line">all_class_collection = db.all_class</div><div class="line"># 学生信息</div><div class="line">students_collection = db.students</div><div class="line"></div><div class="line">def _save_class_code(url, college_code):</div><div class="line">    &apos;&apos;&apos;将班级信息保持到数据库中&apos;&apos;&apos;</div><div class="line"></div><div class="line">    print &apos;[*] 正在将班级&#123;&#125;信息保存到数据库中&apos;.format(college_code)</div><div class="line">    info = get_info(url)</div><div class="line">    for i in json.loads(info):</div><div class="line">        for j in i[&apos;children&apos;]:</div><div class="line">            item = &#123;&#125;</div><div class="line">            item[&apos;class_code&apos;] = j[&apos;id&apos;]</div><div class="line">            item[&apos;text&apos;] = j[&apos;text&apos;]</div><div class="line">            item[&apos;college_code&apos;] = college_code</div><div class="line">            item[&apos;update&apos;] = datetime.now()</div><div class="line">            class_collection.insert(item)</div></pre></td></tr></table></figure>
-<h1 id="mongodb-config"><a href="#mongodb-config" class="headerlink" title="mongodb.config"></a>mongodb.config</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">port=27017</div><div class="line">dbpath=/data/db/</div><div class="line">fork=true</div><div class="line">logpath=/data/logs/mongodb.log</div><div class="line">logappend=true</div><div class="line">noauth=true</div><div class="line">nohttpinterface=true</div><div class="line">rest=false</div></pre></td></tr></table></figure>
-<h1 id="导入json文件数据"><a href="#导入json文件数据" class="headerlink" title="导入json文件数据"></a>导入json文件数据</h1><p>将json数据导入到blacklist的phone_number集合中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongoimport -h 127.0.0.1 -d blacklist -c phone_number --file blacklist3.json</div></pre></td></tr></table></figure></p>
-<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtcdrfxiej30mf0gswhj.jpg" alt="mongoimport"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MongoDB</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/db/" class="article-tag-list-link color3">db</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/db/MongoDB-基本操作/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-杂谈-远程管理、SELinux、Raid等" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/devops/杂谈-远程管理、SELinux、Raid等/">[杂谈]远程管理、SELinux、Raid等</a>
-    </h1>
-  
-
-        
-        <a href="/devops/杂谈-远程管理、SELinux、Raid等/" class="archive-article-date">
-  	<time datetime="2016-04-20T11:49:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-04-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="常见远程管理工具方式"><a href="#常见远程管理工具方式" class="headerlink" title="常见远程管理工具方式"></a>常见远程管理工具方式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">RDP: remote desktop protocol 协议，Windows远程桌面管理</div><div class="line">telnet: CLI 界面下的远程管理，几乎所有操作系统都有，不过内容是明文传送</div><div class="line">SSH: secure shell CLI界面下的远程管理，几乎所有操作系统都有，内容加密传送，类UNIX系统下主要的远程管理方式(Linux BSD MaxOS X)</div><div class="line">RFB remote framebuffer,图形化远程管理协议，VNC--Virtual Network Computing 使用的协议，主要为类UNIX系统下主要的图形化远程管理方式</div></pre></td></tr></table></figure>
-<h1 id="SELinux"><a href="#SELinux" class="headerlink" title="SELinux"></a>SELinux</h1><blockquote>
-<p>Secure Enhandced Linux 安全增强Linux是由NSA针对及时基础结构安全开发的一个全新的Linux安全策略机制。SELinux允许管理员更加灵鹤的定义安全策略。<br>SELinux是一个内核级的安全机制，从2.6内核之后集成在内核当中，对其修改一般需要去重启才能生效</p>
-</blockquote>
-<h2 id="基本概览"><a href="#基本概览" class="headerlink" title="基本概览"></a>基本概览</h2><blockquote>
-<p>所有的安全机制都是对两样东西做出限制：进程和系统资源(文件、网络套接字、系统调用等)。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SELinux针对这两种类型定义了两个基本概念：域(domain)和上下文(context)</div><div class="line">前者针对进程进行限制</div><div class="line">后者针对系统资源进行限制</div></pre></td></tr></table></figure>
-<blockquote>
-<p>ps -Z可以查看进程的域<br>ls -Z 可以查看文件的上下文信息</p>
-</blockquote>
-<h1 id="RAID"><a href="#RAID" class="headerlink" title="RAID"></a>RAID</h1><blockquote>
-<p>现代硬盘的缺陷 IO性能极弱 稳定性极差<br>RAID廉价磁盘冗余阵列技术是通过多磁盘并行运行来提高计算机的存储IO性能<br>RAID分为很多种类，称之为RAID级别，</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">RAID 0  读写性能</div><div class="line">RAID 1 读取性能、冗余性</div><div class="line">RAID 5 读写性能、冗余性(1块硬盘)</div><div class="line">RAID 6 读写性能、冗余性(2块硬盘)</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/devops/杂谈-远程管理、SELinux、Raid等/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1474,6 +1360,14 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">hydra</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">

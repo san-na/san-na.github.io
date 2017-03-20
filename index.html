@@ -707,154 +707,123 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-LVM相关介绍" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-一些前端工具" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/devops/LVM相关介绍/">LVM相关介绍</a>
+      <a class="article-title" href="/others/一些前端工具/">一些前端工具</a>
     </h1>
   
 
         
-        <a href="/devops/LVM相关介绍/" class="archive-article-date">
-  	<time datetime="2016-09-20T14:54:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-20</time>
+        <a href="/others/一些前端工具/" class="archive-article-date">
+  	<time datetime="2016-12-20T11:38:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-20</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="LVM概念"><a href="#LVM概念" class="headerlink" title="LVM概念"></a>LVM概念</h1><blockquote>
-<p>Logical Volume Manager 逻辑卷管理</p>
+        <blockquote>
+<p>实时刷新页面<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Broswer-Sync</div></pre></td></tr></table></figure></p>
+<p>css双向修改<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">LiveStyle</div></pre></td></tr></table></figure></p>
+<p>实时JS HTML修改预览<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Livereload</div></pre></td></tr></table></figure></p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">通过将底层物理硬盘抽象封装起来，以逻辑卷的形式表现给上层系统，逻辑卷的大小可以动态调整，而且不会丢失现有数据。新加入的硬盘也不会改变现有上层的逻辑卷。</div><div class="line">作为一种多台磁盘管理机制，逻辑卷技术大大提高了磁盘管理的灵活性。</div></pre></td></tr></table></figure>
-<h2 id="LVM的4个基本概念"><a href="#LVM的4个基本概念" class="headerlink" title="LVM的4个基本概念"></a>LVM的4个基本概念</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">① PE　　(Physical Extend)　　物理拓展</div><div class="line"></div><div class="line">② PV　　(Physical Volume)　　物理卷</div><div class="line"></div><div class="line">③ VG　　(Volume Group)　　卷组</div><div class="line"></div><div class="line">④ LV　　(Logical Volume)　　逻辑卷</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">前端</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/others/一些前端工具/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Nginx-自签发SSL配置实例" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/Nginx-自签发SSL配置实例/">Nginx 自签发SSL配置实例</a>
+    </h1>
+  
+
+        
+        <a href="/devops/Nginx-自签发SSL配置实例/" class="archive-article-date">
+  	<time datetime="2016-11-25T11:31:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="env"><a href="#env" class="headerlink" title="env"></a>env</h1><blockquote>
+<p>Debian Linux</p>
+</blockquote>
+<h1 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install nginx</div></pre></td></tr></table></figure>
+<h1 id="创建自签发SSL证书"><a href="#创建自签发SSL证书" class="headerlink" title="创建自签发SSL证书"></a>创建自签发SSL证书</h1><blockquote>
+<p>我是把证书相关信息放在<br>/etc/nginx/ssl/文件夹中所以先创建该文件夹</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir /etc/nginx/ssl</div></pre></td></tr></table></figure>
 <blockquote>
-<p>PE逻辑卷空间管理的最基本单位。1个PE默认是4M大小<br>VG的作用是用来装PV的–空间池</p>
+<p>创建SSL证书<br>gencert.sh<br>该文件我也放在/etc/nginx/ssl目录下</p>
 </blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtd144awyj30dz09maa8.jpg" alt=""></p>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtd1e7fvuj30es0akjrr.jpg" alt=""></p>
-<h1 id="创建LVM"><a href="#创建LVM" class="headerlink" title="创建LVM"></a>创建LVM</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">➜  ~ fdisk <span class="_">-l</span></div><div class="line"></div><div class="line">Disk /dev/sda: 300 GiB, 322122547200 bytes, 629145600 sectors</div><div class="line">Units: sectors of 1 * 512 = 512 bytes</div><div class="line">Sector size (logical/physical): 512 bytes / 512 bytes</div><div class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</div><div class="line">Disklabel <span class="built_in">type</span>: dos</div><div class="line">Disk identifier: 0xc1<span class="built_in">fc</span>20ae</div><div class="line"></div><div class="line">Device     Boot     Start       End   Sectors  Size Id Type</div><div class="line">/dev/sda1  *         2048 612370431 612368384  292G 83 Linux</div><div class="line">/dev/sda2       612372478 629143551  16771074    8G  5 Extended</div><div class="line">/dev/sda5       612372480 629143551  16771072    8G 82 Linux swap / Solaris</div><div class="line"></div><div class="line">Disk /dev/sdb: 50 GiB, 53687091200 bytes, 104857600 sectors</div><div class="line">Units: sectors of 1 * 512 = 512 bytes</div><div class="line">Sector size (logical/physical): 512 bytes / 512 bytes</div><div class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</div></pre></td></tr></table></figure>
-<ol>
-<li>将物理磁盘设备初始化为物理卷<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvcreate /dev/sdb</div><div class="line">  Physical volume &quot;/dev/sdb&quot; successfully created</div></pre></td></tr></table></figure>
-</li>
-</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line"><span class="comment"># create self-signed server certificate:</span></div><div class="line"></div><div class="line"><span class="built_in">read</span> -p <span class="string">"Enter your domain [www.example.com]: "</span> DOMAIN</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"Create server key..."</span></div><div class="line"></div><div class="line">openssl genrsa -des3 -out <span class="variable">$DOMAIN</span>.key 1024</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"Create server certificate signing request..."</span></div><div class="line"></div><div class="line">SUBJECT=<span class="string">"/C=US/ST=Mars/L=iTranswarp/O=iTranswarp/OU=iTranswarp/CN=<span class="variable">$DOMAIN</span>"</span></div><div class="line"></div><div class="line">openssl req -new -subj <span class="variable">$SUBJECT</span> -key <span class="variable">$DOMAIN</span>.key -out <span class="variable">$DOMAIN</span>.csr</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"Remove password..."</span></div><div class="line"></div><div class="line">mv <span class="variable">$DOMAIN</span>.key <span class="variable">$DOMAIN</span>.origin.key</div><div class="line">openssl rsa -in <span class="variable">$DOMAIN</span>.origin.key -out <span class="variable">$DOMAIN</span>.key</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"Sign SSL certificate..."</span></div><div class="line"></div><div class="line">openssl x509 -req -days 3650 -in <span class="variable">$DOMAIN</span>.csr -signkey <span class="variable">$DOMAIN</span>.key -out <span class="variable">$DOMAIN</span>.crt</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"TODO:"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Copy <span class="variable">$DOMAIN</span>.crt to /etc/nginx/ssl/<span class="variable">$DOMAIN</span>.crt"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Copy <span class="variable">$DOMAIN</span>.key to /etc/nginx/ssl/<span class="variable">$DOMAIN</span>.key"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Add configuration in nginx:"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"server &#123;"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"    ..."</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"    listen 443 ssl;"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"    ssl_certificate     /etc/nginx/ssl/<span class="variable">$DOMAIN</span>.crt;"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"    ssl_certificate_key /etc/nginx/ssl/<span class="variable">$DOMAIN</span>.key;"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"&#125;"</span></div></pre></td></tr></table></figure>
 <blockquote>
-<p>查看物理卷信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvs</div><div class="line">  PV         VG   Fmt  Attr PSize  PFree</div><div class="line">  /dev/sdb        lvm2 ---  50.00g 50.00g</div></pre></td></tr></table></figure></p>
+<p>操作方法如下图<br>说明 <a href="https://www.trustasia.com/help/nginx-generate-csr.htm" target="_blank" rel="external">https://www.trustasia.com/help/nginx-generate-csr.htm</a></p>
 </blockquote>
-<ol>
-<li>创建卷组，并将PV加入卷组中<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;名字为lvmtest， 可任意</div><div class="line">➜  ~ vgcreate lvmtest /dev/sdb</div><div class="line">  Volume group &quot;lvmtest&quot; successfully created</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgs</div><div class="line">  VG      <span class="comment">#PV #LV #SN Attr   VSize  VFree</span></div><div class="line">  lvmtest   1   0   0 wz--n- 50.00g 50.00g</div><div class="line">&gt;查看卷组信息</div><div class="line">➜  ~ vgdisplay</div><div class="line">  --- Volume group ---</div><div class="line">  VG Name               lvmtest</div><div class="line">  System ID             </div><div class="line">  Format                lvm2</div><div class="line">  Metadata Areas        1</div><div class="line">  Metadata Sequence No  1</div><div class="line">  VG Access             <span class="built_in">read</span>/write</div><div class="line">  VG Status             resizable</div><div class="line">  MAX LV                0</div><div class="line">  Cur LV                0</div><div class="line">  Open LV               0</div><div class="line">  Max PV                0</div><div class="line">  Cur PV                1</div><div class="line">  Act PV                1</div><div class="line">  VG Size               50.00 GiB</div><div class="line">  PE Size               4.00 MiB</div><div class="line">  Total PE              12799</div><div class="line">  Alloc PE / Size       0 / 0   </div><div class="line">  Free  PE / Size       12799 / 50.00 GiB</div><div class="line">  VG UUID               cxMG1m-pMAE-Suk5-bM69-1sB3-W7YB-WXmmGh</div></pre></td></tr></table></figure>
-<ol>
-<li>基于卷组创建逻辑卷<blockquote>
-<p>这里我从lvmtest拿了20G空间来创建了一个名为lv1的逻辑卷</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvcreate -n lv1 -L 20G lvmtest</div><div class="line">  Logical volume <span class="string">"lv1"</span> created</div></pre></td></tr></table></figure>
-</blockquote>
-</li>
-</ol>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtj9ob34yj30jm0jnq50.jpg" alt="图片标题"></p>
 <blockquote>
-<p>查看逻辑卷信息<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvs</div><div class="line">  LV   VG      Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert</div><div class="line">  lv1  lvmtest -wi<span class="_">-a</span>----- 20.00g                                                    </div><div class="line">➜  ~ lvdisplay</div><div class="line">  --- Logical volume ---</div><div class="line">  LV Path                /dev/lvmtest/lv1</div><div class="line">  LV Name                lv1</div><div class="line">  VG Name                lvmtest</div><div class="line">  LV UUID                Q4UIbv-yWhL-Bl5A-ywTN-1HJo-TE5r-TKBPfQ</div><div class="line">  LV Write Access        <span class="built_in">read</span>/write</div><div class="line">  LV Creation host, time kali, 2016-08-03 08:44:31 +0800</div><div class="line">  LV Status              available</div><div class="line">  <span class="comment"># open                 0</span></div><div class="line">  LV Size                20.00 GiB</div><div class="line">  Current LE             5120</div><div class="line">  Segments               1</div><div class="line">  Allocation             inherit</div><div class="line">  Read ahead sectors     auto</div><div class="line">  - currently <span class="built_in">set</span> to     256</div><div class="line">  Block device           254:0</div></pre></td></tr></table></figure></p>
+<p>效果图</p>
 </blockquote>
-<ol>
-<li><p>为创建好的逻辑卷创建文件系统</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  ~ mkfs.ext4 /dev/lvmtest/lv1</div><div class="line">mke2fs 1.42.12 (29-Aug-2014)</div><div class="line">Creating filesystem with 5242880 4k blocks and 1310720 inodes</div><div class="line">Filesystem UUID: 5130e6e1-8293-4fcb-b580-5091f3840f99</div><div class="line">Superblock backups stored on blocks:</div><div class="line">	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,</div><div class="line">	4096000</div><div class="line"></div><div class="line">Allocating group tables: done                            </div><div class="line">Writing inode tables: done                            </div><div class="line">Creating journal (32768 blocks): done</div><div class="line">Writing superblocks and filesystem accounting information: done</div></pre></td></tr></table></figure>
-</li>
-<li><p>将格式化好的逻辑卷挂载使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ mount /dev/lvmtest/lv1 /mnt/</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<blockquote>
-<p>查看<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  /mnt mount | tail -n 1</div><div class="line">/dev/mapper/lvmtest-lv1 on /mnt type ext4 (rw,relatime,data=ordered)</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h1 id="删除LVM"><a href="#删除LVM" class="headerlink" title="删除LVM"></a>删除LVM</h1><blockquote>
-<p>先把相应的东西umount掉<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ umount /mnt</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ mount | tail -n 1</div><div class="line">/dev/sr0 on /media/cdrom0 type iso9660 (ro,nosuid,nodev,noexec,relatime,user)</div></pre></td></tr></table></figure>
-<ol>
-<li><p>删除LV</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvremove /dev/lvmtest/lv1</div><div class="line">Do you really want to remove active logical volume lv1? [y/n]: y</div><div class="line">  Logical volume &quot;lv1&quot; successfully removed</div></pre></td></tr></table></figure>
-</li>
-<li><p>删除VG</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgremove lvmtest</div><div class="line">  Volume group &quot;lvmtest&quot; successfully removed</div></pre></td></tr></table></figure>
-</li>
-<li><p>删除物理卷</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvremove /dev/sdb</div><div class="line">  Labels on physical volume &quot;/dev/sdb&quot; successfully wiped</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h1 id="扩充逻辑卷容量"><a href="#扩充逻辑卷容量" class="headerlink" title="扩充逻辑卷容量"></a>扩充逻辑卷容量</h1><blockquote>
-<p>逻辑卷的拉伸操作可以在线执行，不需要卸载逻辑卷</p>
-</blockquote>
-<ol>
-<li>保证VG中有足够的空闲空间</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgs</div><div class="line">  VG   #PV #LV #SN Attr   VSize  VFree</div><div class="line">  vg     1   1   0 wz--n- 50.00g 30.00g</div></pre></td></tr></table></figure>
-<ol>
-<li><p>扩充逻辑卷</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvextend  -L +1G /dev/vg/lv</div><div class="line">  Size of logical volume vg/lv changed from 20.00 GiB (5120 extents) to 21.00 GiB (5376 extents).</div><div class="line">  Logical volume lv successfully resized</div></pre></td></tr></table></figure>
-</li>
-<li><p>查看扩充后LV大小</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvdisplay</div><div class="line">  --- Logical volume ---</div><div class="line">  LV Path                /dev/vg/lv</div><div class="line">  LV Name                lv</div><div class="line">  VG Name                vg</div><div class="line">  LV UUID                5q9mCJ-7Y3f-dEo7-xlDz-lJAW-Oczm-RuCeIE</div><div class="line">  LV Write Access        read/write</div><div class="line">  LV Creation host, time kali, 2016-08-03 09:51:18 +0800</div><div class="line">  LV Status              available</div><div class="line">  # open                 0</div><div class="line">  LV Size                21.00 GiB</div><div class="line">  Current LE             5376</div><div class="line">  Segments               1</div><div class="line">  Allocation             inherit</div><div class="line">  Read ahead sectors     auto</div><div class="line">  - currently set to     256</div><div class="line">  Block device           254:0</div></pre></td></tr></table></figure>
-</li>
-<li><p>更新文件系统</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  ~ resize2fs /dev/vg/lv</div><div class="line">resize2fs 1.42.12 (29-Aug-2014)</div><div class="line">Filesystem at /dev/vg/lv is mounted on /mnt; on-line resizing required</div><div class="line">old_desc_blocks = 2, new_desc_blocks = 2</div><div class="line">The filesystem on /dev/vg/lv is now 5505024 (4k) blocks long.</div></pre></td></tr></table></figure>
-</li>
-<li><p>查看更新后文件系统</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  ~ df -h</div><div class="line">Filesystem         Size  Used Avail Use% Mounted on</div><div class="line">udev                10M     0   10M   0% /dev</div><div class="line">tmpfs              792M  9.1M  783M   2% /run</div><div class="line">/dev/sda1          288G   16G  257G   6% /</div><div class="line">tmpfs              2.0G  208K  2.0G   1% /dev/shm</div><div class="line">tmpfs              5.0M     0  5.0M   0% /run/lock</div><div class="line">tmpfs              2.0G     0  2.0G   0% /sys/fs/cgroup</div><div class="line">tmpfs              396M  8.0K  396M   1% /run/user/132</div><div class="line">tmpfs              396M   12K  396M   1% /run/user/0</div><div class="line">/dev/sr0           3.1G  3.1G     0 100% /media/cdrom0</div><div class="line">/dev/mapper/vg-lv   21G   44M   20G   1% /mnt</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h1 id="扩充卷组容量"><a href="#扩充卷组容量" class="headerlink" title="扩充卷组容量"></a>扩充卷组容量</h1><ol>
-<li><p>将要添加到VG的硬盘格式化为PV</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvcreate /dev/sdc</div><div class="line">  Physical volume &quot;/dev/sdc&quot; successfully created</div></pre></td></tr></table></figure>
-</li>
-<li><p>将新的PV添加到指定卷组中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgextend vg /dev/sdc</div><div class="line">  Volume group &quot;vg&quot; successfully extended</div></pre></td></tr></table></figure>
-</li>
-<li><p>查看扩充后VG大小</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgs</div><div class="line">  VG   #PV #LV #SN Attr   VSize  VFree</div><div class="line">  vg     2   1   0 wz--n- 69.99g 48.99g</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h1 id="缩小逻辑卷容量"><a href="#缩小逻辑卷容量" class="headerlink" title="缩小逻辑卷容量"></a>缩小逻辑卷容量</h1><blockquote>
-<p>逻辑卷的缩小操作必须离线执行，要卸载逻辑卷</p>
-</blockquote>
-<ol>
-<li><p>卸载一键挂载的逻辑卷</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ umount /dev/mapper/vg-lv</div></pre></td></tr></table></figure>
-</li>
-<li><p>缩小文件系统</p>
-<blockquote>
-<p>缩小为10G</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">➜  ~ resize2fs /dev/vg/lv 10G</div><div class="line">resize2fs 1.42.12 (29-Aug-2014)</div><div class="line">Please run &apos;e2fsck -f /dev/vg/lv&apos; first.</div><div class="line"></div><div class="line">➜  ~ resize2fs /dev/mapper/vg-lv 10G</div><div class="line">resize2fs 1.42.12 (29-Aug-2014)</div><div class="line">Please run &apos;e2fsck -f /dev/mapper/vg-lv&apos; first.</div><div class="line"></div><div class="line">➜  ~ e2fsck -f /dev/mapper/vg-lv</div><div class="line">e2fsck 1.42.12 (29-Aug-2014)</div><div class="line">Pass 1: Checking inodes, blocks, and sizes</div><div class="line">Pass 2: Checking directory structure</div><div class="line">Pass 3: Checking directory connectivity</div><div class="line">Pass 4: Checking reference counts</div><div class="line">Pass 5: Checking group summary information</div><div class="line">/dev/mapper/vg-lv: 11/1376256 files (0.0% non-contiguous), 130401/5505024 blocks</div><div class="line">➜  ~ resize2fs /dev/mapper/vg-lv 10G</div><div class="line">resize2fs 1.42.12 (29-Aug-2014)</div><div class="line">Resizing the filesystem on /dev/mapper/vg-lv to 2621440 (4k) blocks.</div><div class="line">The filesystem on /dev/mapper/vg-lv is now 2621440 (4k) blocks long.</div></pre></td></tr></table></figure>
-</blockquote>
-</li>
-<li><p>缩小LV</p>
-<blockquote>
-<p>缩小的容量为之前的容量减去文件系统容量<br>21-10=11</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvreduce -L -11G /dev/vg/lv</div><div class="line">  WARNING: Reducing active logical volume to 10.00 GiB</div><div class="line">  THIS MAY DESTROY YOUR DATA (filesystem etc.)</div><div class="line">Do you really want to reduce lv? [y/n]: y</div><div class="line">  Size of logical volume vg/lv changed from 21.00 GiB (5376 extents) to 10.00 GiB (2560 extents).</div><div class="line">  Logical volume lv successfully resized</div></pre></td></tr></table></figure>
-</blockquote>
-</li>
-<li><p>查看缩小后的LV</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">➜  ~ lvdisplay</div><div class="line">  --- Logical volume ---</div><div class="line">  LV Path                /dev/vg/lv</div><div class="line">  LV Name                lv</div><div class="line">  VG Name                vg</div><div class="line">  LV UUID                5q9mCJ-7Y3f-dEo7-xlDz-lJAW-Oczm-RuCeIE</div><div class="line">  LV Write Access        read/write</div><div class="line">  LV Creation host, time kali, 2016-08-03 09:51:18 +0800</div><div class="line">  LV Status              available</div><div class="line">  # open                 0</div><div class="line">  LV Size                10.00 GiB</div><div class="line">  Current LE             2560</div><div class="line">  Segments               1</div><div class="line">  Allocation             inherit</div><div class="line">  Read ahead sectors     auto</div><div class="line">  - currently set to     256</div><div class="line">  Block device           254:0</div></pre></td></tr></table></figure>
-</li>
-<li><p>挂载</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ mount /dev/vg/lv /mnt</div><div class="line">➜  ~ mount | tail -n 1</div><div class="line">/dev/mapper/vg-lv on /mnt type ext4 (rw,relatime,data=ordered)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h1 id="缩小卷组"><a href="#缩小卷组" class="headerlink" title="缩小卷组"></a>缩小卷组</h1><ol>
-<li><p>将一个PV从制定卷组中移除</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ vgreduce vg /dev/sdc</div><div class="line">  Removed &quot;/dev/sdc&quot; from volume group &quot;vg&quot;</div></pre></td></tr></table></figure>
-</li>
-<li><p>查看缩小后的卷组大小</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">~ vgdisplay</div><div class="line">--- Volume group ---</div><div class="line">VG Name               vg</div><div class="line">System ID             </div><div class="line">Format                lvm2</div><div class="line">Metadata Areas        1</div><div class="line">Metadata Sequence No  8</div><div class="line">VG Access             read/write</div><div class="line">VG Status             resizable</div><div class="line">MAX LV                0</div><div class="line">Cur LV                1</div><div class="line">Open LV               1</div><div class="line">Max PV                0</div><div class="line">Cur PV                1</div><div class="line">Act PV                1</div><div class="line">VG Size               50.00 GiB</div><div class="line">PE Size               4.00 MiB</div><div class="line">Total PE              12799</div><div class="line">Alloc PE / Size       2560 / 10.00 GiB</div><div class="line">Free  PE / Size       10239 / 40.00 GiB</div><div class="line">VG UUID               E32ZJW-3NqL-jpr2-1KYN-QWDh-dZhJ-1ZxZ2i</div></pre></td></tr></table></figure>
-</li>
-<li><p>移除物理卷</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">➜  ~ pvs</div><div class="line">  PV         VG   Fmt  Attr PSize  PFree</div><div class="line">  /dev/sdb   vg   lvm2 a--  50.00g 40.00g</div><div class="line">  /dev/sdc        lvm2 ---  20.00g 20.00g</div><div class="line">➜  ~ pvremove /dev/sdc</div><div class="line">  Labels on physical volume &quot;/dev/sdc&quot; successfully wiped</div><div class="line">➜  ~ pvs</div><div class="line">  PV         VG   Fmt  Attr PSize  PFree</div><div class="line">  /dev/sdb   vg   lvm2 a--  50.00g 40.00g</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
-</li>
-</ol>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtja45eeyj30my0kzjsp.jpg" alt="图片标题"></p>
 
       
 
@@ -869,10 +838,6 @@ var _hmt = _hmt || [];
 			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">LVM</a>
         		</li>
       		
 		</ul>
@@ -893,7 +858,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/devops/LVM相关介绍/">展开全文 >></a>
+          <a class="article-more-a" href="/devops/Nginx-自签发SSL配置实例/">展开全文 >></a>
         </p>
       
 
@@ -911,40 +876,44 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-hydra-折腾笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-ThinkPHP折腾笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/sec/hydra-折腾笔记/">hydra 折腾笔记</a>
+      <a class="article-title" href="/others/ThinkPHP折腾笔记/">ThinkPHP折腾笔记</a>
     </h1>
   
 
         
-        <a href="/sec/hydra-折腾笔记/" class="archive-article-date">
-  	<time datetime="2016-09-20T10:18:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-20</time>
+        <a href="/others/ThinkPHP折腾笔记/" class="archive-article-date">
+  	<time datetime="2016-11-21T11:41:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-21</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">output =subprocess.Popen(<span class="string">"hydra -l ftp -P wooyun.txt 192.168.1.20 ftp"</span>, shell=True,stdout=subprocess.PIPE).communicate()[0]</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">In [62]: &apos;successfully&apos; in output</div><div class="line"></div><div class="line">Out[62]: True</div></pre></td></tr></table></figure>
-<h1 id="相关文档"><a href="#相关文档" class="headerlink" title="相关文档"></a>相关文档</h1><blockquote>
-<p><a href="http://www.cnblogs.com/mchina/archive/2013/01/01/2840815.html" target="_blank" rel="external">http://www.cnblogs.com/mchina/archive/2013/01/01/2840815.html</a></p>
+        <h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h1><blockquote>
+<p>将ThinkPHP下载后，解压至网站根目录<br>为了快速安装PHP环境，我使用的是<a href="http://www.phpstudy.net/" target="_blank" rel="external">phpStudy</a><br>在ThinkPHP的同级目录创建index.php，文件内容为<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line">define(<span class="string">'APP_DEBUG'</span>,<span class="keyword">true</span>);</div><div class="line">define(<span class="string">'APP_NAME'</span>, <span class="string">'App'</span>);</div><div class="line">define(<span class="string">'APP_PATH'</span>,<span class="string">'./App/'</span>);</div><div class="line"><span class="keyword">require</span>(<span class="string">'./ThinkPHP/ThinkPHP.php'</span>);</div></pre></td></tr></table></figure></p>
+<p>该文件会创建名为App的文件夹，目录结构大概这样子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── Common</div><div class="line">├── Conf</div><div class="line">│   ├── config.php</div><div class="line">├── Lang</div><div class="line">├── Lib</div><div class="line">│   ├── Action</div><div class="line">│   │   └── IndexAction.class.php</div><div class="line">│   ├── Behavior</div><div class="line">│   ├── Model</div><div class="line">│   └── Widget</div><div class="line">├── Runtime</div><div class="line">│   ├── Cache</div><div class="line">│   │   ├── 9885ecc411f90bec36756701bd64bb4a.php</div><div class="line">│   │   └── f331a3f0d874c4248458495ef2c2c2d1.php</div><div class="line">│   ├── Data</div><div class="line">│   ├── Logs</div><div class="line">│   │   └── 16_11_27.log</div><div class="line">│   └── Temp</div><div class="line">└── Tpl</div></pre></td></tr></table></figure></p>
 </blockquote>
-<h1 id="备选方案"><a href="#备选方案" class="headerlink" title="备选方案"></a>备选方案</h1><blockquote>
-<p>全能暴力破解测试工具——Patator v0.5<br><a href="https://github.com/lanjelot/patator" target="_blank" rel="external">https://github.com/lanjelot/patator</a></p>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtjjju733j30dq089t8n.jpg" alt="start"></p>
+<blockquote>
+<p>如果要添加函数，可在Common文件夹下创建common.php文件进行实现，然后在lib/Action/IndexActionclass.php中直接通过函数名进行调用。比如</p>
 </blockquote>
-<h1 id="python-捕获-shell-脚本的输出结果"><a href="#python-捕获-shell-脚本的输出结果" class="headerlink" title="python 捕获 shell 脚本的输出结果"></a>python 捕获 shell 脚本的输出结果</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line">output =Popen([<span class="string">"mycmd"</span>,<span class="string">"myarg"</span>], stdout=PIPE).communicate()[<span class="number">0</span>]</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line">p = subprocess.Popen([<span class="string">'ls'</span>,<span class="string">'-a'</span>], stdout=subprocess.PIPE, stderr=subprocess.PIPE)</div><div class="line">out, err = p.communicate()</div><div class="line"><span class="keyword">print</span> out</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># work on Unix/Linux only</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> commands</div><div class="line"><span class="keyword">print</span> commands.getstatusoutput(<span class="string">'wc -l file'</span>)[<span class="number">1</span>]</div></pre></td></tr></table></figure>
-<h1 id="Demo-Py-hydra"><a href="#Demo-Py-hydra" class="headerlink" title="[Demo] Py-hydra"></a>[Demo] Py-hydra</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line">通过Python操作Hydra进行相关服务弱口令扫描</div><div class="line">相关结果以json的形式返回</div><div class="line">'''</div><div class="line"></div><div class="line">__author__ = <span class="string">"SanNa"</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">import</span> signal</div><div class="line"></div><div class="line"><span class="comment"># 设置超时时间</span></div><div class="line">TIME_OUT = <span class="number">20</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_hydra</span><span class="params">(ip, service, username, password)</span>:</span></div><div class="line">    <span class="string">'''调用hydra进行破解</span></div><div class="line"></div><div class="line">    :param ip: 目标ip</div><div class="line">    :param service: 服务类型</div><div class="line">    :param username: 用户字典</div><div class="line">    :param password: 密码字典</div><div class="line"></div><div class="line">    :return str</div><div class="line">    '''</div><div class="line">    kwargs = &#123;</div><div class="line">            <span class="string">'ip'</span>: ip,</div><div class="line">            <span class="string">'service'</span>: service,</div><div class="line">            <span class="string">'username'</span>: username,</div><div class="line">            <span class="string">'password'</span>: password,</div><div class="line">            &#125;</div><div class="line">    command_str = <span class="string">"hydra -L &#123;username&#125; -P &#123;password&#125; &#123;ip&#125; &#123;service&#125;"</span></div><div class="line">    result = subprocess.Popen(command_str.format(**kwargs),</div><div class="line">                    shell=<span class="keyword">True</span>, stdout=subprocess.PIPE).communicate()[<span class="number">0</span>]</div><div class="line">    <span class="keyword">return</span> result</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">return_json</span><span class="params">(result)</span>:</span></div><div class="line">    <span class="string">'''从扫描结果中提出相关信息</span></div><div class="line"></div><div class="line">    :param result: 扫描结果</div><div class="line"></div><div class="line">    :return json</div><div class="line">    '''</div><div class="line">    ok_flag = <span class="string">'target successfully completed'</span></div><div class="line">    fail_flag = <span class="string">'0 valid passwords found'</span></div><div class="line">    data = &#123;</div><div class="line">            <span class="string">'login'</span>: <span class="keyword">None</span>,</div><div class="line">            <span class="string">'password'</span>: <span class="keyword">None</span>,</div><div class="line">            &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ok_flag <span class="keyword">in</span> result:</div><div class="line">        data[<span class="string">'status'</span>]  =  <span class="string">'success'</span></div><div class="line">        item = result.split(<span class="string">'\n'</span>)[<span class="number">5</span>]</div><div class="line">        data[<span class="string">'login'</span>] = item.split(<span class="string">' '</span>)[<span class="number">6</span>]</div><div class="line">        data[<span class="string">'password'</span>] = item.split(<span class="string">' '</span>)[<span class="number">10</span>]</div><div class="line">    <span class="keyword">elif</span> fail_flag <span class="keyword">in</span> result:</div><div class="line">        data[<span class="string">'status'</span>] = <span class="string">'fail'</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        data[<span class="string">'status'</span>] = <span class="string">'unknown error.'</span></div><div class="line">    <span class="keyword">return</span> json.dumps([data])</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">handler</span><span class="params">(signum, frame)</span>:</span></div><div class="line">    <span class="keyword">raise</span> AssertionError</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    ip = sys.argv[<span class="number">1</span>]</div><div class="line">    service = sys.argv[<span class="number">2</span>]</div><div class="line">    username = <span class="string">'username.txt'</span></div><div class="line">    password = <span class="string">'password.txt'</span></div><div class="line">    <span class="comment"># try:</span></div><div class="line">    <span class="comment">#     username = sys.argv[3]</span></div><div class="line">    <span class="comment"># except:</span></div><div class="line">    <span class="comment">#     username = 'ftp'</span></div><div class="line">    <span class="comment"># try:</span></div><div class="line">    <span class="comment">#     password = sys.argv[4]</span></div><div class="line">    <span class="comment"># except:</span></div><div class="line">    <span class="comment">#     password = 'ftp'</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'[*] Place wait...'</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="comment"># 超时设置</span></div><div class="line">        signal.signal(signal.SIGALRM, handler)</div><div class="line">        signal.alarm(TIME_OUT)</div><div class="line"></div><div class="line">        result = start_hydra(ip, service, username, password)</div><div class="line">        <span class="keyword">print</span> result</div><div class="line">        data = return_json(result)</div><div class="line">    <span class="keyword">except</span> AssertionError:</div><div class="line">        <span class="keyword">print</span> <span class="string">"TIMEOUT!"</span></div></pre></td></tr></table></figure>
-<h1 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  hydar  python test.py 192.168.1.55 ftp</div><div class="line">[*] Place wait...</div><div class="line">Hydra v8.1 (c) 2014 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes.</div><div class="line"></div><div class="line">Hydra (http://www.thc.org/thc-hydra) starting at 2016-06-02 12:41:32</div><div class="line">[DATA] max 16 tasks per 1 server, overall 64 tasks, 22425 login tries (l:69/p:325), ~21 tries per task</div><div class="line">[DATA] attacking service ftp on port 21</div><div class="line">[21][ftp] host: 192.168.1.55   login: ftp   password: ftp</div><div class="line">1 of 1 target successfully completed, 1 valid password found</div><div class="line">Hydra (http://www.thc.org/thc-hydra) finished at 2016-06-02 12:41:37</div><div class="line"></div><div class="line">[&#123;&quot;status&quot;: &quot;success&quot;, &quot;login&quot;: &quot;ftp&quot;, &quot;password&quot;: &quot;ftp&quot;&#125;]</div></pre></td></tr></table></figure>
-<h1 id="备选方案-1"><a href="#备选方案-1" class="headerlink" title="备选方案"></a>备选方案</h1><blockquote>
-<p>全能暴力破解测试工具——Patator v0.5<br><a href="https://github.com/lanjelot/patator" target="_blank" rel="external">https://github.com/lanjelot/patator</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"> cat Common/common.php</div><div class="line">&lt;?php</div><div class="line">function show()&#123;</div><div class="line">  echo &apos;hello world1&apos;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">cat Lib/Action/IndexAction.class.php</div><div class="line">&lt;?php</div><div class="line">// 本类由系统自动生成，仅供测试用途</div><div class="line">class IndexAction extends Action &#123;</div><div class="line">    public function index()&#123;</div><div class="line">      //echo C(&apos;name&apos;),&apos;&lt;br/&gt;&apos;;</div><div class="line">      //echo C(&apos;sex&apos;);</div><div class="line">    //  echo C(&apos;URL_MODEL&apos;),&apos;&lt;br/&gt;&apos;;</div><div class="line">      //echo U(&apos;index/user&apos;,array(&apos;id&apos;=&gt;1),&apos;html&apos;,false,&apos;localhost&apos;);</div><div class="line">      show();</div><div class="line">      // $arr=array(1,2,3,4,5);</div><div class="line">      // dump($arr);</div><div class="line">      // $this-&gt;display();</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    public function user()&#123;</div><div class="line">      echo &apos;id is:&apos;.$_GET[&apos;id&apos;].&apos;&lt;br/&gt;&apos;;</div><div class="line">      // echo &apos;这里是INDEX模块的user方法&apos;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>如果要添加模板的话</p>
 </blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">在Tpl目录下创建函数同名的文件夹如Index在该文件夹中创建index.html，</div><div class="line">然后在IndexAction.class.php通过$this-&gt;display();进行调用</div><div class="line">如果Tpl/Index目录下有多个html，则通过$this-&gt;display(&apos;文件名&apos;);进行调用</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">  &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</div><div class="line">  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</div><div class="line">  &lt;title&gt;Document&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">Hello World.</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<h2 id="模板输入"><a href="#模板输入" class="headerlink" title="模板输入"></a>模板输入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;$now|date=&apos;Y-m-d H:i:s&apos;,###&#125;&lt;p/&gt;</div><div class="line"></div><div class="line">&#123;$Think.now&#125;&lt;p/&gt;</div><div class="line">&#123;$Think.version&#125;&lt;p/&gt;</div></pre></td></tr></table></figure>
+<h2 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;for start=&apos;1&apos; end=&apos;10&apos;  name=&apos;k&apos;&gt;</div><div class="line">  &#123;$k&#125;&lt;br/&gt;</div><div class="line">&lt;/for&gt;</div></pre></td></tr></table></figure>
+<h2 id="if"><a href="#if" class="headerlink" title="if"></a>if</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;if condition=&apos;$num gt 10&apos;&gt;</div><div class="line">  num &gt; 10</div><div class="line">&lt;elseif condition=&quot;$num lt 10&quot;/&gt;num &lt; 10</div><div class="line">&lt;else/&gt;num===10</div><div class="line">&lt;/if&gt;</div></pre></td></tr></table></figure>
 
       
 
@@ -953,24 +922,13 @@ var _hmt = _hmt || [];
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">hydra</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
         		</li>
       		
 		</ul>
@@ -979,7 +937,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/sec/hydra-折腾笔记/">展开全文 >></a>
+          <a class="article-more-a" href="/others/ThinkPHP折腾笔记/">展开全文 >></a>
         </p>
       
 
@@ -997,32 +955,76 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-MongoDB-开机自启动" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-solr分布式环境配置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/db/MongoDB-开机自启动/">MongoDB 开机自启动</a>
+      <a class="article-title" href="/devops/solr分布式环境配置/">solr分布式环境配置</a>
     </h1>
   
 
         
-        <a href="/db/MongoDB-开机自启动/" class="archive-article-date">
-  	<time datetime="2016-09-20T08:18:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-20</time>
+        <a href="/devops/solr分布式环境配置/" class="archive-article-date">
+  	<time datetime="2016-10-20T11:44:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-20</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mongodb"><a href="#mongodb" class="headerlink" title="mongodb"></a>mongodb</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/rc.d/init.d/mongodb</div></pre></td></tr></table></figure>
-<blockquote>
-<p>如果需要后台的方式启动，则为<br>/dat0/mongodb/bin/mongod –dbpath=/data/db/ –fork –logpath=/data/logs/mongodb.log</p>
+        <h1 id="搭建zookeeper集群"><a href="#搭建zookeeper集群" class="headerlink" title="搭建zookeeper集群"></a>搭建zookeeper集群</h1><blockquote>
+<p>使用的是三个节点，分别为<br>192.168.64.132  node2<br>192.168.64.130  node1<br>192.168.64.131  node3</p>
+<h2 id="在节点中分别配置主机名IP隐射关系"><a href="#在节点中分别配置主机名IP隐射关系" class="headerlink" title="在节点中分别配置主机名IP隐射关系"></a>在节点中分别配置主机名IP隐射关系</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &apos;192.168.64.132  node2\n192.168.64.130  node1\n192.168.64.131  node3&apos;   &gt;&gt; /etc/hosts &amp;&amp;  source /etc/hosts</div></pre></td></tr></table></figure>
 </blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh  </span></div><div class="line"><span class="comment">#  </span></div><div class="line"><span class="comment">#chkconfig: 2345 80 90  </span></div><div class="line"><span class="comment">#description: mongodb  </span></div><div class="line"><span class="function"><span class="title">start</span></span>() &#123;  </div><div class="line">  /dat0/mongodb/bin/mongod</div><div class="line">&#125;  </div><div class="line"></div><div class="line"><span class="function"><span class="title">stop</span></span>() &#123;  </div><div class="line">   /dat0/mongodb/bin/mongod  --shutdown  </div><div class="line">&#125;  </div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span>  </div><div class="line">  start)  </div><div class="line"> start  </div><div class="line"> ;;  </div><div class="line">  stop)  </div><div class="line"> stop  </div><div class="line"> ;;  </div><div class="line">  restart)  </div><div class="line"> stop  </div><div class="line"> start  </div><div class="line"> ;;  </div><div class="line">  *)  </div><div class="line"> <span class="built_in">echo</span> $<span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart&#125;"</span>  </div><div class="line"> <span class="built_in">exit</span> 1  </div><div class="line"><span class="keyword">esac</span></div></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">chkconfig --add mongodb  </div><div class="line">chmod +x  mongodb  </div><div class="line">chkconfig mongodb on</div></pre></td></tr></table></figure>
+<h2 id="创建相关文件夹"><a href="#创建相关文件夹" class="headerlink" title="创建相关文件夹"></a>创建相关文件夹</h2><blockquote>
+<p>在各节点根目录中创建 soft文件夹并将下载好的zookeeper解压至该文件夹<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -zxvf zookeeper-3.5.2-alpha.tar.gz -C /soft/</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="新建zookeeper数据存储文件夹和日志存储文件夹"><a href="#新建zookeeper数据存储文件夹和日志存储文件夹" class="headerlink" title="新建zookeeper数据存储文件夹和日志存储文件夹"></a>新建zookeeper数据存储文件夹和日志存储文件夹</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /soft/zookeeper-data</div><div class="line">mkdir /soft/zookeeper-data/logs</div></pre></td></tr></table></figure>
+<h2 id="新建节点标示"><a href="#新建节点标示" class="headerlink" title="新建节点标示"></a>新建节点标示</h2><blockquote>
+<p>以node1为例<br>其他节点以此类推<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo 1 &gt; /soft/zookeeper-data/myid</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="编辑配置文件"><a href="#编辑配置文件" class="headerlink" title="编辑配置文件"></a>编辑配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /soft/zookeeper-3.5.2-alpha/</div><div class="line">mv conf/zoo_sample.cfg conf/zoo.cfg</div><div class="line">vim /conf/zoo.cfg</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">dataDir=/soft/zookeeper-data</div><div class="line">dataLogDir=/soft/zookeeper-data/logs</div><div class="line">server.1=node1:2888:3888</div><div class="line">server.2=node2:2888:3888</div><div class="line">server.3=node3:2888:3888</div></pre></td></tr></table></figure>
+<h2 id="配置完成后把配置发送到其他两台机子"><a href="#配置完成后把配置发送到其他两台机子" class="headerlink" title="配置完成后把配置发送到其他两台机子"></a>配置完成后把配置发送到其他两台机子</h2><h2 id="启动zookeeper"><a href="#启动zookeeper" class="headerlink" title="启动zookeeper"></a>启动zookeeper</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  zookeeper-3.5.2-alpha bin/zkServer.sh start conf/zoo.cfg</div><div class="line">/usr/bin/java</div><div class="line">ZooKeeper JMX enabled by default</div><div class="line">Using config: conf/zoo.cfg</div><div class="line">Starting zookeeper ... STARTED</div></pre></td></tr></table></figure>
+<blockquote>
+<p>验证是否启动成功</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜  zookeeper-3.5.2-alpha bin/zkServer.sh status conf/zoo.cfg</div><div class="line">/usr/bin/java</div><div class="line">ZooKeeper JMX enabled by default</div><div class="line">Using config: conf/zoo.cfg</div><div class="line">Client port found: 2181. Client address: localhost.</div><div class="line">Mode: leader</div></pre></td></tr></table></figure>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtjnfmkdpj30fh02yq30.jpg" alt=""></p>
+<h1 id="安装Java环境"><a href="#安装Java环境" class="headerlink" title="安装Java环境"></a>安装Java环境</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install openjdk-8-jre-headless</div></pre></td></tr></table></figure>
+<h1 id="运行solr"><a href="#运行solr" class="headerlink" title="运行solr"></a>运行solr</h1><blockquote>
+<p>解压 并运行下载好的solr<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">tar -zxvf solr-6.2.1.tgz</div><div class="line">root@tp-ubuntu:/opt/solr-6.2.1# ./bin/solr start</div><div class="line">Waiting up to 30 seconds to see Solr running on port 8983 [-]  </div><div class="line">Started Solr server on port 8983 (pid=20810). Happy searching!</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>效果图</p>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtjnv45nmj30ql0ke0tw.jpg" alt="效果图"></p>
+<h1 id="创建-solr目录"><a href="#创建-solr目录" class="headerlink" title="创建/solr目录"></a>创建/solr目录</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># 进入zookeeper后台命令，默认连接本地localhost:2181</div><div class="line">./zookeeper/bin/zkCli.sh</div><div class="line"></div><div class="line"># 创建目录</div><div class="line">create /solr &quot;solr&quot;</div></pre></td></tr></table></figure>
+<h2 id="初始化solr配置文件"><a href="#初始化solr配置文件" class="headerlink" title="初始化solr配置文件"></a>初始化solr配置文件</h2><blockquote>
+<p>上传solr自带配置文件到zookeeper的/solr/configs目录下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./bin/solr zk -z localhost:2181/solr -upconfig -n solr -d example/example-DIH/solr/solr</div></pre></td></tr></table></figure></p>
+<p>参数说明<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-upconfig to move a configset from the local machine to Zookeeper.</div><div class="line">-n configName    Name of the configset in Zookeeper that will be the destinatino of &apos;upconfig&apos; and the source for &apos;downconfig&apos;.</div><div class="line">-d confdir       The local directory the configuration will be uploaded from</div><div class="line">-z zkHost        Zookeeper connection string.</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h4 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">使用自定义ZooKeeper connection string启动Solr。该选项只能在-c选项，即SolrCloud模式下使用。如果该选项未提供，Solr将启动内置ZooKeeper实例</div><div class="line">如果指定ZooKeeper连接字符串，例如&quot;-z 192.168.64.133:2181&quot;，Solr将连接到ZooKeeper并加入集群。如果以cloud模式启动，但没有指定-z选项，则Solr启动内置ZooKeeper服务器，坚挺在Solr端口+1000，例如Solr在端口8983，则内置ZooKeeper监听在端口9983</div></pre></td></tr></table></figure>
+<blockquote>
+<p>查看zookeeper目录：<br>以前的schema.xml换成了managed-schema文件，具体配置文档：<br><a href="https://cwiki.apache.org/confluence/display/solr/Documents%2C+Fields%2C+and+Schema+Design" target="_blank" rel="external">https://cwiki.apache.org/confluence/display/solr/Documents%2C+Fields%2C+and+Schema+Design</a></p>
+</blockquote>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtjoaij71j30fh02yq30.jpg" alt=""></p>
+<h2 id="使用solr自带的jetty启动服务"><a href="#使用solr自带的jetty启动服务" class="headerlink" title="使用solr自带的jetty启动服务"></a>使用solr自带的jetty启动服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /soft/solr</div><div class="line">bin/solr start -c -m 1g -z node1:2181/solr,node2:2181/solr,node3:2181/solr -p 8983</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-c：cloud模式启动</div><div class="line">-m：最大内存使用</div><div class="line">-z：zookeeper集群地址</div><div class="line">-p：启动服务端口</div></pre></td></tr></table></figure>
+<h3 id="分别在其他节点上也以此方式启动solr"><a href="#分别在其他节点上也以此方式启动solr" class="headerlink" title="分别在其他节点上也以此方式启动solr"></a>分别在其他节点上也以此方式启动solr</h3><h2 id="创建collections集群"><a href="#创建collections集群" class="headerlink" title="创建collections集群"></a>创建collections集群</h2><blockquote>
+<p>1.通过浏览器访问<a href="http://192.168.64.130:8983/solr" target="_blank" rel="external">http://192.168.64.130:8983/solr</a><br>创建集群</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtjomenefj30ff0dr74u.jpg" alt=""></p>
+<blockquote>
+<p>或者通过restful api创建collections集群</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl &apos;http://localhost:8983/solr/admin/collections?action=CREATE&amp;name=solr&amp;numShards=3&amp;replicationFactor=2&amp;maxShardsPerNode=2&apos;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">name：待创建Collection的名称</div><div class="line">configset：collection在zookeeper中的配置目录</div><div class="line">numShards：分片的数量</div><div class="line">replicationFactor：复制副本的数量</div><div class="line">maxShardsPerNode：默认值为1，注意三个数值：numShards、replicationFactor、liveSolrNode，一个正常的solrCloud集群不容许同一个liveSolrNode上部署同一个shard的多个replic，因此当maxShardsPerNode=1时，numShards*replicationFactor&gt;liveSolrNode时，报错。因此正确时因满足以下条件：</div><div class="line">numShards*replicationFactor&lt;liveSolrNode*maxShardsPerNode</div></pre></td></tr></table></figure>
+<h2 id="最终效果图"><a href="#最终效果图" class="headerlink" title="最终效果图"></a>最终效果图</h2><p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtjovwp62j31hc0gqab9.jpg" alt=""></p>
+<h1 id="导入配置"><a href="#导入配置" class="headerlink" title="导入配置"></a>导入配置</h1><blockquote>
+<p>最后一条命令需要指定到具体配置目录<br>执行命令结束后，需要到也没reload下core<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bash /dat0/solr/server/scripts/cloud-scripts/zkcli.sh -cmd linkconfig -zkhost localhost:9983 -collection cninfo -confname cninfoconf</div><div class="line">bash /dat0/solr/server/scripts/cloud-scripts/zkcli.sh -cmd upconfig -zkhost localhost:9983 -confname cninfoconf -confdir /dat0/solr/server/cloud/conf/</div></pre></td></tr></table></figure></p>
+</blockquote>
 
       
 
@@ -1036,108 +1038,7 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MongoDB</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/db/" class="article-tag-list-link color3">db</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/db/MongoDB-开机自启动/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-FreeRADIUS" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/devops/FreeRADIUS/">FreeRADIUS</a>
-    </h1>
-  
-
-        
-        <a href="/devops/FreeRADIUS/" class="archive-article-date">
-  	<time datetime="2016-09-18T12:30:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Radius"><a href="#Radius" class="headerlink" title="Radius"></a>Radius</h1><blockquote>
-<p>Remote Authentication Dial In User Service 远程访问拨号用户服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">RADIUS是一种C/S结构的协议，它的客户端最初就是NAS（Net Access Server）服务器，任何运行RADIUS客户端软件的计算机都可以成为RADIUS的客户端。RADIUS协议认证机制灵活，可以采用PAP、CHAP或者Unix登录认证等多种方式。RADIUS是一种可扩展的协议，它进行的全部工作都是基于Attribute-Length-Value的向量进行的。RADIUS也支持厂商扩充厂家专有属性。</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="Freeradius-Install"><a href="#Freeradius-Install" class="headerlink" title="Freeradius Install"></a>Freeradius Install</h2><blockquote>
-<p>Ubuntu.</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-3.0.11.tar.gz</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar zxf freeradius-server-3.0.11.tar.gz</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd freeradius-server-3.0.11/</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure</div></pre></td></tr></table></figure>
-<blockquote>
-<p>Bug Fix<br>在configure时可能会出现<br>failed linking to libcrypto. Use –with-openssl-lib-dir=<path></path>, or –with-openssl=no (builds without OpenSSL)<br>解决办法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Red Hat, Fedora, CentOS - openssl-devel</div><div class="line">Debian, Ubuntu - libssl-dev</div><div class="line">Arch - openssl</div></pre></td></tr></table></figure></p>
-<p>error: FreeRADIUS requires libtalloc</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install libtalloc-devel -y</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">radiusd -X</div></pre></td></tr></table></figure>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adtest hello hello localhost 0 testing123</div></pre></td></tr></table></figure>
-<h3 id="To-Do"><a href="#To-Do" class="headerlink" title="To Do"></a>To Do</h3><blockquote>
-<p>修改的模块是modules里面的rlm_realm，这个module完成了Proxy的相关业务逻辑，我们需要开发HUE的rlm_realm，并打包。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./src/modules/rlm_realm/rlm_realm.c</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h1 id="PAM"><a href="#PAM" class="headerlink" title="PAM"></a>PAM</h1><blockquote>
-<p>Pluggable Authentication Modules 可插拔认证模块<br><a href="http://www.ibm.com/developerworks/cn/linux/l-pam/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/linux/l-pam/</a></p>
-</blockquote>
-<h1 id="PAM的文件"><a href="#PAM的文件" class="headerlink" title="PAM的文件"></a>PAM的文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/etc/pam.conf或者/etc/pam.d/ PAM配置文件</div><div class="line">/usr/lib/security/pam_*.so 可动态加载的PAM service module</div><div class="line">对于RedHat，其目录不是/usr/lib，而是/lib</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">FreeRADIUS</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Solr</a>
         		</li>
       		
 		</ul>
@@ -1158,7 +1059,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/devops/FreeRADIUS/">展开全文 >></a>
+          <a class="article-more-a" href="/devops/solr分布式环境配置/">展开全文 >></a>
         </p>
       
 
@@ -1322,6 +1223,14 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">hydra</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">
