@@ -870,6 +870,101 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-Docker-容器间通信" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/virtualization/Docker-容器间通信/">Docker-容器间通信</a>
+    </h1>
+  
+
+        
+        <a href="/virtualization/Docker-容器间通信/" class="archive-article-date">
+  	<time datetime="2015-06-19T22:35:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="pipework"><a href="#pipework" class="headerlink" title="pipework"></a>pipework</h1><blockquote>
+<p><a href="https://github.com/jpetazzo/pipework" target="_blank" rel="external">https://github.com/jpetazzo/pipework</a></p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>在同一宿主主机中创建两台容器，通过pipework创建网桥进行通讯</p>
+<h4 id="c1"><a href="#c1" class="headerlink" title="c1"></a>c1</h4><p>docker run –name c1 -it ubuntu:14.04</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtfx8vx82j30hc0ad75b.jpg" alt="c1"></p>
+<h4 id="c2"><a href="#c2" class="headerlink" title="c2"></a>c2</h4><blockquote>
+<p>docker run –name c2 -it ubuntu:14.04</p>
+</blockquote>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtfxkm169j30gy0abgmm.jpg" alt="c2"></p>
+<blockquote>
+<p>创建网桥<br>git clone <a href="https://github.com/jpetazzo/pipework.git" target="_blank" rel="external">https://github.com/jpetazzo/pipework.git</a></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  pipework git:(master) ./pipework br1 c1 192.168.11.1/24</div><div class="line">➜  pipework git:(master) ./pipework br1 c2 192.168.11.2/24</div><div class="line"> brctl show</div></pre></td></tr></table></figure>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfxvtbynj30i20a0my7.jpg" alt="创建网桥"></p>
+<blockquote>
+<p>效果图</p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtfy8sij4j311n0hq0wt.jpg" alt="效果图"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/virtualization/Docker-容器间通信/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Docker构建镜像-Dockerfile" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1058,97 +1153,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Docker私有仓库" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker私有仓库/">Docker私有仓库</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker私有仓库/" class="archive-article-date">
-  	<time datetime="2015-03-20T12:20:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="搭建仓库"><a href="#搭建仓库" class="headerlink" title="搭建仓库"></a>搭建仓库</h1><blockquote>
-<p>使用docker-registry进行私有仓库搭建</p>
-<h2 id="基于容器"><a href="#基于容器" class="headerlink" title="基于容器"></a>基于容器</h2><p>docker pull registry</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#运行容器并将镜像存储到宿主主机/opt/data/registry目录</div><div class="line">docker run -d -p 5000 -v /opt/data/registry:/tmp/registry /registry</div></pre></td></tr></table></figure>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><blockquote>
-<p>打开浏览器输入<a href="http://127.0.0.1:5000/v2" target="_blank" rel="external">http://127.0.0.1:5000/v2</a></p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtfgogy03j30dg03o0so.jpg" alt="安装成功"></p>
-<h2 id="上传镜像"><a href="#上传镜像" class="headerlink" title="上传镜像"></a>上传镜像</h2><blockquote>
-<p>通过docker tag将该镜像标志为要推送到私有仓库</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker tag sshd:dockerfile3 127.0.0.1:5000/sshd</div><div class="line">docker push 127.0.0.1:5000/sshd</div></pre></td></tr></table></figure>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfh6m1i0j30pg08ft9e.jpg" alt="push success"></p>
-<h2 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker pull 127.0.0.1:5000/sshd</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker私有仓库/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1234,15 +1238,15 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1266,11 +1270,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
+                <a href="javascript:void(0)" class="js-tag color5">Perl</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1283,10 +1291,6 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Perl</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -6,17 +6,56 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: Perl | SanNa&#39;s Blog</title>
+  <title>Docker-容器间通信 | SanNa&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Pythoner|机器学习|数据挖掘|安全|运维|开发|Linuxer">
-<meta property="og:type" content="website">
-<meta property="og:title" content="SanNa's Blog">
-<meta property="og:url" content="http://yoursite.com/tags/Perl/index.html">
+  <meta name="description" content="pipework
+https://github.com/jpetazzo/pipework
+思路在同一宿主主机中创建两台容器，通过pipework创建网桥进行通讯
+c1docker run –name c1 -it ubuntu:14.04
+
+
+c2
+docker run –name c2 -it ubuntu:14.04
+
+
+
+创建网桥git clone https://github.com/j">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker-容器间通信">
+<meta property="og:url" content="http://yoursite.com/virtualization/Docker-容器间通信/index.html">
 <meta property="og:site_name" content="SanNa's Blog">
-<meta property="og:description" content="Pythoner|机器学习|数据挖掘|安全|运维|开发|Linuxer">
+<meta property="og:description" content="pipework
+https://github.com/jpetazzo/pipework
+思路在同一宿主主机中创建两台容器，通过pipework创建网桥进行通讯
+c1docker run –name c1 -it ubuntu:14.04
+
+
+c2
+docker run –name c2 -it ubuntu:14.04
+
+
+
+创建网桥git clone https://github.com/j">
+<meta property="og:image" content="https://ww3.sinaimg.cn/large/006tNc79gy1fdtfx8vx82j30hc0ad75b.jpg">
+<meta property="og:image" content="https://ww4.sinaimg.cn/large/006tNc79gy1fdtfxkm169j30gy0abgmm.jpg">
+<meta property="og:image" content="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfxvtbynj30i20a0my7.jpg">
+<meta property="og:image" content="https://ww2.sinaimg.cn/large/006tNc79gy1fdtfy8sij4j311n0hq0wt.jpg">
+<meta property="og:updated_time" content="2017-03-20T09:38:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SanNa's Blog">
-<meta name="twitter:description" content="Pythoner|机器学习|数据挖掘|安全|运维|开发|Linuxer">
+<meta name="twitter:title" content="Docker-容器间通信">
+<meta name="twitter:description" content="pipework
+https://github.com/jpetazzo/pipework
+思路在同一宿主主机中创建两台容器，通过pipework创建网桥进行通讯
+c1docker run –name c1 -it ubuntu:14.04
+
+
+c2
+docker run –name c2 -it ubuntu:14.04
+
+
+
+创建网桥git clone https://github.com/j">
+<meta name="twitter:image" content="https://ww3.sinaimg.cn/large/006tNc79gy1fdtfx8vx82j30hc0ad75b.jpg">
   
     <link rel="alternative" href="/atom.xml" title="SanNa&#39;s Blog" type="application/atom+xml">
   
@@ -182,71 +221,196 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Docker-容器间通信" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/others/Perl-学习笔记/" class="archive-article-date">
-  	<time datetime="2015-08-10T03:25:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-08-10</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/others/Perl-学习笔记/">Perl 学习笔记</a>
+    <h1 class="article-title" itemprop="name">
+      Docker-容器间通信
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/virtualization/Docker-容器间通信/" class="archive-article-date">
+  	<time datetime="2015-06-19T22:35:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="pipework"><a href="#pipework" class="headerlink" title="pipework"></a>pipework</h1><blockquote>
+<p><a href="https://github.com/jpetazzo/pipework" target="_blank" rel="external">https://github.com/jpetazzo/pipework</a></p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>在同一宿主主机中创建两台容器，通过pipework创建网桥进行通讯</p>
+<h4 id="c1"><a href="#c1" class="headerlink" title="c1"></a>c1</h4><p>docker run –name c1 -it ubuntu:14.04</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtfx8vx82j30hc0ad75b.jpg" alt="c1"></p>
+<h4 id="c2"><a href="#c2" class="headerlink" title="c2"></a>c2</h4><blockquote>
+<p>docker run –name c2 -it ubuntu:14.04</p>
+</blockquote>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtfxkm169j30gy0abgmm.jpg" alt="c2"></p>
+<blockquote>
+<p>创建网桥<br>git clone <a href="https://github.com/jpetazzo/pipework.git" target="_blank" rel="external">https://github.com/jpetazzo/pipework.git</a></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  pipework git:(master) ./pipework br1 c1 192.168.11.1/24</div><div class="line">➜  pipework git:(master) ./pipework br1 c2 192.168.11.2/24</div><div class="line"> brctl show</div></pre></td></tr></table></figure>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfxvtbynj30i20a0my7.jpg" alt="创建网桥"></p>
+<blockquote>
+<p>效果图</p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtfy8sij4j311n0hq0wt.jpg" alt="效果图"></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtefu6qezj30b20czwf1.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Perl</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
+        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/virtualization/Docker-容器间通信/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/others/Perl-学习笔记/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Perl 学习笔记
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/virtualization/Docker构建镜像-Dockerfile/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Docker构建镜像-Dockerfile</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -269,9 +433,9 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
