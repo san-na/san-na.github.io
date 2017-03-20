@@ -870,6 +870,137 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-Docker-跨主机连接" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/virtualization/Docker-跨主机连接/">Docker-跨主机连接</a>
+    </h1>
+  
+
+        
+        <a href="/virtualization/Docker-跨主机连接/" class="archive-article-date">
+  	<time datetime="2015-07-03T11:47:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-07-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="使用网桥"><a href="#使用网桥" class="headerlink" title="使用网桥"></a>使用网桥</h1><blockquote>
+<p>配置简单、不依赖第三方软件；将容器和物理机放在同一网段</p>
+</blockquote>
+<h2 id="网络设置"><a href="#网络设置" class="headerlink" title="网络设置"></a>网络设置</h2><blockquote>
+<p>vim /etc/network/interfaces</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">auto br0</div><div class="line">iface br0 inet static</div><div class="line">netmask 255.255.255.0</div><div class="line">gateway 101.210.55.1</div><div class="line">bridge_ports eth0</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Docker网络设置<br>vim /etc/default/docker</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-b指定使用自定义网桥</div><div class="line">-b=br0</div><div class="line">--fixed-cidr限制ip地址分配范围</div><div class="line">host1: 101.211.55.64/26</div><div class="line">101.211.55.65~101.211.55.126</div></pre></td></tr></table></figure>
+<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><blockquote>
+<p>使用自定义网桥<br>在启动docker服务的时候，使用-b BEIDGE 或者–bridge=BEIDGE来指定使用的网桥</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#停止服务并删除旧的网桥</div><div class="line">service docker stop</div><div class="line">brctl delbr docker0</div><div class="line">#创建新的网桥</div><div class="line">brctl addbr bridge0</div><div class="line">ip addr add 192.168.5.1/24 dev bridge0</div></pre></td></tr></table></figure>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtg9gcy3yj30h106fgm0.jpg" alt="使用自定义网桥"></p>
+<blockquote>
+<p>ip addr show bridge0</p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtg9tule6j30j708pt9p.jpg" alt="网桥创建成功"></p>
+<blockquote>
+<p>配置Docker服务<br>默认桥接到创建的网桥上<br>echo ‘DOCKER_OPTS=”-b=bridge0”‘ &gt;&gt; /etc/default/docker<br>service docker start<br>新建容器进行测试</p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtga8c8msj30hk0cggmt.jpg" alt="独立网桥测试成功"></p>
+<h1 id="使用Open-vSwitch"><a href="#使用Open-vSwitch" class="headerlink" title="使用Open vSwitch"></a>使用Open vSwitch</h1><blockquote>
+<p>高质量、多层虚拟交换机 使用GRE协议<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GRE 通用路由协议封装</div><div class="line">隧道技术是一种通过使用互联网络的基础设施在网络之间传递数据的方式，使用隧道传送的数据可以是不同协议的数据帧或包，隧道协议将其它协议的数据帧或包重新封装然后通过隧道发送；新的帧头提供路由信息，以便通过互联网传递被封装的负载数据。</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><blockquote>
+<p>apt-get install openvswitch-switch<br>apt-get install bridge-utils</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>pc1=192.168.1.110<br>pc2=192.168.1.55<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#建立网桥</div><div class="line">ovs-vsctl add-br obr0</div><div class="line">#添加GRE连接</div><div class="line">ovs-vsctl add-port obr0 gre0</div><div class="line">#配置Docker容器虚拟网桥</div><div class="line">set interface gre0 type=gre options:remote_ip=192.168.1.55</div><div class="line">root@tp-ubuntu:/etc/default# ovs-vsctl show</div></pre></td></tr></table></figure></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">brctl addbr br0</div><div class="line">ifconfig br0 192.168.11.1 netmask 255.255.255.0</div><div class="line">brctl addif br0 obr0</div><div class="line">sudo brctl show</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">58fa415c-67aa-477d-93b7-6ac0f32fe49d</div><div class="line">    Bridge &quot;obr0&quot;</div><div class="line">        Port &quot;gre0&quot;</div><div class="line">            Interface &quot;gre0&quot;</div><div class="line">                type: gre</div><div class="line">                options: &#123;remote_ip=&quot;192.168.1.55&quot;&#125;</div><div class="line">        Port &quot;obr0&quot;</div><div class="line">            Interface &quot;obr0&quot;</div><div class="line">                type: internal</div><div class="line">    ovs_version: &quot;2.5.0&quot;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>修改Docker配置文件<br>为虚拟网桥添加ovs接口<br>vim /etc/default/docker<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">BRIDGE=br0</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="使用weave"><a href="#使用weave" class="headerlink" title="使用weave"></a>使用weave</h1><blockquote>
+<p>原理：建立一个虚拟的网络，用于将运行在不同主机的Docker容器连接起来</p>
+<h2 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget -O /usr/bin/weave https://raw.githubusercontent.com/zettio/weave/master/weave &amp;&amp; chmod a+x /usr/bin/weave</div></pre></td></tr></table></figure>
+<p>weave操作</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">安装weave</div><div class="line">启动weave</div><div class="line">    weave launch</div><div class="line">连接不同主机</div><div class="line">通过weave 启动容器</div></pre></td></tr></table></figure>
+<h1 id="启动虚拟机"><a href="#启动虚拟机" class="headerlink" title="启动虚拟机"></a>启动虚拟机</h1><blockquote>
+<p>客户机1<br>192.168.1.110<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave luanch</div></pre></td></tr></table></figure></p>
+<p>客户机2</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave launch 192.168.1.110</div></pre></td></tr></table></figure>
+<blockquote>
+<p>虚拟机1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave run 192.168.11.2/24 -it ubuntu:14.04 /bin/bash</div></pre></td></tr></table></figure></p>
+<p>虚拟机2</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave run 192.168.11.3/24 -it ubuntu:14.04 /bin/bash</div></pre></td></tr></table></figure>
+<blockquote>
+<p>查看weave路由状态<br>weave ps<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">容器重启问题</div><div class="line">如果使用weave，则就不能再使用docker自带的auto-restart feature（如docker run –restart=always redis），因为weave是在docker之外为容器配置的网络，容器重启的时候docker本身不会做这些事情。因而，还需额外的工具来管理容器的状态（比如systemd, upstart等），这些工具要调用weave命令（weave run/start/attach）来启动容器。</div></pre></td></tr></table></figure></p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/virtualization/Docker-跨主机连接/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Docker-容器间通信" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1060,99 +1191,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Docker构建镜像-commit" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker构建镜像-commit/">Docker构建镜像-commit</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker构建镜像-commit/" class="archive-article-date">
-  	<time datetime="2015-03-22T13:23:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="docker-commit"><a href="#docker-commit" class="headerlink" title="docker commit"></a>docker commit</h1><blockquote>
-<p>先创建一个容器，并在容器里做出修改,最后commit修改<br>类似github的使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker run -i -t --name test-docker-commit debian /bin/bash</div><div class="line">root@8b20759d9e60:/#</div><div class="line">root@8b20759d9e60:/# apt-get -yqq update</div><div class="line">root@8b20759d9e60:/# apt-get -yqq install ipython</div></pre></td></tr></table></figure></p>
-<p>commit修改</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@8b20759d9e60:/# exit</div><div class="line">exit</div><div class="line">➜  ~ docker commit test-docker-commit debian/ipython</div><div class="line">sha256:dd7440e1f33791270b82010396b02b8522899619f9336bc998835733b988cd76</div></pre></td></tr></table></figure>
-<blockquote>
-<p>查看新创建的镜像</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker images debian/ipython</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">debian/ipython      latest              dd7440e1f337        2 minutes ago       173.9 MB</div></pre></td></tr></table></figure>
-<blockquote>
-<p>可通过docker inspect查看镜像详细详细</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker inspect debian/ipython:v1</div><div class="line">[</div><div class="line">    &#123;</div><div class="line">        <span class="string">"Id"</span>: <span class="string">"sha256:05fc24b025ad3ad61a121785e53e7748cfd415b6fbb0aad630ae5844e4bd5607"</span>,</div><div class="line">        <span class="string">"RepoTags"</span>: [</div><div class="line">            <span class="string">"debian/ipython:v1"</span></div><div class="line">        ],</div><div class="line">        <span class="string">"RepoDigests"</span>: [],</div><div class="line">        <span class="string">"Parent"</span>: <span class="string">"sha256:1b01529cc499d51767c62f9fc8083043610546b4e050898809ec54e00dbb1a34"</span>,</div><div class="line">        <span class="string">"Comment"</span>: <span class="string">"base image is debian"</span>,</div><div class="line">        <span class="string">"Created"</span>: <span class="string">"2016-08-25T05:54:03.366052897Z"</span>,</div><div class="line">        <span class="string">"Container"</span>: <span class="string">"8b20759d9e601a78a1baa8441238297e35a51c95b35fb17f3a1e6399cb540f1a"</span>,</div><div class="line">        <span class="string">"ContainerConfig"</span>: &#123;</div><div class="line">            <span class="string">"Hostname"</span>: <span class="string">"8b20759d9e60"</span>,</div><div class="line">            <span class="string">"Domainname"</span>: <span class="string">""</span>,</div><div class="line">………………………………</div></pre></td></tr></table></figure>
-<blockquote>
-<p>docker commit 的一些参数</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker commit --help</div><div class="line"></div><div class="line">Usage:	docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]</div><div class="line"></div><div class="line">Create a new image from a container<span class="string">'s changes</span></div><div class="line"></div><div class="line">Options:</div><div class="line">  -a, --author string    Author (e.g., "John Hannibal Smith &lt;hannibal@a-team.com&gt;")</div><div class="line">  -c, --change value     Apply Dockerfile instruction to the created image (default [])</div><div class="line">      --help             Print usage</div><div class="line">  -m, --message string   Commit message</div><div class="line">  -p, --pause            Pause container during commit (default true)</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker构建镜像-commit/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1238,15 +1276,15 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">

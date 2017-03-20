@@ -6,17 +6,52 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2017/2 | SanNa&#39;s Blog</title>
+  <title>Docker-跨主机连接 | SanNa&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Pythoner|机器学习|数据挖掘|安全|运维|开发|Linuxer">
-<meta property="og:type" content="website">
-<meta property="og:title" content="SanNa's Blog">
-<meta property="og:url" content="http://yoursite.com/archives/2017/02/index.html">
+  <meta name="description" content="使用网桥
+配置简单、不依赖第三方软件；将容器和物理机放在同一网段
+
+网络设置
+vim /etc/network/interfaces
+
+12345auto br0iface br0 inet staticnetmask 255.255.255.0gateway 101.210.55.1bridge_ports eth0
+
+Docker网络设置vim /etc/default/docker
+
+123">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker-跨主机连接">
+<meta property="og:url" content="http://yoursite.com/virtualization/Docker-跨主机连接/index.html">
 <meta property="og:site_name" content="SanNa's Blog">
-<meta property="og:description" content="Pythoner|机器学习|数据挖掘|安全|运维|开发|Linuxer">
+<meta property="og:description" content="使用网桥
+配置简单、不依赖第三方软件；将容器和物理机放在同一网段
+
+网络设置
+vim /etc/network/interfaces
+
+12345auto br0iface br0 inet staticnetmask 255.255.255.0gateway 101.210.55.1bridge_ports eth0
+
+Docker网络设置vim /etc/default/docker
+
+123">
+<meta property="og:image" content="https://ww3.sinaimg.cn/large/006tNc79gy1fdtg9gcy3yj30h106fgm0.jpg">
+<meta property="og:image" content="https://ww1.sinaimg.cn/large/006tNc79gy1fdtg9tule6j30j708pt9p.jpg">
+<meta property="og:image" content="https://ww1.sinaimg.cn/large/006tNc79gy1fdtga8c8msj30hk0cggmt.jpg">
+<meta property="og:updated_time" content="2017-03-20T09:52:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SanNa's Blog">
-<meta name="twitter:description" content="Pythoner|机器学习|数据挖掘|安全|运维|开发|Linuxer">
+<meta name="twitter:title" content="Docker-跨主机连接">
+<meta name="twitter:description" content="使用网桥
+配置简单、不依赖第三方软件；将容器和物理机放在同一网段
+
+网络设置
+vim /etc/network/interfaces
+
+12345auto br0iface br0 inet staticnetmask 255.255.255.0gateway 101.210.55.1bridge_ports eth0
+
+Docker网络设置vim /etc/default/docker
+
+123">
+<meta name="twitter:image" content="https://ww3.sinaimg.cn/large/006tNc79gy1fdtg9gcy3yj30h106fgm0.jpg">
   
     <link rel="alternative" href="/atom.xml" title="SanNa&#39;s Blog" type="application/atom+xml">
   
@@ -182,75 +217,232 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Docker-跨主机连接" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/devops/自动化运维工具-Ansible/" class="archive-article-date">
-  	<time datetime="2017-02-20T14:12:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-20</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/devops/自动化运维工具-Ansible/">自动化运维工具-Ansible</a>
+    <h1 class="article-title" itemprop="name">
+      Docker-跨主机连接
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/virtualization/Docker-跨主机连接/" class="archive-article-date">
+  	<time datetime="2015-07-03T11:47:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-07-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="使用网桥"><a href="#使用网桥" class="headerlink" title="使用网桥"></a>使用网桥</h1><blockquote>
+<p>配置简单、不依赖第三方软件；将容器和物理机放在同一网段</p>
+</blockquote>
+<h2 id="网络设置"><a href="#网络设置" class="headerlink" title="网络设置"></a>网络设置</h2><blockquote>
+<p>vim /etc/network/interfaces</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">auto br0</div><div class="line">iface br0 inet static</div><div class="line">netmask 255.255.255.0</div><div class="line">gateway 101.210.55.1</div><div class="line">bridge_ports eth0</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Docker网络设置<br>vim /etc/default/docker</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-b指定使用自定义网桥</div><div class="line">-b=br0</div><div class="line">--fixed-cidr限制ip地址分配范围</div><div class="line">host1: 101.211.55.64/26</div><div class="line">101.211.55.65~101.211.55.126</div></pre></td></tr></table></figure>
+<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><blockquote>
+<p>使用自定义网桥<br>在启动docker服务的时候，使用-b BEIDGE 或者–bridge=BEIDGE来指定使用的网桥</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#停止服务并删除旧的网桥</div><div class="line">service docker stop</div><div class="line">brctl delbr docker0</div><div class="line">#创建新的网桥</div><div class="line">brctl addbr bridge0</div><div class="line">ip addr add 192.168.5.1/24 dev bridge0</div></pre></td></tr></table></figure>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtg9gcy3yj30h106fgm0.jpg" alt="使用自定义网桥"></p>
+<blockquote>
+<p>ip addr show bridge0</p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtg9tule6j30j708pt9p.jpg" alt="网桥创建成功"></p>
+<blockquote>
+<p>配置Docker服务<br>默认桥接到创建的网桥上<br>echo ‘DOCKER_OPTS=”-b=bridge0”‘ &gt;&gt; /etc/default/docker<br>service docker start<br>新建容器进行测试</p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtga8c8msj30hk0cggmt.jpg" alt="独立网桥测试成功"></p>
+<h1 id="使用Open-vSwitch"><a href="#使用Open-vSwitch" class="headerlink" title="使用Open vSwitch"></a>使用Open vSwitch</h1><blockquote>
+<p>高质量、多层虚拟交换机 使用GRE协议<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GRE 通用路由协议封装</div><div class="line">隧道技术是一种通过使用互联网络的基础设施在网络之间传递数据的方式，使用隧道传送的数据可以是不同协议的数据帧或包，隧道协议将其它协议的数据帧或包重新封装然后通过隧道发送；新的帧头提供路由信息，以便通过互联网传递被封装的负载数据。</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><blockquote>
+<p>apt-get install openvswitch-switch<br>apt-get install bridge-utils</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>pc1=192.168.1.110<br>pc2=192.168.1.55<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#建立网桥</div><div class="line">ovs-vsctl add-br obr0</div><div class="line">#添加GRE连接</div><div class="line">ovs-vsctl add-port obr0 gre0</div><div class="line">#配置Docker容器虚拟网桥</div><div class="line">set interface gre0 type=gre options:remote_ip=192.168.1.55</div><div class="line">root@tp-ubuntu:/etc/default# ovs-vsctl show</div></pre></td></tr></table></figure></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">brctl addbr br0</div><div class="line">ifconfig br0 192.168.11.1 netmask 255.255.255.0</div><div class="line">brctl addif br0 obr0</div><div class="line">sudo brctl show</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">58fa415c-67aa-477d-93b7-6ac0f32fe49d</div><div class="line">    Bridge &quot;obr0&quot;</div><div class="line">        Port &quot;gre0&quot;</div><div class="line">            Interface &quot;gre0&quot;</div><div class="line">                type: gre</div><div class="line">                options: &#123;remote_ip=&quot;192.168.1.55&quot;&#125;</div><div class="line">        Port &quot;obr0&quot;</div><div class="line">            Interface &quot;obr0&quot;</div><div class="line">                type: internal</div><div class="line">    ovs_version: &quot;2.5.0&quot;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>修改Docker配置文件<br>为虚拟网桥添加ovs接口<br>vim /etc/default/docker<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">BRIDGE=br0</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="使用weave"><a href="#使用weave" class="headerlink" title="使用weave"></a>使用weave</h1><blockquote>
+<p>原理：建立一个虚拟的网络，用于将运行在不同主机的Docker容器连接起来</p>
+<h2 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget -O /usr/bin/weave https://raw.githubusercontent.com/zettio/weave/master/weave &amp;&amp; chmod a+x /usr/bin/weave</div></pre></td></tr></table></figure>
+<p>weave操作</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">安装weave</div><div class="line">启动weave</div><div class="line">    weave launch</div><div class="line">连接不同主机</div><div class="line">通过weave 启动容器</div></pre></td></tr></table></figure>
+<h1 id="启动虚拟机"><a href="#启动虚拟机" class="headerlink" title="启动虚拟机"></a>启动虚拟机</h1><blockquote>
+<p>客户机1<br>192.168.1.110<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave luanch</div></pre></td></tr></table></figure></p>
+<p>客户机2</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave launch 192.168.1.110</div></pre></td></tr></table></figure>
+<blockquote>
+<p>虚拟机1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave run 192.168.11.2/24 -it ubuntu:14.04 /bin/bash</div></pre></td></tr></table></figure></p>
+<p>虚拟机2</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave run 192.168.11.3/24 -it ubuntu:14.04 /bin/bash</div></pre></td></tr></table></figure>
+<blockquote>
+<p>查看weave路由状态<br>weave ps<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">容器重启问题</div><div class="line">如果使用weave，则就不能再使用docker自带的auto-restart feature（如docker run –restart=always redis），因为weave是在docker之外为容器配置的网络，容器重启的时候docker本身不会做这些事情。因而，还需额外的工具来管理容器的状态（比如systemd, upstart等），这些工具要调用weave命令（weave run/start/attach）来启动容器。</div></pre></td></tr></table></figure></p>
+</blockquote>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtefu6qezj30b20czwf1.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/virtualization/Docker-跨主机连接/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/others/Perl-学习笔记/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Perl 学习笔记
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/virtualization/Docker-容器间通信/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Docker-容器间通信</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -273,8 +465,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
