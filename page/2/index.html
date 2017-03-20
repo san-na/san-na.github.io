@@ -55,7 +55,7 @@ var _hmt = _hmt || [];
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdsilsyi5aj30zk0qowgy.jpg" class="js-avatar">
+			<img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfqqo84uj30cq0cyt9f.jpg" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">SanNa</a></h1>
@@ -117,7 +117,7 @@ var _hmt = _hmt || [];
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdsilsyi5aj30zk0qowgy.jpg" class="js-avatar">
+				<img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfqqo84uj30cq0cyt9f.jpg" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">SanNa</h1>
@@ -870,63 +870,45 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Docker笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Docker构建镜像-Dockerfile" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker笔记/">Docker 笔记</a>
+      <a class="article-title" href="/virtualization/Docker构建镜像-Dockerfile/">Docker构建镜像-Dockerfile</a>
     </h1>
   
 
         
-        <a href="/virtualization/Docker笔记/" class="archive-article-date">
-  	<time datetime="2015-03-18T07:16:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-18</time>
+        <a href="/virtualization/Docker构建镜像-Dockerfile/" class="archive-article-date">
+  	<time datetime="2015-03-27T14:25:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-27</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h1><blockquote>
-<p>Docker官方脚本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -sSL https://get.docker.com/ | sh</div></pre></td></tr></table></figure></p>
-<p>阿里云脚本</p>
+        <h1 id="通过dockerfile构建镜像"><a href="#通过dockerfile构建镜像" class="headerlink" title="通过dockerfile构建镜像"></a>通过dockerfile构建镜像</h1><blockquote>
+<p>Docker提供了一种标准化的DSL，你只需要编写一个Dockerfile，运行docker build指令，就可以构建自己的Image<br>Dockerfile指令<br><a href="https://docs.docker.com/engine/reference/builder/" target="_blank" rel="external">https://docs.docker.com/engine/reference/builder/</a></p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -sSL http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/internet | sh -</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo cat Dockerfile</div><div class="line">FROM debian</div><div class="line">RUN echo &quot;Hello docker!&quot;</div><div class="line">RUN apt-get update &amp;&amp; apt-get install -y \</div><div class="line">nginx</div><div class="line">RUN echo &apos;Nginx install success&apos; &gt; /var/www/html/index.html</div><div class="line">EXPOSE 80</div></pre></td></tr></table></figure>
 <blockquote>
-<p>DaoCloud脚本</p>
+<p>构建镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo docker build -t=&quot;debian/nginx:2&quot; .</div><div class="line">Sending build context to Docker daemon 2.048 kB</div><div class="line">Step 1 : FROM debian</div><div class="line"> ---&gt; 1b01529cc499</div><div class="line">Step 2 : RUN echo &quot;Hello docker!&quot;</div><div class="line"> ---&gt; Using cache</div><div class="line"> ---&gt; 3791785c0268</div><div class="line">Step 3 : RUN apt-get update &amp;&amp; apt-get install -y nginx</div><div class="line"> ---&gt; Using cache</div><div class="line"> ---&gt; 47fcc445f762</div><div class="line">****************************************</div><div class="line">Successfully built 26eee4e7b4e4</div></pre></td></tr></table></figure></p>
+<p>查看构建成功后的镜像<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo docker images debian/nginx:2</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">debian/nginx        2                   26eee4e7b4e4        6 minutes ago       196.4 MB</div></pre></td></tr></table></figure></p>
+<p>使用该 镜像创建容器<br>-d 告诉容器以分离的方式在后台运行<br>nginx -g “daemon off;” 以前台的方式启动Nginx，作为Web容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker run -itd  -p 80 debian/nginx:2 nginx -g &quot;daemon off;&quot;</div><div class="line">b329360da168141902fc623b71f5cc79540bdffad26b1802e504988925ffec54</div><div class="line">➜  ~ docker port b329360da168141902fc623b71f5cc79540bdffad26b1802e504988925ffec54</div><div class="line">80/tcp -&gt; 0.0.0.0:32769</div></pre></td></tr></table></figure></p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -sSL https://get.daocloud.io/docker | sh</div></pre></td></tr></table></figure>
-<h1 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h1><h2 id="退出正在运行的容器"><a href="#退出正在运行的容器" class="headerlink" title="退出正在运行的容器"></a>退出正在运行的容器</h2><blockquote>
-<p>不是终止</p>
+<h2 id="推送镜像至仓库"><a href="#推送镜像至仓库" class="headerlink" title="推送镜像至仓库"></a>推送镜像至仓库</h2><blockquote>
+<p>以docker hub为例</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">先ctrl+p再ctrl+q</div></pre></td></tr></table></figure>
-<h2 id="检查Docker服务是否运行"><a href="#检查Docker服务是否运行" class="headerlink" title="检查Docker服务是否运行"></a>检查Docker服务是否运行</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps aux | grep docker</div></pre></td></tr></table></figure>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtbzad6eqj30ny012jra.jpg" alt="检查Docker服务是否运行"></p>
-<h2 id="查找镜像"><a href="#查找镜像" class="headerlink" title="查找镜像"></a>查找镜像</h2><blockquote>
-<p>以kali为例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker search kali</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtc0d7o9oj30yz06rwf7.jpg" alt="search docker image"></p>
-<h2 id="删除所有没有运行的容器"><a href="#删除所有没有运行的容器" class="headerlink" title="删除所有没有运行的容器"></a>删除所有没有运行的容器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker rm $(docker ps -a | grep Exited | awk &apos;&#123;print $1&#125;&apos;)</div><div class="line">bcb7eddb6e6f</div><div class="line">c9175726acaf</div><div class="line">115104b12746</div><div class="line">934a087667bd</div><div class="line">8b20759d9e60</div><div class="line">d484e3abffa1</div></pre></td></tr></table></figure>
-<h1 id="修改镜像名字"><a href="#修改镜像名字" class="headerlink" title="修改镜像名字"></a>修改镜像名字</h1><blockquote>
-<p>before</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">daocloud.io/library/ubuntu     xenial-20160809     f8d79ba03c00        13 days ago         126.4 MB</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker push r65q89/test</div></pre></td></tr></table></figure>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><h3 id="查看镜像构建历史"><a href="#查看镜像构建历史" class="headerlink" title="查看镜像构建历史"></a>查看镜像构建历史</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="built_in">history</span> debian/nginx:2</div><div class="line">IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT</div><div class="line">26eee4e7b4e4        10 minutes ago      /bin/sh -c <span class="comment">#(nop)  EXPOSE 80/tcp                0 B                 </span></div><div class="line">fe16089c6b6f        11 minutes ago      /bin/sh -c <span class="built_in">echo</span> <span class="string">'Nginx install success'</span> &gt; /va   22 B                </div><div class="line">5c40a6f4eee9        11 minutes ago      /bin/sh -c service nginx start                  3 B                 </div><div class="line">47fcc445f762        12 minutes ago      /bin/sh -c apt-get update &amp;&amp; apt-get install    71.29 MB            </div><div class="line">3791785c0268        17 minutes ago      /bin/sh -c <span class="built_in">echo</span> <span class="string">"Hello docker!"</span>                 0 B                 </div><div class="line">1b01529cc499        3 weeks ago         /bin/sh -c <span class="comment">#(nop) CMD ["/bin/bash"]             0 B                 </span></div><div class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c <span class="comment">#(nop) ADD file:0e0565652aa852f620   125.1 MB</span></div></pre></td></tr></table></figure>
+<h3 id="查看某容器端口映射情况"><a href="#查看某容器端口映射情况" class="headerlink" title="查看某容器端口映射情况"></a>查看某容器端口映射情况</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker port 容器id</div></pre></td></tr></table></figure>
 <blockquote>
-<p>改名<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker tag daocloud.io/library/ubuntu:xenial-20160809 ubuntu:latest</div></pre></td></tr></table></figure></p>
-<p>可以看到除了REPOSITORY和TAG  其他的都一样<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">daocloud.io/library/ubuntu     xenial-20160809     f8d79ba03c00        13 days ago         126.4 MB</div><div class="line">ubuntu                         latest              f8d79ba03c00        13 days ago         126.4 MB</div></pre></td></tr></table></figure></p>
-<p>然后删除之前的别名</p>
+<p>或者这样查看所有docker映射的端口</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker rmi daocloud.io/library/ubuntu:xenial-20160809</div><div class="line">Untagged: daocloud.io/library/ubuntu:xenial-20160809</div><div class="line">Untagged: daocloud.io/library/ubuntu@sha256:746fa32ad3473c57c6a80b9addc1629937778b074b885dcdd9f3366250605850</div></pre></td></tr></table></figure>
-<h2 id="设置docker开机启动"><a href="#设置docker开机启动" class="headerlink" title="设置docker开机启动"></a>设置docker开机启动</h2><blockquote>
-<p>如果没设置docker服务开机启动的话，先运行命令<br>chkconfig –add docker<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">在运行docker run的时候再加上命令 --restart=always</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="修改容器配置"><a href="#修改容器配置" class="headerlink" title="修改容器配置"></a>修改容器配置</h2><blockquote>
-<p>对于已经在运行的容器，可通过如下命令进入容器中进行配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker exec -it $container_id /bin/bash</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="修改源"><a href="#修改源" class="headerlink" title="修改源"></a>修改源</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">新版的 Docker 使用 /etc/docker/daemon.json（Linux） 或者 %programdata%\docker\config\daemon.json（Windows） 来配置 Daemon。</div><div class="line"></div><div class="line">请在该配置文件中加入（没有该文件的话，请先建一个）：</div><div class="line"></div><div class="line">&#123;</div><div class="line">  &quot;registry-mirrors&quot;: [&quot;https://docker.mirrors.ustc.edu.cn&quot;]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtft761tij30p9026glm.jpg" alt="端口映射"></p>
 
       
 
@@ -965,7 +947,191 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker笔记/">展开全文 >></a>
+          <a class="article-more-a" href="/virtualization/Docker构建镜像-Dockerfile/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Docker构建镜像-commit" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/virtualization/Docker构建镜像-commit/">Docker构建镜像-commit</a>
+    </h1>
+  
+
+        
+        <a href="/virtualization/Docker构建镜像-commit/" class="archive-article-date">
+  	<time datetime="2015-03-22T13:23:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="docker-commit"><a href="#docker-commit" class="headerlink" title="docker commit"></a>docker commit</h1><blockquote>
+<p>先创建一个容器，并在容器里做出修改,最后commit修改<br>类似github的使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker run -i -t --name test-docker-commit debian /bin/bash</div><div class="line">root@8b20759d9e60:/#</div><div class="line">root@8b20759d9e60:/# apt-get -yqq update</div><div class="line">root@8b20759d9e60:/# apt-get -yqq install ipython</div></pre></td></tr></table></figure></p>
+<p>commit修改</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@8b20759d9e60:/# exit</div><div class="line">exit</div><div class="line">➜  ~ docker commit test-docker-commit debian/ipython</div><div class="line">sha256:dd7440e1f33791270b82010396b02b8522899619f9336bc998835733b988cd76</div></pre></td></tr></table></figure>
+<blockquote>
+<p>查看新创建的镜像</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker images debian/ipython</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">debian/ipython      latest              dd7440e1f337        2 minutes ago       173.9 MB</div></pre></td></tr></table></figure>
+<blockquote>
+<p>可通过docker inspect查看镜像详细详细</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker inspect debian/ipython:v1</div><div class="line">[</div><div class="line">    &#123;</div><div class="line">        <span class="string">"Id"</span>: <span class="string">"sha256:05fc24b025ad3ad61a121785e53e7748cfd415b6fbb0aad630ae5844e4bd5607"</span>,</div><div class="line">        <span class="string">"RepoTags"</span>: [</div><div class="line">            <span class="string">"debian/ipython:v1"</span></div><div class="line">        ],</div><div class="line">        <span class="string">"RepoDigests"</span>: [],</div><div class="line">        <span class="string">"Parent"</span>: <span class="string">"sha256:1b01529cc499d51767c62f9fc8083043610546b4e050898809ec54e00dbb1a34"</span>,</div><div class="line">        <span class="string">"Comment"</span>: <span class="string">"base image is debian"</span>,</div><div class="line">        <span class="string">"Created"</span>: <span class="string">"2016-08-25T05:54:03.366052897Z"</span>,</div><div class="line">        <span class="string">"Container"</span>: <span class="string">"8b20759d9e601a78a1baa8441238297e35a51c95b35fb17f3a1e6399cb540f1a"</span>,</div><div class="line">        <span class="string">"ContainerConfig"</span>: &#123;</div><div class="line">            <span class="string">"Hostname"</span>: <span class="string">"8b20759d9e60"</span>,</div><div class="line">            <span class="string">"Domainname"</span>: <span class="string">""</span>,</div><div class="line">………………………………</div></pre></td></tr></table></figure>
+<blockquote>
+<p>docker commit 的一些参数</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker commit --help</div><div class="line"></div><div class="line">Usage:	docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]</div><div class="line"></div><div class="line">Create a new image from a container<span class="string">'s changes</span></div><div class="line"></div><div class="line">Options:</div><div class="line">  -a, --author string    Author (e.g., "John Hannibal Smith &lt;hannibal@a-team.com&gt;")</div><div class="line">  -c, --change value     Apply Dockerfile instruction to the created image (default [])</div><div class="line">      --help             Print usage</div><div class="line">  -m, --message string   Commit message</div><div class="line">  -p, --pause            Pause container during commit (default true)</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/virtualization/Docker构建镜像-commit/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Docker私有仓库" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/virtualization/Docker私有仓库/">Docker私有仓库</a>
+    </h1>
+  
+
+        
+        <a href="/virtualization/Docker私有仓库/" class="archive-article-date">
+  	<time datetime="2015-03-20T12:20:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="搭建仓库"><a href="#搭建仓库" class="headerlink" title="搭建仓库"></a>搭建仓库</h1><blockquote>
+<p>使用docker-registry进行私有仓库搭建</p>
+<h2 id="基于容器"><a href="#基于容器" class="headerlink" title="基于容器"></a>基于容器</h2><p>docker pull registry</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#运行容器并将镜像存储到宿主主机/opt/data/registry目录</div><div class="line">docker run -d -p 5000 -v /opt/data/registry:/tmp/registry /registry</div></pre></td></tr></table></figure>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><blockquote>
+<p>打开浏览器输入<a href="http://127.0.0.1:5000/v2" target="_blank" rel="external">http://127.0.0.1:5000/v2</a></p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtfgogy03j30dg03o0so.jpg" alt="安装成功"></p>
+<h2 id="上传镜像"><a href="#上传镜像" class="headerlink" title="上传镜像"></a>上传镜像</h2><blockquote>
+<p>通过docker tag将该镜像标志为要推送到私有仓库</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker tag sshd:dockerfile3 127.0.0.1:5000/sshd</div><div class="line">docker push 127.0.0.1:5000/sshd</div></pre></td></tr></table></figure>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfh6m1i0j30pg08ft9e.jpg" alt="push success"></p>
+<h2 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker pull 127.0.0.1:5000/sshd</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/virtualization/Docker私有仓库/">展开全文 >></a>
         </p>
       
 
@@ -985,7 +1151,7 @@ var _hmt = _hmt || [];
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 
@@ -1088,11 +1254,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
+                <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
+                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1100,15 +1266,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Perl</a>
+                <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1121,6 +1283,10 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Perl</a>
               </li>
              
               <li class="article-tag-list-item">

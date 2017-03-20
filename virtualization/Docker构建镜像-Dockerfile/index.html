@@ -6,21 +6,29 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>FreeRADIUS | SanNa&#39;s Blog</title>
+  <title>Docker构建镜像-Dockerfile | SanNa&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Radius
-Remote Authentication Dial In User Service 远程访问拨号用户服务1RADIUS是一种C/S结构的协议，它的客户端最初就是NAS（Net Access Server）服务器，任何运行RADIUS客户端软件的计算机都可以成为RADIUS的客户端。RADIUS协议认证机制灵活，可以采用PAP、CHAP或者Unix登录认证等多种方式。RADIUS是一">
+  <meta name="description" content="通过dockerfile构建镜像
+Docker提供了一种标准化的DSL，你只需要编写一个Dockerfile，运行docker build指令，就可以构建自己的ImageDockerfile指令https://docs.docker.com/engine/reference/builder/
+
+1234567➜  DockerfileDemo cat DockerfileFROM debianRU">
 <meta property="og:type" content="article">
-<meta property="og:title" content="FreeRADIUS">
-<meta property="og:url" content="http://yoursite.com/devops/FreeRADIUS/index.html">
+<meta property="og:title" content="Docker构建镜像-Dockerfile">
+<meta property="og:url" content="http://yoursite.com/virtualization/Docker构建镜像-Dockerfile/index.html">
 <meta property="og:site_name" content="SanNa's Blog">
-<meta property="og:description" content="Radius
-Remote Authentication Dial In User Service 远程访问拨号用户服务1RADIUS是一种C/S结构的协议，它的客户端最初就是NAS（Net Access Server）服务器，任何运行RADIUS客户端软件的计算机都可以成为RADIUS的客户端。RADIUS协议认证机制灵活，可以采用PAP、CHAP或者Unix登录认证等多种方式。RADIUS是一">
-<meta property="og:updated_time" content="2017-03-20T08:32:20.000Z">
+<meta property="og:description" content="通过dockerfile构建镜像
+Docker提供了一种标准化的DSL，你只需要编写一个Dockerfile，运行docker build指令，就可以构建自己的ImageDockerfile指令https://docs.docker.com/engine/reference/builder/
+
+1234567➜  DockerfileDemo cat DockerfileFROM debianRU">
+<meta property="og:image" content="https://ww1.sinaimg.cn/large/006tNc79gy1fdtft761tij30p9026glm.jpg">
+<meta property="og:updated_time" content="2017-03-20T09:33:47.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="FreeRADIUS">
-<meta name="twitter:description" content="Radius
-Remote Authentication Dial In User Service 远程访问拨号用户服务1RADIUS是一种C/S结构的协议，它的客户端最初就是NAS（Net Access Server）服务器，任何运行RADIUS客户端软件的计算机都可以成为RADIUS的客户端。RADIUS协议认证机制灵活，可以采用PAP、CHAP或者Unix登录认证等多种方式。RADIUS是一">
+<meta name="twitter:title" content="Docker构建镜像-Dockerfile">
+<meta name="twitter:description" content="通过dockerfile构建镜像
+Docker提供了一种标准化的DSL，你只需要编写一个Dockerfile，运行docker build指令，就可以构建自己的ImageDockerfile指令https://docs.docker.com/engine/reference/builder/
+
+1234567➜  DockerfileDemo cat DockerfileFROM debianRU">
+<meta name="twitter:image" content="https://ww1.sinaimg.cn/large/006tNc79gy1fdtft761tij30p9026glm.jpg">
   
     <link rel="alternative" href="/atom.xml" title="SanNa&#39;s Blog" type="application/atom+xml">
   
@@ -186,51 +194,45 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-FreeRADIUS" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Docker构建镜像-Dockerfile" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      FreeRADIUS
+      Docker构建镜像-Dockerfile
     </h1>
   
 
         
-        <a href="/devops/FreeRADIUS/" class="archive-article-date">
-  	<time datetime="2016-09-18T12:30:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-18</time>
+        <a href="/virtualization/Docker构建镜像-Dockerfile/" class="archive-article-date">
+  	<time datetime="2015-03-27T14:25:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-27</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Radius"><a href="#Radius" class="headerlink" title="Radius"></a>Radius</h1><blockquote>
-<p>Remote Authentication Dial In User Service 远程访问拨号用户服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">RADIUS是一种C/S结构的协议，它的客户端最初就是NAS（Net Access Server）服务器，任何运行RADIUS客户端软件的计算机都可以成为RADIUS的客户端。RADIUS协议认证机制灵活，可以采用PAP、CHAP或者Unix登录认证等多种方式。RADIUS是一种可扩展的协议，它进行的全部工作都是基于Attribute-Length-Value的向量进行的。RADIUS也支持厂商扩充厂家专有属性。</div></pre></td></tr></table></figure></p>
+        <h1 id="通过dockerfile构建镜像"><a href="#通过dockerfile构建镜像" class="headerlink" title="通过dockerfile构建镜像"></a>通过dockerfile构建镜像</h1><blockquote>
+<p>Docker提供了一种标准化的DSL，你只需要编写一个Dockerfile，运行docker build指令，就可以构建自己的Image<br>Dockerfile指令<br><a href="https://docs.docker.com/engine/reference/builder/" target="_blank" rel="external">https://docs.docker.com/engine/reference/builder/</a></p>
 </blockquote>
-<h2 id="Freeradius-Install"><a href="#Freeradius-Install" class="headerlink" title="Freeradius Install"></a>Freeradius Install</h2><blockquote>
-<p>Ubuntu.</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-3.0.11.tar.gz</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar zxf freeradius-server-3.0.11.tar.gz</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd freeradius-server-3.0.11/</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo cat Dockerfile</div><div class="line">FROM debian</div><div class="line">RUN echo &quot;Hello docker!&quot;</div><div class="line">RUN apt-get update &amp;&amp; apt-get install -y \</div><div class="line">nginx</div><div class="line">RUN echo &apos;Nginx install success&apos; &gt; /var/www/html/index.html</div><div class="line">EXPOSE 80</div></pre></td></tr></table></figure>
 <blockquote>
-<p>Bug Fix<br>在configure时可能会出现<br>failed linking to libcrypto. Use –with-openssl-lib-dir=<path></path>, or –with-openssl=no (builds without OpenSSL)<br>解决办法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Red Hat, Fedora, CentOS - openssl-devel</div><div class="line">Debian, Ubuntu - libssl-dev</div><div class="line">Arch - openssl</div></pre></td></tr></table></figure></p>
-<p>error: FreeRADIUS requires libtalloc</p>
+<p>构建镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo docker build -t=&quot;debian/nginx:2&quot; .</div><div class="line">Sending build context to Docker daemon 2.048 kB</div><div class="line">Step 1 : FROM debian</div><div class="line"> ---&gt; 1b01529cc499</div><div class="line">Step 2 : RUN echo &quot;Hello docker!&quot;</div><div class="line"> ---&gt; Using cache</div><div class="line"> ---&gt; 3791785c0268</div><div class="line">Step 3 : RUN apt-get update &amp;&amp; apt-get install -y nginx</div><div class="line"> ---&gt; Using cache</div><div class="line"> ---&gt; 47fcc445f762</div><div class="line">****************************************</div><div class="line">Successfully built 26eee4e7b4e4</div></pre></td></tr></table></figure></p>
+<p>查看构建成功后的镜像<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo docker images debian/nginx:2</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">debian/nginx        2                   26eee4e7b4e4        6 minutes ago       196.4 MB</div></pre></td></tr></table></figure></p>
+<p>使用该 镜像创建容器<br>-d 告诉容器以分离的方式在后台运行<br>nginx -g “daemon off;” 以前台的方式启动Nginx，作为Web容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker run -itd  -p 80 debian/nginx:2 nginx -g &quot;daemon off;&quot;</div><div class="line">b329360da168141902fc623b71f5cc79540bdffad26b1802e504988925ffec54</div><div class="line">➜  ~ docker port b329360da168141902fc623b71f5cc79540bdffad26b1802e504988925ffec54</div><div class="line">80/tcp -&gt; 0.0.0.0:32769</div></pre></td></tr></table></figure></p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install libtalloc-devel -y</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">radiusd -X</div></pre></td></tr></table></figure>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adtest hello hello localhost 0 testing123</div></pre></td></tr></table></figure>
-<h3 id="To-Do"><a href="#To-Do" class="headerlink" title="To Do"></a>To Do</h3><blockquote>
-<p>修改的模块是modules里面的rlm_realm，这个module完成了Proxy的相关业务逻辑，我们需要开发HUE的rlm_realm，并打包。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./src/modules/rlm_realm/rlm_realm.c</div></pre></td></tr></table></figure></p>
+<h2 id="推送镜像至仓库"><a href="#推送镜像至仓库" class="headerlink" title="推送镜像至仓库"></a>推送镜像至仓库</h2><blockquote>
+<p>以docker hub为例</p>
 </blockquote>
-<h1 id="PAM"><a href="#PAM" class="headerlink" title="PAM"></a>PAM</h1><blockquote>
-<p>Pluggable Authentication Modules 可插拔认证模块<br><a href="http://www.ibm.com/developerworks/cn/linux/l-pam/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/linux/l-pam/</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker push r65q89/test</div></pre></td></tr></table></figure>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><h3 id="查看镜像构建历史"><a href="#查看镜像构建历史" class="headerlink" title="查看镜像构建历史"></a>查看镜像构建历史</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="built_in">history</span> debian/nginx:2</div><div class="line">IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT</div><div class="line">26eee4e7b4e4        10 minutes ago      /bin/sh -c <span class="comment">#(nop)  EXPOSE 80/tcp                0 B                 </span></div><div class="line">fe16089c6b6f        11 minutes ago      /bin/sh -c <span class="built_in">echo</span> <span class="string">'Nginx install success'</span> &gt; /va   22 B                </div><div class="line">5c40a6f4eee9        11 minutes ago      /bin/sh -c service nginx start                  3 B                 </div><div class="line">47fcc445f762        12 minutes ago      /bin/sh -c apt-get update &amp;&amp; apt-get install    71.29 MB            </div><div class="line">3791785c0268        17 minutes ago      /bin/sh -c <span class="built_in">echo</span> <span class="string">"Hello docker!"</span>                 0 B                 </div><div class="line">1b01529cc499        3 weeks ago         /bin/sh -c <span class="comment">#(nop) CMD ["/bin/bash"]             0 B                 </span></div><div class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c <span class="comment">#(nop) ADD file:0e0565652aa852f620   125.1 MB</span></div></pre></td></tr></table></figure>
+<h3 id="查看某容器端口映射情况"><a href="#查看某容器端口映射情况" class="headerlink" title="查看某容器端口映射情况"></a>查看某容器端口映射情况</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker port 容器id</div></pre></td></tr></table></figure>
+<blockquote>
+<p>或者这样查看所有docker映射的端口</p>
 </blockquote>
-<h1 id="PAM的文件"><a href="#PAM的文件" class="headerlink" title="PAM的文件"></a>PAM的文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/etc/pam.conf或者/etc/pam.d/ PAM配置文件</div><div class="line">/usr/lib/security/pam_*.so 可动态加载的PAM service module</div><div class="line">对于RedHat，其目录不是/usr/lib，而是/lib</div></pre></td></tr></table></figure>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtft761tij30p9026glm.jpg" alt="端口映射"></p>
 
       
 
@@ -270,11 +272,11 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">FreeRADIUS</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
         		</li>
       		
 		</ul>
@@ -286,7 +288,7 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
         		</li>
       		
 		</ul>
@@ -341,7 +343,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/devops/FreeRADIUS/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/virtualization/Docker构建镜像-Dockerfile/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -355,18 +357,18 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/db/MongoDB-开机自启动/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/others/Perl-学习笔记/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          MongoDB 开机自启动
+          Perl 学习笔记
         
       </div>
     </a>
   
   
-    <a href="/sec/Demo-MSF检测指定服务的漏洞/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">[Demo] MSF检测指定服务的漏洞</div>
+    <a href="/virtualization/Docker构建镜像-commit/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Docker构建镜像-commit</div>
       <i class="icon-circle-right"></i>
     </a>
   
