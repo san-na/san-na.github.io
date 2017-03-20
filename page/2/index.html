@@ -184,6 +184,114 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-OSSIM-Add-Linux-Agent" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/OSSIM-Add-Linux-Agent/">OSSIM-Add-Linux-Agent</a>
+    </h1>
+  
+
+        
+        <a href="/sec/OSSIM-Add-Linux-Agent/" class="archive-article-date">
+  	<time datetime="2016-07-21T14:01:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>OSSIM 添加 Linux代理</p>
+</blockquote>
+<h1 id="Env-CentOS6-6"><a href="#Env-CentOS6-6" class="headerlink" title="Env CentOS6.6"></a>Env CentOS6.6</h1><blockquote>
+<p>操作方法见 <a href="https://www.alienvault.com/documentation/usm-v5/ids-configuration/deploying-alienvault-hids.htm" target="_blank" rel="external">官网</a><br>干净的CentOS需要 先安装好wget 和gcc</p>
+<h1 id="下载源码安装"><a href="#下载源码安装" class="headerlink" title="下载源码安装"></a>下载源码安装</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> wget https://bintray.com/artifact/download/ossec/ossec-hids/ossec-hids-2.8.3.tar.gz</div><div class="line">tar -zxvf ossec-hids-2.8.3.tar.gz</div><div class="line">cd ossec-hids-2.8.3</div><div class="line">bash install.sh</div></pre></td></tr></table></figure>
+<p>然后就是根据提示进行安装，</p>
+<p>提取Key到agent文件(/var/ossec/binmanage_agents)</p>
+</blockquote>
+<ol>
+<li>选择语言<br><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtez5msmgj30hi08w752.jpg" alt="选择语言"></li>
+<li>提示安装gcc<br><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtf02z6uej30gp05m0sv.jpg" alt="安装gcc"></li>
+<li>选择安装模式 agent<br><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtf0ormqgj30dg0210sj.jpg" alt="选择安装模式"><br>4.相关信息设置默认就好<br><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtf12z26gj30ag02oglh.jpg" alt="相关信息设置默认就好"><br>5.根据相关情况填入Service IP或者主机名<br>……<br>安装成功后会给出服务启动和关闭的一些命令信息<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- 已正确完成系统配置.</div><div class="line"></div><div class="line">- 要启动 OSSEC HIDS:</div><div class="line">	/var/ossec/bin/ossec-control start</div><div class="line"></div><div class="line">- 要停止 OSSEC HIDS:</div><div class="line">	/var/ossec/bin/ossec-control stop</div><div class="line"></div><div class="line">- 要查看或修改系统配置,请编辑  /var/ossec/etc/ossec.conf</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="在OSSIM-Web-端添加Agent"><a href="#在OSSIM-Web-端添加Agent" class="headerlink" title="在OSSIM Web 端添加Agent"></a>在OSSIM Web 端添加Agent</h1><blockquote>
+<p>Environment &gt; Detection&gt;HIDS &gt; Agents &gt; Agent Control &gt; Add Agent.<br>选择相应主机后 Save</p>
+</blockquote>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtf1jnsgej30fo0csdgb.jpg" alt=""></p>
+<blockquote>
+<p>提取Key到agent文件(/var/ossec/binmanage_agents)</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtf1wzmrpj30y804d3yu.jpg" alt=""></p>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtf251g2hj30dp051aa8.jpg" alt=""></p>
+<blockquote>
+<p>agent启动成功</p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtf2dfr6aj30d803374d.jpg" alt="">)</p>
+<blockquote>
+<p>然后可在OSSIM中看到该Agent相关信息</p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtf2lyaobj30ea0ar74p.jpg" alt=""></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">OSSIM</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/OSSIM-Add-Linux-Agent/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-OSSIM-GNOME-GUIDE" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1078,137 +1186,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Docker-跨主机连接" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker-跨主机连接/">Docker-跨主机连接</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker-跨主机连接/" class="archive-article-date">
-  	<time datetime="2015-07-03T11:47:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-07-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="使用网桥"><a href="#使用网桥" class="headerlink" title="使用网桥"></a>使用网桥</h1><blockquote>
-<p>配置简单、不依赖第三方软件；将容器和物理机放在同一网段</p>
-</blockquote>
-<h2 id="网络设置"><a href="#网络设置" class="headerlink" title="网络设置"></a>网络设置</h2><blockquote>
-<p>vim /etc/network/interfaces</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">auto br0</div><div class="line">iface br0 inet static</div><div class="line">netmask 255.255.255.0</div><div class="line">gateway 101.210.55.1</div><div class="line">bridge_ports eth0</div></pre></td></tr></table></figure>
-<blockquote>
-<p>Docker网络设置<br>vim /etc/default/docker</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-b指定使用自定义网桥</div><div class="line">-b=br0</div><div class="line">--fixed-cidr限制ip地址分配范围</div><div class="line">host1: 101.211.55.64/26</div><div class="line">101.211.55.65~101.211.55.126</div></pre></td></tr></table></figure>
-<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><blockquote>
-<p>使用自定义网桥<br>在启动docker服务的时候，使用-b BEIDGE 或者–bridge=BEIDGE来指定使用的网桥</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#停止服务并删除旧的网桥</div><div class="line">service docker stop</div><div class="line">brctl delbr docker0</div><div class="line">#创建新的网桥</div><div class="line">brctl addbr bridge0</div><div class="line">ip addr add 192.168.5.1/24 dev bridge0</div></pre></td></tr></table></figure>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtg9gcy3yj30h106fgm0.jpg" alt="使用自定义网桥"></p>
-<blockquote>
-<p>ip addr show bridge0</p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtg9tule6j30j708pt9p.jpg" alt="网桥创建成功"></p>
-<blockquote>
-<p>配置Docker服务<br>默认桥接到创建的网桥上<br>echo ‘DOCKER_OPTS=”-b=bridge0”‘ &gt;&gt; /etc/default/docker<br>service docker start<br>新建容器进行测试</p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtga8c8msj30hk0cggmt.jpg" alt="独立网桥测试成功"></p>
-<h1 id="使用Open-vSwitch"><a href="#使用Open-vSwitch" class="headerlink" title="使用Open vSwitch"></a>使用Open vSwitch</h1><blockquote>
-<p>高质量、多层虚拟交换机 使用GRE协议<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GRE 通用路由协议封装</div><div class="line">隧道技术是一种通过使用互联网络的基础设施在网络之间传递数据的方式，使用隧道传送的数据可以是不同协议的数据帧或包，隧道协议将其它协议的数据帧或包重新封装然后通过隧道发送；新的帧头提供路由信息，以便通过互联网传递被封装的负载数据。</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><blockquote>
-<p>apt-get install openvswitch-switch<br>apt-get install bridge-utils</p>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>pc1=192.168.1.110<br>pc2=192.168.1.55<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#建立网桥</div><div class="line">ovs-vsctl add-br obr0</div><div class="line">#添加GRE连接</div><div class="line">ovs-vsctl add-port obr0 gre0</div><div class="line">#配置Docker容器虚拟网桥</div><div class="line">set interface gre0 type=gre options:remote_ip=192.168.1.55</div><div class="line">root@tp-ubuntu:/etc/default# ovs-vsctl show</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">brctl addbr br0</div><div class="line">ifconfig br0 192.168.11.1 netmask 255.255.255.0</div><div class="line">brctl addif br0 obr0</div><div class="line">sudo brctl show</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">58fa415c-67aa-477d-93b7-6ac0f32fe49d</div><div class="line">    Bridge &quot;obr0&quot;</div><div class="line">        Port &quot;gre0&quot;</div><div class="line">            Interface &quot;gre0&quot;</div><div class="line">                type: gre</div><div class="line">                options: &#123;remote_ip=&quot;192.168.1.55&quot;&#125;</div><div class="line">        Port &quot;obr0&quot;</div><div class="line">            Interface &quot;obr0&quot;</div><div class="line">                type: internal</div><div class="line">    ovs_version: &quot;2.5.0&quot;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>修改Docker配置文件<br>为虚拟网桥添加ovs接口<br>vim /etc/default/docker<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">BRIDGE=br0</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h1 id="使用weave"><a href="#使用weave" class="headerlink" title="使用weave"></a>使用weave</h1><blockquote>
-<p>原理：建立一个虚拟的网络，用于将运行在不同主机的Docker容器连接起来</p>
-<h2 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget -O /usr/bin/weave https://raw.githubusercontent.com/zettio/weave/master/weave &amp;&amp; chmod a+x /usr/bin/weave</div></pre></td></tr></table></figure>
-<p>weave操作</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">安装weave</div><div class="line">启动weave</div><div class="line">    weave launch</div><div class="line">连接不同主机</div><div class="line">通过weave 启动容器</div></pre></td></tr></table></figure>
-<h1 id="启动虚拟机"><a href="#启动虚拟机" class="headerlink" title="启动虚拟机"></a>启动虚拟机</h1><blockquote>
-<p>客户机1<br>192.168.1.110<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave luanch</div></pre></td></tr></table></figure></p>
-<p>客户机2</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave launch 192.168.1.110</div></pre></td></tr></table></figure>
-<blockquote>
-<p>虚拟机1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave run 192.168.11.2/24 -it ubuntu:14.04 /bin/bash</div></pre></td></tr></table></figure></p>
-<p>虚拟机2</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave run 192.168.11.3/24 -it ubuntu:14.04 /bin/bash</div></pre></td></tr></table></figure>
-<blockquote>
-<p>查看weave路由状态<br>weave ps<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">容器重启问题</div><div class="line">如果使用weave，则就不能再使用docker自带的auto-restart feature（如docker run –restart=always redis），因为weave是在docker之外为容器配置的网络，容器重启的时候docker本身不会做这些事情。因而，还需额外的工具来管理容器的状态（比如systemd, upstart等），这些工具要调用weave命令（weave run/start/attach）来启动容器。</div></pre></td></tr></table></figure></p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker-跨主机连接/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1294,15 +1271,15 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
