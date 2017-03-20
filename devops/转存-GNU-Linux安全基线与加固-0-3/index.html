@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://yoursite.com">
+  <title>[转存]GNU/Linux安全基线与加固-0.3 | SanNa&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="原文链接
+https://raw.githubusercontent.com/citypw/DNFWAH/master/4/d4_0x02_DNFWAH_gnu-linux_security_baseline_hardening.txt
+
+12345678910111213141516171819202122232425262728293031323334353637383940414243444">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[转存]GNU/Linux安全基线与加固-0.3">
+<meta property="og:url" content="http://yoursite.com/devops/转存-GNU-Linux安全基线与加固-0-3/index.html">
+<meta property="og:site_name" content="SanNa's Blog">
+<meta property="og:description" content="原文链接
+https://raw.githubusercontent.com/citypw/DNFWAH/master/4/d4_0x02_DNFWAH_gnu-linux_security_baseline_hardening.txt
+
+12345678910111213141516171819202122232425262728293031323334353637383940414243444">
+<meta property="og:updated_time" content="2017-03-20T10:42:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[转存]GNU/Linux安全基线与加固-0.3">
+<meta name="twitter:description" content="原文链接
+https://raw.githubusercontent.com/citypw/DNFWAH/master/4/d4_0x02_DNFWAH_gnu-linux_security_baseline_hardening.txt
+
+12345678910111213141516171819202122232425262728293031323334353637383940414243444">
+  
+    <link rel="alternative" href="/atom.xml" title="SanNa&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" type="text/css" href="/./main.2d7529.css">
+  <style type="text/css">
+  
+    #container.show {
+      background: linear-gradient(200deg,#a0cfe4,#e8c37e);
+    }
+  </style>
+  
+
+  
+<script>
+var _hmt = _hmt || [];
+(function() {
+	var hm = document.createElement("script");
+	hm.src = "https://hm.baidu.com/hm.js?f6202ec9e98031e85828c58c219e6b47";
+	var s = document.getElementsByTagName("script")[0]; 
+	s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+
+<body>
+  <div id="container" q-class="show:isCtnShow">
+    <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="left-col" q-class="show:isShow">
+      
+<div class="overlay" style="background: #4d4d4d"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfqqo84uj30cq0cyt9f.jpg" class="js-avatar">
+		</a>
+		<hgroup>
+		  <h1 class="header-author"><a href="/">SanNa</a></h1>
+		</hgroup>
+		
+		<p class="header-subtitle">DevOps|Python|Linux</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/categories/sec/">安全</a></li>
+	        
+				<li><a href="/categories/virtualization/">虚拟化</a></li>
+	        
+				<li><a href="/categories/db/">数据库</a></li>
+	        
+				<li><a href="/categories/devops/">运维开发</a></li>
+	        
+				<li><a href="/categories/ml/">机器学习</a></li>
+	        
+				<li><a href="/categories/others/">其它分类</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+    		
+    			
+    			<a q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+            
+    			
+    			<a q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/san-na" title="github"><i class="icon-github"></i></a>
+		        
+					<a class="weibo" target="_blank" href="http://weibo.com/5888471241" title="weibo"><i class="icon-weibo"></i></a>
+		        
+					<a class="mail" target="_blank" href="mailto:Aed1p@protonmail.com" title="mail"><i class="icon-mail"></i></a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
+      
+<nav id="mobile-nav">
+  	<div class="overlay js-overlay" style="background: #4d4d4d"></div>
+	<div class="btnctn js-mobile-btnctn">
+  		<div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
+	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfqqo84uj30cq0cyt9f.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author js-header-author">SanNa</h1>
+			</hgroup>
+			
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>DevOps|Python|Linux<i class="icon icon-quo-right"></i></p>
+			
+			
+			
+				
+			
+				
+			
+				
+			
+				
+			
+				
+			
+				
+			
+			
+			
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/san-na" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/5888471241" title="weibo"><i class="icon-weibo"></i></a>
+			        
+						<a class="mail" target="_blank" href="mailto:Aed1p@protonmail.com" title="mail"><i class="icon-mail"></i></a>
+			        
+				</div>
+			</nav>
+
+			<nav class="header-menu js-header-menu">
+				<ul style="width: 70%">
+				
+				
+					<li style="width: 16.666666666666668%"><a href="/categories/sec/">安全</a></li>
+		        
+					<li style="width: 16.666666666666668%"><a href="/categories/virtualization/">虚拟化</a></li>
+		        
+					<li style="width: 16.666666666666668%"><a href="/categories/db/">数据库</a></li>
+		        
+					<li style="width: 16.666666666666668%"><a href="/categories/devops/">运维开发</a></li>
+		        
+					<li style="width: 16.666666666666668%"><a href="/categories/ml/">机器学习</a></li>
+		        
+					<li style="width: 16.666666666666668%"><a href="/categories/others/">其它分类</a></li>
+		        
+				</ul>
+			</nav>
+		</header>				
+	</div>
+	<div class="mobile-mask" style="display:none" q-show="isShow"></div>
+</nav>
+
+      <div id="wrapper" class="body-wrap">
+        <div class="menu-l">
+          <div class="canvas-wrap">
+            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+          </div>
+          <div id="js-content" class="content-ll">
+            <article id="post-转存-GNU-Linux安全基线与加固-0-3" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      [转存]GNU/Linux安全基线与加固-0.3
+    </h1>
+  
+
+        
+        <a href="/devops/转存-GNU-Linux安全基线与加固-0-3/" class="archive-article-date">
+  	<time datetime="2017-02-14T22:41:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="原文链接"><a href="#原文链接" class="headerlink" title="原文链接"></a>原文链接</h1><blockquote>
+<p><a href="https://raw.githubusercontent.com/citypw/DNFWAH/master/4/d4_0x02_DNFWAH_gnu-linux_security_baseline_hardening.txt" target="_blank" rel="external">https://raw.githubusercontent.com/citypw/DNFWAH/master/4/d4_0x02_DNFWAH_gnu-linux_security_baseline_hardening.txt</a></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">[sth0r@shawn-fortress]$ uname -a</div><div class="line">Linux shawn-fortress 3.7-trunk-686-pae #1 SMP Debian 3.7.2-0+kali8 i686 GNU/Linux</div><div class="line"></div><div class="line">|=-----------------------------------------------------------------=|</div><div class="line">|=-----=[ D O   N O T   F U C K   W I T H   A   H A C K E R ]=-----=|</div><div class="line">|=-----------------------------------------------------------------=|</div><div class="line">|=------------------------[ #4 File 0x02 ]-------------------------=|</div><div class="line">|=-----------------------------------------------------------------=|</div><div class="line">|=----------------=[ GNU/Linux安全基线与加固-0.3 ]=----------------=|</div><div class="line">|=-----------------------------------------------------------------=|</div><div class="line">|=-------------------=[ By Shawn the R0ck   ]=---------------------=|</div><div class="line">|=-----------------------------------------------------------------=|</div><div class="line">|=--------------------=[ 初稿:July 22 2014  ]=---------------------=|</div><div class="line">|=-----------------------------------------------------------------=|</div><div class="line">|=-------------------=[ Update: Jan 7 2015 ]=---------------------=|</div><div class="line">|=-----------------------------------------------------------------=|</div><div class="line"></div><div class="line">--[ CONTENTS</div><div class="line"></div><div class="line">0. About this doc</div><div class="line"></div><div class="line">1. Routine security baseline</div><div class="line"></div><div class="line">   1.1 Security fix update</div><div class="line"></div><div class="line">   1.2 Password policy</div><div class="line"></div><div class="line">   1.3 SSH secure config</div><div class="line"></div><div class="line">   1.4 audit framework</div><div class="line"></div><div class="line">       1.4.1 file permission audit</div><div class="line"></div><div class="line">       1.4.2 Prevent *UNSET* bash history</div><div class="line"></div><div class="line">   1.5 sudoers</div><div class="line"></div><div class="line">2. Kernel security baseline</div><div class="line"></div><div class="line">3. Hardening</div><div class="line"></div><div class="line">   3.1 Kernel hardening - Grsecurity/PaX</div><div class="line"></div><div class="line">   3.2 PHP</div><div class="line"></div><div class="line">4. SSL/TLS Checklist</div><div class="line"></div><div class="line">5. Weirdo audit</div><div class="line"></div><div class="line">6. Reference</div></pre></td></tr></table></figure>
+<h1 id="0-关于这份文档"><a href="#0-关于这份文档" class="headerlink" title="0. 关于这份文档"></a>0. 关于这份文档</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">随着GNU/Linux在各个行业的IT基础架构中的普及，安全问题也成为了关注的焦点，</div><div class="line">GNU/Linux主要是由GNU核心组建( 编译器GCC, C库Glibc等)和Linux内核组合而成，</div><div class="line">在自由开源软件统治着基础平台的大环境下，不少人认为开源一定是安全的，这</div><div class="line">是一种不完全正确的观念，Coverity的报告只是说明了开源比闭源更安全，这并</div><div class="line">不代表自由开源软件就是牢不可破的，自由开源软件在一定程度上具有一些安全</div><div class="line">的特性，这些特性不一定在GNU/Linux发行版中是默认开启，这些特性中有一些是</div><div class="line">必须在安全基线中去部署的，有一些可以根据具体需求来定制，这篇文档主要是</div><div class="line">介绍一些关于安全基线建设和加固的基本内容。</div><div class="line"></div><div class="line">在实际的安全咨询工作中，很多普通个人用户和企业用户并不是安全领域的黑客，</div><div class="line">大多客户都会要求给出一份简单易懂的部署文档，也就是所谓的安全基线，基线</div><div class="line">和加固是很大的话题，我会尽力不断更新这篇文档的内容，也希望有社区的朋友</div><div class="line">参与，本文所使用的GNU/Linux发行版是Debian。</div></pre></td></tr></table></figure>
+<h1 id="1-安全基线"><a href="#1-安全基线" class="headerlink" title="1. 安全基线"></a>1. 安全基线</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">在遵循最小安装和最小权限的部署原则下，还有一些地方是需要注意的，我们把</div><div class="line">这些部分称为安全基线。</div></pre></td></tr></table></figure>
+<h2 id="1-1-安全修复更新"><a href="#1-1-安全修复更新" class="headerlink" title="1.1 安全修复更新"></a>1.1 安全修复更新</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">作为系统管理员，每天干的第1件事情就应该是查看生产环境的机器是否有安全修</div><div class="line">复的更新，甚至应该除了生产环境再另外跑一套模拟环境，用于测试升级后是否</div><div class="line">影响业务系统。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Debian检查需要安全修复包：</div><div class="line"></div><div class="line">sudo apt-get upgrade -s | grep -i security</div><div class="line"></div><div class="line">OpenSuSE发行版检查需要安全修复的包：</div><div class="line"></div><div class="line">sudo zypper lp | awk &apos;&#123; if ($7==&quot;security&quot;)&#123; if ($11==&quot;update&quot;) &#123;print $13&#125; else&#123; print $11 &#125;&#125;&#125;&apos; | sed &apos;s/:$//&apos; | grep -v &quot;^$&quot; | sort | uniq</div><div class="line"></div><div class="line">RHEL/CentOS( 6.4)检查需要安全修复的包和明细：</div><div class="line">sudo yum list-security | grep RHSA</div><div class="line">sudo yum info-security RHSA-NUMBER</div></pre></td></tr></table></figure>
+<h2 id="1-2-密码策略"><a href="#1-2-密码策略" class="headerlink" title="1.2 密码策略"></a>1.2 密码策略</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">root密码策略至少应该考虑以下几点：</div><div class="line"></div><div class="line">1，密码强度，至少是大小写字母+数字+符号一共9位以上，PAM例子：</div><div class="line">password requisite pam_cracklib.so minlen=10 ucredit=-1 lcredit=-1 dcredit=-1 ocredit=-1</div><div class="line"></div><div class="line">2，不同的系统密码不能一样</div><div class="line"></div><div class="line">3，更换密码策略(每90天更换一次）</div><div class="line"></div><div class="line">4，密码分发管理，管理不同业务服务器的系统管理员掌握不同的密码</div><div class="line"></div><div class="line"></div><div class="line">PAM例子：</div><div class="line"></div><div class="line">分别代表最短密码长度为8,其中至少包含一个大写字母，一个小写字母，一个数</div><div class="line">字和一个字符, 编辑/etc/pam.d/passwd，增加：</div><div class="line"></div><div class="line">password  requisite pam_cracklib.so minlen=8 ucredit=-1 lcredit=-1 dcredit=-1 ocredit=-1</div><div class="line"></div><div class="line"></div><div class="line">编辑/etc/login.defs，设置：</div><div class="line"></div><div class="line">PASS_MAX_DAYS 90	#密码最长生命周期90天</div><div class="line">PASS_WARN_AGE 7		#密码过期之前7天报警信息</div><div class="line"></div><div class="line"></div><div class="line">登录失败3次死锁，编辑/etc/pam.d/system-auth，设置：</div><div class="line"></div><div class="line">auth	required	pam_tally2.so onerr=fail even_deny_root deny=3 unlock_time=3600</div></pre></td></tr></table></figure>
+<h3 id="1-2-1-业务分离"><a href="#1-2-1-业务分离" class="headerlink" title="1.2.1 业务分离"></a>1.2.1 业务分离</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">生产环境中,不同的业务可以做水平分离,比如把不同的服务运行到不同的虚拟机</div><div class="line">中,不需要远程访问的服务器可以绑定到 localhost( 比如只需要访问本机业务的</div><div class="line">mysql) 上。</div></pre></td></tr></table></figure>
+<h2 id="1-3-SSH安全配置"><a href="#1-3-SSH安全配置" class="headerlink" title="1.3 SSH安全配置"></a>1.3 SSH安全配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div></pre></td><td class="code"><pre><div class="line">openssh目前的默认配置文件相比以前虽然要安全的多，但还是有必要对生产系统</div><div class="line">中的ssh服务器进行基线检查。</div><div class="line"></div><div class="line">配置文件：/etc/ssh/ssh_config</div><div class="line">--------------------------------------------------------------</div><div class="line">1，known_hosts保存相关服务器的签名，所以必须把主机名hash:</div><div class="line"></div><div class="line">HashKnownHosts yes</div><div class="line"></div><div class="line">2，SSH协议v1不安全：</div><div class="line"></div><div class="line">Protocol 2</div><div class="line"></div><div class="line">3，如果没用X11转发的情况：</div><div class="line"></div><div class="line">X11Forwarding no</div><div class="line"></div><div class="line">4，关闭rhosts:</div><div class="line"></div><div class="line">IgnoreRhosts yes</div><div class="line"></div><div class="line">5，关闭允许空密码登录：</div><div class="line"></div><div class="line">PermitEmptyPasswords no</div><div class="line"></div><div class="line">6，最多登录尝试次数：</div><div class="line"></div><div class="line">MaxAuthTries 5</div><div class="line"></div><div class="line">7，禁止root登录</div><div class="line"></div><div class="line">PermitRootLogin no</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">(可选)</div><div class="line">--------------------------------------------------------------</div><div class="line">1，关闭密码认证，启用公钥认证：</div><div class="line"></div><div class="line">PubkeyAuthentication yes</div><div class="line"></div><div class="line">PasswordAuthentication no</div><div class="line"></div><div class="line"></div><div class="line">2，允许或者禁止用户/组登录:</div><div class="line"></div><div class="line">AllowGroups, AllowUsers, DenyUsers, DenyGroups</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">密钥交换( Kex)</div><div class="line">--------------------------------------------------------------</div><div class="line">OpenSSH支持8种密钥交换协议：</div><div class="line">1. curve25519-sha256: ECDH over Curve25519 with SHA2</div><div class="line">2. diffie-hellman-group1-sha1: 1024 bit DH with SHA1</div><div class="line">3. diffie-hellman-group14-sha1: 2048 bit DH with SHA1</div><div class="line">4. diffie-hellman-group-exchange-sha1: Custom DH with SHA1</div><div class="line">5. diffie-hellman-group-exchange-sha256: Custom DH with SHA2</div><div class="line">6. ecdh-sha2-nistp256: ECDH over NIST P-256 with SHA2</div><div class="line">7. ecdh-sha2-nistp384: ECDH over NIST P-384 with SHA2</div><div class="line">8. ecdh-sha2-nistp521: ECDH over NIST P-521 with SHA2</div><div class="line"></div><div class="line">按照以下3个标准：</div><div class="line"></div><div class="line">* ECDH曲线：安标NIST已经受到污染所以排除6--8</div><div class="line">* DH的位数：排除1024-bit的</div><div class="line">* 安全的Hash：排除2--4的SHA1</div><div class="line"></div><div class="line">*** 只剩下1和5，建议配置：</div><div class="line"></div><div class="line">/etc/ssh/sshd_config:</div><div class="line"></div><div class="line">KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256</div><div class="line"></div><div class="line">/etc/ssh/ssh_config snippet:</div><div class="line"></div><div class="line">Host *</div><div class="line">    KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256</div><div class="line"></div><div class="line"></div><div class="line">*** 建议删除/etc/ssh/moduli低于2048位长度的，或者直接创建：</div><div class="line">ssh-keygen -G /tmp/moduli -b 4096</div><div class="line">ssh-keygen -T /etc/ssh/moduli -f /tmp/moduli</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">认证( Authentication)</div><div class="line">--------------------------------------------------------------</div><div class="line">1. DSA</div><div class="line">2. ECDSA</div><div class="line">3. Ed25519</div><div class="line">4. RSA</div><div class="line"></div><div class="line">2是属于被污染的NIST里的，这里不能通过配置来屏蔽ECDSA，但可以通过坏链接</div><div class="line">来实现：</div><div class="line">cd /etc/ssh</div><div class="line">rm ssh_host_ecdsa_key*</div><div class="line">rm ssh_host_key*</div><div class="line">ln -s ssh_host_ecdsa_key ssh_host_ecdsa_key</div><div class="line">ln -s ssh_host_key ssh_host_key</div><div class="line"></div><div class="line">DSA虽然没有被污染，但是必须要求是1024-bit，长度过低，所以关掉最好的情况是只使用：</div><div class="line">Protocol 2</div><div class="line">HostKey /etc/ssh/ssh_host_ed25519_key</div><div class="line"></div><div class="line">如果需要使用RSA，生成更高强度的密钥：</div><div class="line">cd /etc/ssh</div><div class="line">rm ssh_host_rsa_key*</div><div class="line">ssh-keygen -t rsa -b 4096 -f ssh_host_rsa_key &lt; /dev/null</div><div class="line"></div><div class="line">生成客户端的密钥：</div><div class="line">ssh-keygen -t ed25519</div><div class="line">ssh-keygen -t rsa -b 4096</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">对称算法( Symmetric ciphers)</div><div class="line">--------------------------------------------------------------</div><div class="line">1.  3des-cbc</div><div class="line">2.  aes128-cbc</div><div class="line">3.  aes192-cbc</div><div class="line">4.  aes256-cbc</div><div class="line">5.  aes128-ctr</div><div class="line">6.  aes192-ctr</div><div class="line">7.  aes256-ctr</div><div class="line">8.  aes128-gcm</div><div class="line">9.  aes256-gcm</div><div class="line">10. arcfour</div><div class="line">11. arcfour128</div><div class="line">12. arcfour256</div><div class="line">13. blowfish-cbc</div><div class="line">14. ast128-cbc</div><div class="line">15. chacha20-poly1305</div><div class="line"></div><div class="line">对称算法选型是最后意思的，根据以下标准：</div><div class="line"></div><div class="line">* 算法本身的安全性，RC4和DES已经存在风险，所以排除1和10--12</div><div class="line">* 密钥强度：至少128-bit</div><div class="line">* 块大小：块加密的情况下至少128 bits</div><div class="line">* cipher mode：建议使用AE：</div><div class="line">https://en.wikipedia.org/wiki/Authenticated_encryption</div><div class="line"></div><div class="line">这样只剩下了5--9和15，/etc/ssh/sshd_config建议配置：</div><div class="line"></div><div class="line">Ciphers aes256-gcm@openssh.com,aes128-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr</div><div class="line"></div><div class="line">建议配置/etc/ssh/ssh_config：</div><div class="line"></div><div class="line">Host *</div><div class="line">    Ciphers aes256-gcm@openssh.com,aes128-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">MAC（Message authentication codes)：</div><div class="line">--------------------------------------------------------------</div><div class="line">为了抗侧信道攻击，所以必须采用先加密再MAC，OpenSSH提供了以下MAC支持：</div><div class="line"></div><div class="line">1.  hmac-md5</div><div class="line">2.  hmac-md5-96</div><div class="line">3.  hmac-ripemd160</div><div class="line">4.  hmac-sha1</div><div class="line">5.  hmac-sha1-96</div><div class="line">6.  hmac-sha2-256</div><div class="line">7.  hmac-sha2-512</div><div class="line">8.  umac-64</div><div class="line">9.  umac-128</div><div class="line">10. hmac-md5-etm</div><div class="line">11. hmac-md5-96-etm</div><div class="line">12. hmac-ripemd160-etm</div><div class="line">13. hmac-sha1-etm</div><div class="line">14. hmac-sha1-96-etm</div><div class="line">15. hmac-sha2-256-etm</div><div class="line">16. hmac-sha2-512-etm</div><div class="line">17. umac-64-etm</div><div class="line">18. umac-128-etm</div><div class="line"></div><div class="line">按照以下标准：</div><div class="line"></div><div class="line">* HASH算法的安全性，MD5和SHA1被排除</div><div class="line">* 必须先加密再MAC，所有不带-etm的被排除</div><div class="line">* Tag大小：最少256 bits，UMAC和RIPEMD160被排除</div><div class="line">* 密钥长度：至少128-bit</div><div class="line"></div><div class="line">建议配置/etc/ssh/sshd_config:</div><div class="line"></div><div class="line">MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com</div><div class="line"></div><div class="line">建议配置/etc/ssh/ssh_config</div><div class="line"></div><div class="line">Host *</div><div class="line">    MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com</div><div class="line"></div><div class="line">为了兼容github，可以加上：</div><div class="line">Host github.com</div><div class="line">    MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512</div></pre></td></tr></table></figure>
+<h2 id="1-4-auditd审计框架"><a href="#1-4-auditd审计框架" class="headerlink" title="1.4 auditd审计框架"></a>1.4 auditd审计框架</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line">auditd是接收内核审计模块关于系统调用信息的一个用户态程序，可以通过一些</div><div class="line">规则来对一些系统调用或者文件目录进行监控。</div><div class="line"></div><div class="line">安装auditd:</div><div class="line">sudo apt-get install auditd</div><div class="line"></div><div class="line">配置文件:/etc/audit/auditd.conf</div><div class="line"></div><div class="line">存储地址log_file = /var/log/audit/audit.log</div><div class="line"></div><div class="line">审计规则的配置文件：/etc/audit/audit.rules，这里给出一个例子：</div><div class="line">--------------------------------------------------------------</div><div class="line"># First rule - delete all</div><div class="line">-D</div><div class="line"></div><div class="line"># Increase the buffers to survive stress events.</div><div class="line"># Make this bigger for busy systems</div><div class="line">-b 320</div><div class="line">-a always,exit -S adjtimex -S settimeofday -S stime -k time-change</div><div class="line">-a always,exit -S clock_settime -k time-change</div><div class="line">-a always,exit -S sethostname -S setdomainname -k system-locale</div><div class="line"># Monitor binaries ps &amp; ls and saved the log when being executed....</div><div class="line">-a always,exit -F path=/bin/ps -F path=/bin/ls -F perm=x -k binaries</div><div class="line">-w /etc/group -p wa -k identity</div><div class="line">-w /etc/passwd -p wa -k identity</div><div class="line">-w /etc/shadow -p wa -k identity</div><div class="line">-w /etc/sudoers -p wa -k identity</div><div class="line">-w /var/run/utmp -p wa -k session</div><div class="line">-w /var/log/wtmp -p wa -k session</div><div class="line">-w /var/log/btmp -p wa -k session</div><div class="line">-w /etc/apparmor -p wa -k MAC-policy</div><div class="line">-w /etc/apparmor.d -p wa -k MAC-policy</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">上面的例子对一系列关于时间的系统调用进行了监控，一旦时间出现改变就会记</div><div class="line">录进如日志，之后对几个跟创建/删除用户和组的文件也进行了监控，最后是对</div><div class="line">apparmor的配置文件和规则目录进行监控。在/etc/apparmor下的shell中输入：</div><div class="line"></div><div class="line">sudo touch hello</div><div class="line"></div><div class="line">用工具ausearch来进行查询：</div><div class="line"></div><div class="line">--------------------------------------------------------------</div><div class="line">sudo ausearch -i -k MAC-policy</div><div class="line">----</div><div class="line">type=CONFIG_CHANGE msg=audit(07/20/2014 20:36:48.397:58) : auid=root ses=2 op=&quot;add rule&quot; key=MAC-policy list=exit res=1</div><div class="line">----</div><div class="line">type=CONFIG_CHANGE msg=audit(07/20/2014 20:36:48.445:59) : auid=root ses=2 op=&quot;add rule&quot; key=MAC-policy list=exit res=1</div><div class="line">----</div><div class="line">type=PATH msg=audit(07/20/2014 20:38:42.717:61) : item=1 name=hello inode=799889 dev=08:01 mode=file,644 ouid=root ogid=root rdev=00:00 nametype=CREATE</div><div class="line">type=PATH msg=audit(07/20/2014 20:38:42.717:61) : item=0 name=/etc/apparmor inode=783766 dev=08:01 mode=dir,755 ouid=root ogid=root rdev=00:00 nametype=PARENT</div><div class="line">type=CWD msg=audit(07/20/2014 20:38:42.717:61) :  cwd=/etc/apparmor</div><div class="line">type=SYSCALL msg=audit(07/20/2014 20:38:42.717:61) : arch=i386 syscall=open success=yes exit=3 a0=bfeca8ab a1=8941 a2=1b6 a3=1 items=2 ppid=17704 pid=17876 auid=root uid=root gid=root euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=pts1 ses=2 comm=touch exe=/bin/touch key=MAC-policy</div><div class="line">----</div><div class="line">type=PATH msg=audit(07/20/2014 20:38:56.017:62) : item=1 name=hello inode=799889 dev=08:01 mode=file,644 ouid=root ogid=root rdev=00:00 nametype=DELETE</div><div class="line">type=PATH msg=audit(07/20/2014 20:38:56.017:62) : item=0 name=/etc/apparmor inode=783766 dev=08:01 mode=dir,755 ouid=root ogid=root rdev=00:00 nametype=PARENT</div><div class="line">type=CWD msg=audit(07/20/2014 20:38:56.017:62) :  cwd=/etc/apparmor</div><div class="line">type=SYSCALL msg=audit(07/20/2014 20:38:56.017:62) : arch=i386 syscall=unlinkat success=yes exit=0 a0=ffffff9c a1=89eb8c0 a2=0 a3=0 items=2 ppid=17704 pid=17889 auid=root uid=root gid=root euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=pts1 ses=2 comm=rm exe=/bin/rm key=MAC-policy</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">也可以使用aureport来生成报告。</div><div class="line"></div><div class="line">记录tty的场景:</div><div class="line"></div><div class="line">编辑/etc/pam.d/password-auth-ac：</div><div class="line"></div><div class="line">session     required      pam_tty_audit.so enable=*</div><div class="line"></div><div class="line">查看相关信息：</div><div class="line">#tail -n 20 /var/log/audit/audit.log</div><div class="line">#aureport --tty -ts today</div></pre></td></tr></table></figure>
+<h3 id="1-4-1-针对文件的审计"><a href="#1-4-1-针对文件的审计" class="headerlink" title="1.4.1 针对文件的审计"></a>1.4.1 针对文件的审计</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line">1, Leo Juranic的详细的分析[]了异常的通配符威胁有多大，：</div><div class="line">--------------------------------------------------------------</div><div class="line">find / -path /proc -prune  -name &quot;-*&quot;</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">2, 所谓的world-writable权限的文件是不太合理的，所以这种文件我们必须得提防：</div><div class="line">--------------------------------------------------------------</div><div class="line">find / -path /proc -prune -o -perm -2 ! -type l -ls</div><div class="line"></div><div class="line">针对日志的world-readable也需要注意：</div><div class="line">find /var/log -perm -o=r ! -type l</div><div class="line"></div><div class="line">正确：</div><div class="line">chmod 640 /var/log/</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">3, 一个没有owner的文件是存在潜在威胁的，因为你永远也不知道未来某个时候她的</div><div class="line">uid/gid成为了你的敌人：</div><div class="line">--------------------------------------------------------------</div><div class="line">find / -path /proc -prune -o -nouser -o -nogroup</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">4, 作为&quot;自主可控&quot;的自由软件用户，你得知道你的生产环境中哪些用户是可用的：</div><div class="line">--------------------------------------------------------------</div><div class="line">egrep -v &apos;.*:\*|:\!&apos; /etc/shadow | awk -F: &apos;&#123;print $1&#125;&apos;</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">5, 你要删除一个用户前，应该先了解一些有哪些文件是他拥有的：</div><div class="line">--------------------------------------------------------------x</div><div class="line">find / -path /proc -prune -o -user account -ls</div><div class="line"></div><div class="line">然后，安全的删除：</div><div class="line"></div><div class="line">userdel -r account</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">6, 如果不带&apos;:x:&apos;的用户肯定是无法正常使用的：</div><div class="line">--------------------------------------------------------------</div><div class="line">grep -v &apos;:x:&apos; /etc/passwd</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">7, 找到没有密码的用户：</div><div class="line">--------------------------------------------------------------</div><div class="line">cat /etc/shadow | cut -d: -f 1,2 | grep &apos;!&apos;</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">8，找到被锁定的用户：</div><div class="line">--------------------------------------------------------------</div><div class="line">cat /etc/shadow | cut -d: -f 1,2 | grep &apos;*&apos;</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">9, 找到带有过期密码的用户：</div><div class="line">--------------------------------------------------------------</div><div class="line">cat /etc/shadow | cut -d: -f 1,2 | grep &apos;!!&apos;</div><div class="line"></div><div class="line">passwd -u -l可以操作</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">10, /boot目录权限下至少是644，甚至是600:</div><div class="line">--------------------------------------------------------------</div><div class="line">ls -l /boot</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">11，找到suid和sgid相关的可执行文件：</div><div class="line">--------------------------------------------------------------</div><div class="line">find / -xdev -user root \( -perm -4000 -o -perm -2000 \)</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">(可选)</div><div class="line"></div><div class="line">1, GNU/Linux的访问控制列表(ACL)也是不错的文件权限管理的途径，获得文件</div><div class="line">ACL的信息：</div><div class="line">--------------------------------------------------------------</div><div class="line">getfacl file</div><div class="line"></div><div class="line">设置哪些用户对哪些文件有什么样的权限：</div><div class="line">setfacl -m u:user:r file</div><div class="line">--------------------------------------------------------------</div></pre></td></tr></table></figure>
+<h2 id="1-4-2-Prevent-UNSET-bash-history"><a href="#1-4-2-Prevent-UNSET-bash-history" class="headerlink" title="1.4.2 Prevent UNSET bash history"></a>1.4.2 Prevent <em>UNSET</em> bash history</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">针对history_bash不允许unset:</div><div class="line">#Prevent unset of histfile, /etc/profile</div><div class="line">export HISTSIZE=1500</div><div class="line">readonly HISTFILE</div><div class="line">readonly HISTFILESIZE</div><div class="line">readonly HISTSIZE</div><div class="line"></div><div class="line">#Set .bash_history as attr +a</div><div class="line">find / -maxdepth 3|grep -i bash_history|while read line; do chattr +a &quot;$line&quot;; done</div></pre></td></tr></table></figure>
+<h2 id="1-5-sudoers"><a href="#1-5-sudoers" class="headerlink" title="1.5 sudoers"></a>1.5 sudoers</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">执行visudo，让普通用户shawn有所有权限：</div><div class="line">shawn ALL=(ALL) ALL</div><div class="line"></div><div class="line">让普通用户shawn只能以root权限执行ls和cat：</div><div class="line">shawn ALL=/bin/ls,/bin/cat</div><div class="line"></div><div class="line">让普通用户shawn只能在主机localhost上以root权限执行ls：</div><div class="line">shawn localhost=/bin/ls</div><div class="line"></div><div class="line"></div><div class="line">--[ 2. 内核安全基线</div><div class="line"></div><div class="line"></div><div class="line">SYN cookies防护主要是为了防止SYN洪水攻击，开启设置为1：</div><div class="line">--------------------------------------------------------------</div><div class="line">net.ipv4.tcp_syncookies = 1</div><div class="line">/proc/sys/net/ipv4/tcp_syncookies</div><div class="line"></div><div class="line">(可选)，如果需要开启SYNPROXY可以直接：</div><div class="line">iptables -t raw -A PREROUTING -i eth0 -p tcp --dport 80 --syn -j NOTRACK</div><div class="line">iptables -A INPUT -i eth0 -p tcp --dport 80 -m state UNTRACKED,INVALID \</div><div class="line">	 -j SYNPROXY --sack-perm --timestamp --mss 1480 --wscale 7 --ecn</div><div class="line"></div><div class="line">echo 0 &gt; /proc/sys/net/netfilter/nf_conntrack_tcp_loose</div><div class="line"></div><div class="line">注意:SYNPROXY是在Linux内核3.13里加入的NETFILTER特性。</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">TCP FIN-WAIT-2状态保留时间，目前很多发行版的默认时间是60秒，这个值太大</div><div class="line">会造成DOS攻击的风险，太小也有一定概率造成远端机器来不急主动关掉链接，建</div><div class="line">议一般设置成15：</div><div class="line">--------------------------------------------------------------</div><div class="line">参考：</div><div class="line">http://benohead.com/tcp-about-fin_wait_2-time_wait-and-close_wait/</div><div class="line"></div><div class="line">net.ipv4.tcp_fin_timeout = 15</div><div class="line">/proc/sys/net/ipv4/tcp_fin_timeout</div><div class="line">--------------------------------------------------------------</div></pre></td></tr></table></figure>
+<h2 id="网络抗DOS相关："><a href="#网络抗DOS相关：" class="headerlink" title="网络抗DOS相关："></a>网络抗DOS相关：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line">SYN队列的长度，值越大能处理更多的链接数：</div><div class="line">net.ipv4.tcp_max_syn_backlog = 8192</div><div class="line">/proc/sys/net/ipv4/tcp_max_syn_backlog</div><div class="line"></div><div class="line">设备队列的长度，这个值建议比syn队列大：</div><div class="line">net.core.netdev_max_backlog = 16384</div><div class="line">/proc/sys/net/core/netdev_max_backlog</div><div class="line"></div><div class="line">listen()的backlog限制数，内存大可以提升到65535：</div><div class="line">net.core.somaxconn = 4096</div><div class="line">/proc/sys/net/core/somaxconn</div><div class="line"></div><div class="line">TIME_WAIT状态的TCP链接最大数，超过这个值系统会自动清除，抗DOS攻击的选项：</div><div class="line">net.ipv4.tcp_max_tw_buckets = 4096</div><div class="line">/proc/sys/net/ipv4/tcp_max_tw_buckets</div><div class="line"></div><div class="line">TIME-WAIT状态的链接重新使用于新的TCP链接，1表示允许：</div><div class="line">net.ipv4.tcp_tw_reuse = 1</div><div class="line">/proc/sys/net/ipv4/tcp_tw_reuse</div><div class="line"></div><div class="line">TIME-WAIT状态的链接快速回收，1表示开启：</div><div class="line">net.ipv4.tcp_tw_recycle = 1</div><div class="line">/proc/sys/net/ipv4/tcp_tw_recycle</div><div class="line"></div><div class="line">TCP KEEPALIVE探测频率，以秒为单位，建议设置在30分钟以内，300为5分钟：</div><div class="line">net.ipv4.tcp_keepalive_time = 300</div><div class="line">/proc/sys/net/ipv4/tcp_keepalive_time</div><div class="line"></div><div class="line">TCP KEEPALIVE探测包的数量：</div><div class="line">net.ipv4.tcp_keepalive_probes = 3</div><div class="line">/proc/sys/net/ipv4/tcp_keepalive_probes</div><div class="line"></div><div class="line">SYN和SYN+ACK的重传次数：</div><div class="line">net.ipv4.tcp_syn_retries = 3</div><div class="line">/proc/sys/net/ipv4/tcp_syn_retries</div><div class="line"></div><div class="line">net.ipv4.tcp_synack_retries = 3</div><div class="line">/proc/sys/net/ipv4/tcp_synack_retries</div><div class="line"></div><div class="line">TCP ORPHAN的值调大能防止简单DOS攻击，每个ORPHAN消耗大约64k的内存，</div><div class="line">65535相当于4GB内存：</div><div class="line">net.ipv4.tcp_max_orphans = 65536</div><div class="line">/proc/sys/net/ipv4/tcp_max_orphans</div><div class="line"></div><div class="line">TCP链接的内存大小，以PAGE为单位，x86下每个page为4KB大小：</div><div class="line">net.ipv4.tcp_mem = 131072 196608 262144</div><div class="line">/proc/sys/net/ipv4/tcp_mem</div><div class="line"></div><div class="line">如果不是特殊场景的服务器或者网络设备，一般不要调整tcp_mem，超过最大的值</div><div class="line">会报OOM的错误。</div><div class="line"></div><div class="line"></div><div class="line">设置最大的发送和接收窗口,以10G NIC为例,设置64MB：</div><div class="line">net.core.rmem_max = 67108864</div><div class="line">/proc/sys/net/core/rmem_max</div><div class="line"></div><div class="line">net.core.wmem_max = 67108864</div><div class="line">/proc/sys/net/core/wmem_max</div><div class="line"></div><div class="line">每个TCP链接的读，写缓冲区内存大小，单位为Byte：</div><div class="line">net.ipv4.tcp_rmem = 4096 8192 16777216( 4096 87380 33554432)</div><div class="line">/proc/sys/net/ipv4/tcp_rmem</div><div class="line"></div><div class="line">net.ipv4.tcp_wmem = 4096 8192 16777216( 4096 65536 33554432)</div><div class="line">/proc/sys/net/ipv4/tcp_wmem</div><div class="line"></div><div class="line">如果按照缺省分配8KB * 2 = 16KB/链接，4GB内存能提供的链接数为：</div><div class="line">(4 * 1024 * 1024) / 16 = 262144</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div></pre></td><td class="code"><pre><div class="line">Oracle 10g的最佳建议：</div><div class="line">http://www.dba-oracle.com/t_linux_networking_kernel_parameters.htm</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">源路由通常可以用于在IP包的OPTION里设置途经的部分或者全部路由器，这个</div><div class="line">特性可以用于网络排错和优化，比如traceroute，攻击者也可以使用这个特性来</div><div class="line">进行IP欺骗，关闭设置为0：</div><div class="line">--------------------------------------------------------------</div><div class="line">net.ipv4.conf.all.accept_source_route = 0</div><div class="line">/proc/sys/net/ipv4/conf/all/accept_source_route</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">ICMP重定向，正常用于选择最优路径，攻击者可以利用开展中间人攻击，关闭设</div><div class="line">置为0:</div><div class="line">--------------------------------------------------------------</div><div class="line">net.ipv4.conf.all.accept_redirects = 0</div><div class="line">/proc/sys/net/ipv4/conf/all/accept_redirects</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">如果这台GNU/Linux是作为服务器使用而非网关设备，可以关掉：</div><div class="line">--------------------------------------------------------------</div><div class="line">net.ipv4.conf.all.send_redirects = 0</div><div class="line">net.ipv4.conf.default.send_redirects = 0</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">IP欺骗防护，启动设置为1：</div><div class="line">--------------------------------------------------------------</div><div class="line">net.ipv4.conf.all.rp_filter = 1</div><div class="line">/proc/sys/net/ipv4/conf/all/rp_filter</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">忽略ICMP请求( PING)，启动设置为1：</div><div class="line">--------------------------------------------------------------</div><div class="line">net.ipv4.icmp_echo_ignore_all = 1</div><div class="line">/proc/sys/net/ipv4/icmp_echo_ignore_all</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">忽略ICMP广播请求，启动设置为1：</div><div class="line">--------------------------------------------------------------</div><div class="line">net.ipv4.icmp_echo_ignore_broadcasts = 1</div><div class="line">/proc/sys/net/ipv4/icmp_echo_ignore_broadcasts</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">错误消息防护，会警告你关于网络中的ICMP异常，启动设置为1：</div><div class="line">--------------------------------------------------------------</div><div class="line">net.ipv4.icmp_ignore_bogus_error_responses = 1</div><div class="line">/proc/sys/net/ipv4/icmp_ignore_bogus_error_responses</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">对特定packet(IP欺骗，源路由，重定向）进行审计，启动设置为1：</div><div class="line">--------------------------------------------------------------</div><div class="line">/proc/sys/net/ipv4/conf/all/log_martians</div><div class="line">net.ipv4.conf.all.log_martians = 1</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">地址随机化，启动设置为2：</div><div class="line">--------------------------------------------------------------</div><div class="line">kernel.randomize_va_space=2</div><div class="line">/proc/sys/kernel/randomize_va_space</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">内核符号限制访问，启动设置为1：</div><div class="line">--------------------------------------------------------------</div><div class="line">kernel.kptr_restrict=1</div><div class="line">/proc/sys/kernel/kptr_restrict</div><div class="line"></div><div class="line">类似CVE-2014-0196的exploit对于这一项就很难做到“通杀”;-)</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">内存映射最小地址，启动设置为65536：</div><div class="line">--------------------------------------------------------------</div><div class="line">vm.mmap_min_addr=65536</div><div class="line">/proc/sys/vm/mmap_min_addr</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">防护进程被ptrace跟踪调试:</div><div class="line">--------------------------------------------------------------</div><div class="line">kernel.yama.ptrace_scope = 2</div><div class="line">/proc/sys/kernel/yama/ptrace_scope</div><div class="line"></div><div class="line">0: 所有进程都可以被调试</div><div class="line">1: 只有一个父进程可以被调试</div><div class="line">2: 只有系统管理员可以调试（CAP_SYS_PTRACE ）</div><div class="line">3: 没有进程允许被调试</div><div class="line"></div><div class="line">一般加固机用3，普通服务器用2/1。</div></pre></td></tr></table></figure>
+<h2 id="Apparmor"><a href="#Apparmor" class="headerlink" title="Apparmor"></a>Apparmor</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line">安装Apparmor和社区规则：</div><div class="line">sudo apt-get install -y apparmor-profiles apparmor</div><div class="line"></div><div class="line">查看状态是否运行正常：</div><div class="line">sudo aa-status</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">--[ 3. 加固</div><div class="line"></div><div class="line">安全基线是在防御已知的威胁，而加固则是侧重于防御未知的威胁，加固的主要</div><div class="line">目的是增加攻击者的成本。</div><div class="line"></div><div class="line"></div><div class="line">----[ 3.1 内核加固 - Grsecurity/PaX</div><div class="line"></div><div class="line">GNU/Linux平台从用户空间到内核空间都有一系列的加固措施，但是,对于真正面</div><div class="line">临复杂安全环境,确实需要高级安全防护能力的机构,最极端的加固防御是:</div><div class="line">Grsecurity/PaX，对于注重完美的“老派( old school )”黑客社区而言,没有</div><div class="line">Grsecurity/PaX 的定制方案是不完美的 ,这里摘选几段old school社区的调侃：</div><div class="line"></div><div class="line">&quot;The &quot;better than none&quot; point of view is actually a nice way to false</div><div class="line">sense of security for those who don&apos;t know better. We got</div><div class="line">better-than-none apparmor, selinux, tomoyo, some poorly maintained and</div><div class="line">crippled ports of grsec features or alikes, namespaces and containers,</div><div class="line">rootkit-friendly LSM, the dumb and useless kernel version of SSP,</div><div class="line">etc. What&apos;s the sum of all this shit for end users? False sense of</div><div class="line">security...&quot;</div><div class="line"></div><div class="line">&quot;without Grsecurity/PaX, linux security is like monkey can never</div><div class="line">perform a regular masturbation cu&apos;z lacking of giant pennis;-)&quot;</div><div class="line"></div><div class="line">作为个人完全赞同以上观点，太多的better-than-none可以算是&quot;甜点&quot;，用户使</div><div class="line">用后会觉得自high的很爽，但是到了夜幕降临的时候，用户还是很难入睡，因为</div><div class="line">&quot;痛点&quot;依然在那里，在安全领域，&quot;甜点&quot;就是&quot;安全感&quot;，安全感绝对不等同于安</div><div class="line">全。</div><div class="line"></div><div class="line">Anyway，对于商业客户而言，是否对Grsecurity/PaX定制是一种选择。</div><div class="line"></div><div class="line">安装新的带Grsecurity/PaX补丁的内核，以3.14.1为例，先下载原生内核：</div><div class="line">--------------------------------------------------------------</div><div class="line">https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.14.1.tar.xz</div><div class="line"></div><div class="line">下载Grsecurity/PaX补丁：</div><div class="line">https://github.com/citypw/citypw-SCFE/raw/master/security/apparmor_test/grsecurity-3.0-3.14.11-201407072045.patch</div><div class="line"></div><div class="line">解压内核然后打补丁：</div><div class="line">Patch the kernel with grsecurity:</div><div class="line">xz -d linux-3.14.1.tar.xz</div><div class="line">tar xvf linux-3.14.1.tar</div><div class="line">cd linux-3.14.1/</div><div class="line">patch -p1 &lt; ../grsecurity-3.0-3.14.3-201405121814.patch</div><div class="line"></div><div class="line">你可以在&quot;make menuconfig&quot;里自己定制符合你口味的内核，也可以使用我测试用</div><div class="line">的内核config文件：</div><div class="line">https://raw.githubusercontent.com/citypw/citypw-SCFE/master/security/apparmor_test/debian-7.4-linux-3.14.1-grsec.config</div><div class="line"></div><div class="line">编译内核(-jx, x通常==你的CPU核数+1):</div><div class="line">make -j7 deb-pkg</div><div class="line"></div><div class="line">安装编译后的内核:</div><div class="line">dpkg -i ../*.deb</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">现在内核的部分结束，关于RBAC规则可以使用用户态工具gradm的Learning Mode</div><div class="line">来实现，但不在本文的讨论范畴。</div></pre></td></tr></table></figure>
+<h2 id="3-2-PHP加固"><a href="#3-2-PHP加固" class="headerlink" title="3.2 PHP加固"></a>3.2 PHP加固</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div></pre></td><td class="code"><pre><div class="line">1, PHP是常用的WEB开发语言，在WEB生产环境部署的过程中，目录和文件的权限是需</div><div class="line">要关注的，通常除了少数用途的目录（比如上传）外，都应该把写入权限禁用：</div><div class="line"></div><div class="line">--------------------------------------------------------------</div><div class="line">find -type f -name \*.php -exec chmod 444 &#123;&#125; \;</div><div class="line">find -type d -exec chmod 555 &#123;&#125; \;</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">2, 开启 php 的安全模式,禁用 php 不安全的函数等加固，修改 php 配置文件</div><div class="line">/etc/php5/apache2/php.ini :</div><div class="line"></div><div class="line">--------------------------------------------------------------</div><div class="line">// 设置模式为安全模式,此值直接影响 disable_functions 的命令是否生效;</div><div class="line">[SQL]</div><div class="line">; http://php.net/sql.safe-mode</div><div class="line"></div><div class="line">sql.safe_mode = On</div><div class="line"></div><div class="line">// 禁用不安全的函数</div><div class="line">disable_functions = system, show_source, symlink, exec, dl, shell_exec,</div><div class="line">passthru, phpinfo, escapeshellarg, escapeshellcmd</div><div class="line"></div><div class="line">// 避免暴露 php 信息</div><div class="line">expose_php = Off</div><div class="line"></div><div class="line">// 关闭错误信息提示</div><div class="line">display_errors = Off</div><div class="line"></div><div class="line">// 不允许调用 dl</div><div class="line">enable_dl = Off</div><div class="line"></div><div class="line">// 避免远程调用文件</div><div class="line">allow_url_include = Off</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line"></div><div class="line">--[ 4. SSL/TLS基线检查</div><div class="line"></div><div class="line">SSL/TLS的实现经历BEAST/CRIME/LUCKY-13/HEARTBLEED/POODLE一系列的安全事件</div><div class="line">后，我们根据之前的NDAY漏洞的经验可以制定一些安全基线。这里给出的例子都</div><div class="line">以HOST为&quot;www.google.com&quot;和PORT为443。</div><div class="line"></div><div class="line">SSLv2早已经因为一系列安全漏洞被废弃，必须保证在生产环境当中去除，用以下</div><div class="line">命令验证：</div><div class="line">--------------------------------------------------------------</div><div class="line">openssl s_client -ssl2 -connect www.google.com:443</div><div class="line"></div><div class="line">由于OpenSSL 1.0开始已经不支持SSLv2，所以这条命令如果成功执行代表你有危</div><div class="line">险，GnuTLS也可以用类似的命令来快速检测：</div><div class="line"></div><div class="line">gnutls-cli -d 5 -p 443 --priority &quot;NORMAL:-VERS-TLS1.2:-VERS-TLS1.1:-VERS-TLS1.0:-VERS-SSL3.0&quot; www.google.com</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">SSLv3的漏洞也不少，POODLE攻击是其中的著名例子，如果你没有运行非常古老的</div><div class="line">软件(比如IE6)，那你应该禁用掉SSLv3，检测对端是否支持SSLv3：</div><div class="line">--------------------------------------------------------------</div><div class="line">gnutls-cli -d 5 -p 443 --priority &quot;NORMAL:-VERS-TLS1.2:-VERS-TLS1.1:-VERS-TLS1.0&quot; www.google.com | grep -i version</div><div class="line"></div><div class="line">如果能看到&quot;- Version: SSL3.0&quot;那你得当心了。</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">目前(2014年11月18日)，只有TLS 1.1/1.2是相对安全的，EFF早在2011年就建议</div><div class="line">公众使用TLS 1.2的PFS，检查是否支持TLS 1.1/1.2：</div><div class="line">--------------------------------------------------------------</div><div class="line">gnutls-cli -p 443 --priority &quot;NORMAL:-VERS-TLS1.2:-VERS-TLS1.0:-VERS-SSL3.0&quot; www.google.com | grep -i version</div><div class="line">显示“- Version: TLS1.1&quot;就说明支持TLS 1.1。</div><div class="line"></div><div class="line">gnutls-cli -p 443 --priority &quot;NORMAL:-VERS-TLS1.1:-VERS-TLS1.0:-VERS-SSL3.0&quot; www.google.com | grep -i version</div><div class="line">显示”- Version: TLS1.2“就说明支持TLS 1.2。</div><div class="line"></div><div class="line">使用OpenSSL工具也可以检测：</div><div class="line">openssl s_client -tls1_1 -connect www.google.com:443 | grep -i protocol</div><div class="line">openssl s_client -tls1_2 -connect www.google.com:443 | grep -i protocol</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">安全重协商支持：</div><div class="line">--------------------------------------------------------------</div><div class="line">gnutls-cli -d 5 -p 443  www.google.com</div><div class="line">显示“Safe renegotiation succeeded“说明支持</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">客户端发起的重协商：</div><div class="line">--------------------------------------------------------------</div><div class="line">详情见：</div><div class="line">http://www.solidot.org/story?sid=34026</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">公钥长度检测：</div><div class="line">--------------------------------------------------------------</div><div class="line">gnutls-cli  -p 443  www.google.com | grep -i key</div><div class="line"></div><div class="line">如果公钥小于或者等于1024-bit，请根据业务场景重新评估安全性。</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">检测是否存在较弱的ciphersuites：</div><div class="line">--------------------------------------------------------------</div><div class="line">openssl s_client -cipher NULL,EXPORT,LOW,DES -connect www.google.com:443</div><div class="line"></div><div class="line">如果执行成功代表有风险。</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">PFS( Perfect Forward Secrecy)，对性能有至少10%左右的损耗。</div><div class="line">--------------------------------------------------------------</div><div class="line">openssl s_client -cipher EDH,EECDH -connect www.google.com:443</div><div class="line"></div><div class="line">如果成功说明支持PFS，这个特性是EFF强烈推荐的。</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">CRIME攻击是利用压缩算法，所以可以检测：</div><div class="line">--------------------------------------------------------------</div><div class="line">gnutls-cli www.google.com -p 443 | grep -i compress</div><div class="line">如果显示“- Compression: NULL“就是安全的。</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">OpenSSL的Heartbeat特性：</div><div class="line">--------------------------------------------------------------</div><div class="line">openssl s_client -tlsextdebug -connect www.google.com:443 | grep -i heart</div><div class="line">显示&quot;TLS server extension heartbeat&quot;说明此特性开启。</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">POODLE:</div><div class="line">--------------------------------------------------------------</div><div class="line">openssl s_client -ssl3 -fallback_scsv -connect www.google.com:443 | grep -i &quot;alert ina&quot;</div><div class="line">显示&quot;alert inappropriate fallback&quot;则是安全的。</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">FREAK:</div><div class="line">--------------------------------------------------------------</div><div class="line">openssl s_client -cipher EXPORT -connect www.google.com:443</div><div class="line"></div><div class="line">如果协商成功则说明有风险。</div><div class="line">--------------------------------------------------------------</div><div class="line"></div><div class="line">--[ 5. Weirdo audit</div><div class="line"></div><div class="line">Grinch攻击虽然不是漏洞，但pkcon+wheel的组合场景还是需要注意，首先检查</div><div class="line">wheel组是否存在：</div><div class="line"></div><div class="line">grep -i wheel /etc/group</div><div class="line"></div><div class="line">如果存在的话检查pkcon是否存在。</div><div class="line"></div><div class="line"></div><div class="line">--[ 6. Reference</div><div class="line"></div><div class="line">[1] 开源闭源项目代码质量对比</div><div class="line">    http://www.solidot.org/story?sid=39173</div><div class="line"></div><div class="line">[2] Back To The Future: Unix Wildcards Gone Wild</div><div class="line">    http://www.defensecode.com/public/DefenseCode_Unix_WildCards_Gone_Wild.txt</div><div class="line"></div><div class="line">[3] SYNPROXY：廉价的抗DoS攻击方案</div><div class="line">    www.solidot.org/story?sid=38791</div><div class="line"></div><div class="line">[4] INTERNET PROTOCOL</div><div class="line">    http://tools.ietf.org/html/rfc791</div><div class="line"></div><div class="line">[5] A simple TCP spoofing attack</div><div class="line">    http://www.citi.umich.edu/u/provos/papers/secnet-spoof.txt</div><div class="line"></div><div class="line">[6] ICMP Attacks Illustrated</div><div class="line">    http://www.sans.org/reading-room/whitepapers/threats/icmp-attacks-illustrated-477</div><div class="line"></div><div class="line">[7] SUSE Linux Enterprise Server 11 SP3 - Security and Hardening</div><div class="line">    https://www.suse.com/documentation/sles11/singlehtml/book_hardening/book_hardening.html</div><div class="line"></div><div class="line">[8] Securing Debian Manual</div><div class="line">    https://www.debian.org/doc/manuals/securing-debian-howto/</div><div class="line"></div><div class="line">[9] A Brief Introduction to auditd</div><div class="line">    http://security.blogoverflow.com/2013/01/a-brief-introduction-to-auditd/</div><div class="line"></div><div class="line">[10] Apparmor RBAC</div><div class="line">     http://wiki.apparmor.net/index.php/Pam_apparmor_example</div><div class="line"></div><div class="line">[11] Hardening PHP from php.ini</div><div class="line">     http://www.madirish.net/199</div><div class="line"></div><div class="line">[12] CVE-2014-0196 exploit</div><div class="line">http://bugfuzz.com/stuff/cve-2014-0196-md.c</div><div class="line"></div><div class="line">[13] Secure Secure Shell</div><div class="line">https://stribika.github.io/2015/01/04/secure-secure-shell.html</div></pre></td></tr></table></figure>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtefu6qezj30b20czwf1.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/devops/转存-GNU-Linux安全基线与加固-0-3/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/devops/自动化运维工具-Ansible/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          自动化运维工具-Ansible
+        
+      </div>
+    </a>
+  
+  
+    <a href="/devops/LVM相关介绍/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">LVM相关介绍</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
+  
+
+
+
+
+          </div>
+        </div>
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 SanNa
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		mathjax: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true,
+		showTags: false
+	}
+</script>
+
+<script>!function(t){function n(r){if(e[r])return e[r].exports;var o=e[r]={exports:{},id:r,loaded:!1};return t[r].call(o.exports,o,o.exports,n),o.loaded=!0,o.exports}var e={};return n.m=t,n.c=e,n.p="./",n(0)}([function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}function o(t,n){var e=/\/|index.html/g;return t.replace(e,"")===n.replace(e,"")}function i(){for(var t=document.querySelectorAll(".js-header-menu li a"),n=window.location.pathname,e=0,r=t.length;e<r;e++){var i=t[e];o(n,i.getAttribute("href"))&&(0,d.default)(i,"active")}}function u(t){for(var n=t.offsetLeft,e=t.offsetParent;null!==e;)n+=e.offsetLeft,e=e.offsetParent;return n}function f(t){for(var n=t.offsetTop,e=t.offsetParent;null!==e;)n+=e.offsetTop,e=e.offsetParent;return n}function c(t,n,e,r,o){var i=u(t),c=f(t)-n;if(c-e<=o){var a=t.$newDom;a||(a=t.cloneNode(!0),(0,h.default)(t,a),t.$newDom=a,a.style.position="fixed",a.style.top=(e||c)+"px",a.style.left=i+"px",a.style.zIndex=r||2,a.style.width="100%",a.style.color="#fff"),a.style.visibility="visible",t.style.visibility="hidden"}else{t.style.visibility="visible";var s=t.$newDom;s&&(s.style.visibility="hidden")}}function a(){var t=document.querySelector(".js-overlay"),n=document.querySelector(".js-header-menu");c(t,document.body.scrollTop,-63,2,0),c(n,document.body.scrollTop,1,3,0)}function s(){document.querySelector("#container").addEventListener("scroll",function(t){a()}),window.addEventListener("scroll",function(t){a()}),a()}function l(){x.default.versions.mobile&&window.screen.width<800&&(i(),s())}var p=e(71),d=r(p),v=e(72),y=(r(v),e(84)),h=r(y),b=e(69),x=r(b),m=e(75),g=r(m),w=e(70);l(),(0,w.addLoadEvent)(function(){g.default.init()}),t.exports={}},function(t,n){var e=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=e)},function(t,n){var e={}.hasOwnProperty;t.exports=function(t,n){return e.call(t,n)}},function(t,n,e){var r=e(49),o=e(15);t.exports=function(t){return r(o(t))}},function(t,n,e){t.exports=!e(8)(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},function(t,n,e){var r=e(6),o=e(12);t.exports=e(4)?function(t,n,e){return r.f(t,n,o(1,e))}:function(t,n,e){return t[n]=e,t}},function(t,n,e){var r=e(10),o=e(30),i=e(24),u=Object.defineProperty;n.f=e(4)?Object.defineProperty:function(t,n,e){if(r(t),n=i(n,!0),r(e),o)try{return u(t,n,e)}catch(t){}if("get"in e||"set"in e)throw TypeError("Accessors not supported!");return"value"in e&&(t[n]=e.value),t}},function(t,n,e){var r=e(22)("wks"),o=e(13),i=e(1).Symbol,u="function"==typeof i,f=t.exports=function(t){return r[t]||(r[t]=u&&i[t]||(u?i:o)("Symbol."+t))};f.store=r},function(t,n){t.exports=function(t){try{return!!t()}catch(t){return!0}}},function(t,n,e){var r=e(35),o=e(16);t.exports=Object.keys||function(t){return r(t,o)}},function(t,n,e){var r=e(11);t.exports=function(t){if(!r(t))throw TypeError(t+" is not an object!");return t}},function(t,n){t.exports=function(t){return"object"==typeof t?null!==t:"function"==typeof t}},function(t,n){t.exports=function(t,n){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:n}}},function(t,n){var e=0,r=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++e+r).toString(36))}},function(t,n){var e=t.exports={version:"2.4.0"};"number"==typeof __e&&(__e=e)},function(t,n){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},function(t,n){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")},function(t,n){t.exports={}},function(t,n){t.exports=!0},function(t,n){n.f={}.propertyIsEnumerable},function(t,n,e){var r=e(6).f,o=e(2),i=e(7)("toStringTag");t.exports=function(t,n,e){t&&!o(t=e?t:t.prototype,i)&&r(t,i,{configurable:!0,value:n})}},function(t,n,e){var r=e(22)("keys"),o=e(13);t.exports=function(t){return r[t]||(r[t]=o(t))}},function(t,n,e){var r=e(1),o="__core-js_shared__",i=r[o]||(r[o]={});t.exports=function(t){return i[t]||(i[t]={})}},function(t,n){var e=Math.ceil,r=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?r:e)(t)}},function(t,n,e){var r=e(11);t.exports=function(t,n){if(!r(t))return t;var e,o;if(n&&"function"==typeof(e=t.toString)&&!r(o=e.call(t)))return o;if("function"==typeof(e=t.valueOf)&&!r(o=e.call(t)))return o;if(!n&&"function"==typeof(e=t.toString)&&!r(o=e.call(t)))return o;throw TypeError("Can't convert object to primitive value")}},function(t,n,e){var r=e(1),o=e(14),i=e(18),u=e(26),f=e(6).f;t.exports=function(t){var n=o.Symbol||(o.Symbol=i?{}:r.Symbol||{});"_"==t.charAt(0)||t in n||f(n,t,{value:u.f(t)})}},function(t,n,e){n.f=e(7)},function(t,n,e){var r=e(1),o=e(14),i=e(46),u=e(5),f="prototype",c=function(t,n,e){var a,s,l,p=t&c.F,d=t&c.G,v=t&c.S,y=t&c.P,h=t&c.B,b=t&c.W,x=d?o:o[n]||(o[n]={}),m=x[f],g=d?r:v?r[n]:(r[n]||{})[f];d&&(e=n);for(a in e)s=!p&&g&&void 0!==g[a],s&&a in x||(l=s?g[a]:e[a],x[a]=d&&"function"!=typeof g[a]?e[a]:h&&s?i(l,r):b&&g[a]==l?function(t){var n=function(n,e,r){if(this instanceof t){switch(arguments.length){case 0:return new t;case 1:return new t(n);case 2:return new t(n,e)}return new t(n,e,r)}return t.apply(this,arguments)};return n[f]=t[f],n}(l):y&&"function"==typeof l?i(Function.call,l):l,y&&((x.virtual||(x.virtual={}))[a]=l,t&c.R&&m&&!m[a]&&u(m,a,l)))};c.F=1,c.G=2,c.S=4,c.P=8,c.B=16,c.W=32,c.U=64,c.R=128,t.exports=c},function(t,n){var e={}.toString;t.exports=function(t){return e.call(t).slice(8,-1)}},function(t,n,e){var r=e(11),o=e(1).document,i=r(o)&&r(o.createElement);t.exports=function(t){return i?o.createElement(t):{}}},function(t,n,e){t.exports=!e(4)&&!e(8)(function(){return 7!=Object.defineProperty(e(29)("div"),"a",{get:function(){return 7}}).a})},function(t,n,e){"use strict";var r=e(18),o=e(27),i=e(36),u=e(5),f=e(2),c=e(17),a=e(51),s=e(20),l=e(58),p=e(7)("iterator"),d=!([].keys&&"next"in[].keys()),v="@@iterator",y="keys",h="values",b=function(){return this};t.exports=function(t,n,e,x,m,g,w){a(e,n,x);var O,S,_,j=function(t){if(!d&&t in A)return A[t];switch(t){case y:return function(){return new e(this,t)};case h:return function(){return new e(this,t)}}return function(){return new e(this,t)}},P=n+" Iterator",E=m==h,M=!1,A=t.prototype,T=A[p]||A[v]||m&&A[m],L=T||j(m),N=m?E?j("entries"):L:void 0,C="Array"==n?A.entries||T:T;if(C&&(_=l(C.call(new t)),_!==Object.prototype&&(s(_,P,!0),r||f(_,p)||u(_,p,b))),E&&T&&T.name!==h&&(M=!0,L=function(){return T.call(this)}),r&&!w||!d&&!M&&A[p]||u(A,p,L),c[n]=L,c[P]=b,m)if(O={values:E?L:j(h),keys:g?L:j(y),entries:N},w)for(S in O)S in A||i(A,S,O[S]);else o(o.P+o.F*(d||M),n,O);return O}},function(t,n,e){var r=e(10),o=e(55),i=e(16),u=e(21)("IE_PROTO"),f=function(){},c="prototype",a=function(){var t,n=e(29)("iframe"),r=i.length,o="<",u=">";for(n.style.display="none",e(48).appendChild(n),n.src="javascript:",t=n.contentWindow.document,t.open(),t.write(o+"script"+u+"document.F=Object"+o+"/script"+u),t.close(),a=t.F;r--;)delete a[c][i[r]];return a()};t.exports=Object.create||function(t,n){var e;return null!==t?(f[c]=r(t),e=new f,f[c]=null,e[u]=t):e=a(),void 0===n?e:o(e,n)}},function(t,n,e){var r=e(35),o=e(16).concat("length","prototype");n.f=Object.getOwnPropertyNames||function(t){return r(t,o)}},function(t,n){n.f=Object.getOwnPropertySymbols},function(t,n,e){var r=e(2),o=e(3),i=e(45)(!1),u=e(21)("IE_PROTO");t.exports=function(t,n){var e,f=o(t),c=0,a=[];for(e in f)e!=u&&r(f,e)&&a.push(e);for(;n.length>c;)r(f,e=n[c++])&&(~i(a,e)||a.push(e));return a}},function(t,n,e){t.exports=e(5)},function(t,n,e){var r=e(15);t.exports=function(t){return Object(r(t))}},function(t,n,e){t.exports={default:e(41),__esModule:!0}},function(t,n,e){t.exports={default:e(42),__esModule:!0}},function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}n.__esModule=!0;var o=e(39),i=r(o),u=e(38),f=r(u),c="function"==typeof f.default&&"symbol"==typeof i.default?function(t){return typeof t}:function(t){return t&&"function"==typeof f.default&&t.constructor===f.default&&t!==f.default.prototype?"symbol":typeof t};n.default="function"==typeof f.default&&"symbol"===c(i.default)?function(t){return"undefined"==typeof t?"undefined":c(t)}:function(t){return t&&"function"==typeof f.default&&t.constructor===f.default&&t!==f.default.prototype?"symbol":"undefined"==typeof t?"undefined":c(t)}},function(t,n,e){e(65),e(63),e(66),e(67),t.exports=e(14).Symbol},function(t,n,e){e(64),e(68),t.exports=e(26).f("iterator")},function(t,n){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},function(t,n){t.exports=function(){}},function(t,n,e){var r=e(3),o=e(61),i=e(60);t.exports=function(t){return function(n,e,u){var f,c=r(n),a=o(c.length),s=i(u,a);if(t&&e!=e){for(;a>s;)if(f=c[s++],f!=f)return!0}else for(;a>s;s++)if((t||s in c)&&c[s]===e)return t||s||0;return!t&&-1}}},function(t,n,e){var r=e(43);t.exports=function(t,n,e){if(r(t),void 0===n)return t;switch(e){case 1:return function(e){return t.call(n,e)};case 2:return function(e,r){return t.call(n,e,r)};case 3:return function(e,r,o){return t.call(n,e,r,o)}}return function(){return t.apply(n,arguments)}}},function(t,n,e){var r=e(9),o=e(34),i=e(19);t.exports=function(t){var n=r(t),e=o.f;if(e)for(var u,f=e(t),c=i.f,a=0;f.length>a;)c.call(t,u=f[a++])&&n.push(u);return n}},function(t,n,e){t.exports=e(1).document&&document.documentElement},function(t,n,e){var r=e(28);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==r(t)?t.split(""):Object(t)}},function(t,n,e){var r=e(28);t.exports=Array.isArray||function(t){return"Array"==r(t)}},function(t,n,e){"use strict";var r=e(32),o=e(12),i=e(20),u={};e(5)(u,e(7)("iterator"),function(){return this}),t.exports=function(t,n,e){t.prototype=r(u,{next:o(1,e)}),i(t,n+" Iterator")}},function(t,n){t.exports=function(t,n){return{value:n,done:!!t}}},function(t,n,e){var r=e(9),o=e(3);t.exports=function(t,n){for(var e,i=o(t),u=r(i),f=u.length,c=0;f>c;)if(i[e=u[c++]]===n)return e}},function(t,n,e){var r=e(13)("meta"),o=e(11),i=e(2),u=e(6).f,f=0,c=Object.isExtensible||function(){return!0},a=!e(8)(function(){return c(Object.preventExtensions({}))}),s=function(t){u(t,r,{value:{i:"O"+ ++f,w:{}}})},l=function(t,n){if(!o(t))return"symbol"==typeof t?t:("string"==typeof t?"S":"P")+t;if(!i(t,r)){if(!c(t))return"F";if(!n)return"E";s(t)}return t[r].i},p=function(t,n){if(!i(t,r)){if(!c(t))return!0;if(!n)return!1;s(t)}return t[r].w},d=function(t){return a&&v.NEED&&c(t)&&!i(t,r)&&s(t),t},v=t.exports={KEY:r,NEED:!1,fastKey:l,getWeak:p,onFreeze:d}},function(t,n,e){var r=e(6),o=e(10),i=e(9);t.exports=e(4)?Object.defineProperties:function(t,n){o(t);for(var e,u=i(n),f=u.length,c=0;f>c;)r.f(t,e=u[c++],n[e]);return t}},function(t,n,e){var r=e(19),o=e(12),i=e(3),u=e(24),f=e(2),c=e(30),a=Object.getOwnPropertyDescriptor;n.f=e(4)?a:function(t,n){if(t=i(t),n=u(n,!0),c)try{return a(t,n)}catch(t){}if(f(t,n))return o(!r.f.call(t,n),t[n])}},function(t,n,e){var r=e(3),o=e(33).f,i={}.toString,u="object"==typeof window&&window&&Object.getOwnPropertyNames?Object.getOwnPropertyNames(window):[],f=function(t){try{return o(t)}catch(t){return u.slice()}};t.exports.f=function(t){return u&&"[object Window]"==i.call(t)?f(t):o(r(t))}},function(t,n,e){var r=e(2),o=e(37),i=e(21)("IE_PROTO"),u=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=o(t),r(t,i)?t[i]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?u:null}},function(t,n,e){var r=e(23),o=e(15);t.exports=function(t){return function(n,e){var i,u,f=String(o(n)),c=r(e),a=f.length;return c<0||c>=a?t?"":void 0:(i=f.charCodeAt(c),i<55296||i>56319||c+1===a||(u=f.charCodeAt(c+1))<56320||u>57343?t?f.charAt(c):i:t?f.slice(c,c+2):(i-55296<<10)+(u-56320)+65536)}}},function(t,n,e){var r=e(23),o=Math.max,i=Math.min;t.exports=function(t,n){return t=r(t),t<0?o(t+n,0):i(t,n)}},function(t,n,e){var r=e(23),o=Math.min;t.exports=function(t){return t>0?o(r(t),9007199254740991):0}},function(t,n,e){"use strict";var r=e(44),o=e(52),i=e(17),u=e(3);t.exports=e(31)(Array,"Array",function(t,n){this._t=u(t),this._i=0,this._k=n},function(){var t=this._t,n=this._k,e=this._i++;return!t||e>=t.length?(this._t=void 0,o(1)):"keys"==n?o(0,e):"values"==n?o(0,t[e]):o(0,[e,t[e]])},"values"),i.Arguments=i.Array,r("keys"),r("values"),r("entries")},function(t,n){},function(t,n,e){"use strict";var r=e(59)(!0);e(31)(String,"String",function(t){this._t=String(t),this._i=0},function(){var t,n=this._t,e=this._i;return e>=n.length?{value:void 0,done:!0}:(t=r(n,e),this._i+=t.length,{value:t,done:!1})})},function(t,n,e){"use strict";var r=e(1),o=e(2),i=e(4),u=e(27),f=e(36),c=e(54).KEY,a=e(8),s=e(22),l=e(20),p=e(13),d=e(7),v=e(26),y=e(25),h=e(53),b=e(47),x=e(50),m=e(10),g=e(3),w=e(24),O=e(12),S=e(32),_=e(57),j=e(56),P=e(6),E=e(9),M=j.f,A=P.f,T=_.f,L=r.Symbol,N=r.JSON,C=N&&N.stringify,k="prototype",F=d("_hidden"),q=d("toPrimitive"),I={}.propertyIsEnumerable,B=s("symbol-registry"),D=s("symbols"),W=s("op-symbols"),H=Object[k],K="function"==typeof L,R=r.QObject,J=!R||!R[k]||!R[k].findChild,U=i&&a(function(){return 7!=S(A({},"a",{get:function(){return A(this,"a",{value:7}).a}})).a})?function(t,n,e){var r=M(H,n);r&&delete H[n],A(t,n,e),r&&t!==H&&A(H,n,r)}:A,G=function(t){var n=D[t]=S(L[k]);return n._k=t,n},$=K&&"symbol"==typeof L.iterator?function(t){return"symbol"==typeof t}:function(t){return t instanceof L},z=function(t,n,e){return t===H&&z(W,n,e),m(t),n=w(n,!0),m(e),o(D,n)?(e.enumerable?(o(t,F)&&t[F][n]&&(t[F][n]=!1),e=S(e,{enumerable:O(0,!1)})):(o(t,F)||A(t,F,O(1,{})),t[F][n]=!0),U(t,n,e)):A(t,n,e)},Y=function(t,n){m(t);for(var e,r=b(n=g(n)),o=0,i=r.length;i>o;)z(t,e=r[o++],n[e]);return t},Q=function(t,n){return void 0===n?S(t):Y(S(t),n)},X=function(t){var n=I.call(this,t=w(t,!0));return!(this===H&&o(D,t)&&!o(W,t))&&(!(n||!o(this,t)||!o(D,t)||o(this,F)&&this[F][t])||n)},V=function(t,n){if(t=g(t),n=w(n,!0),t!==H||!o(D,n)||o(W,n)){var e=M(t,n);return!e||!o(D,n)||o(t,F)&&t[F][n]||(e.enumerable=!0),e}},Z=function(t){for(var n,e=T(g(t)),r=[],i=0;e.length>i;)o(D,n=e[i++])||n==F||n==c||r.push(n);return r},tt=function(t){for(var n,e=t===H,r=T(e?W:g(t)),i=[],u=0;r.length>u;)!o(D,n=r[u++])||e&&!o(H,n)||i.push(D[n]);return i};K||(L=function(){if(this instanceof L)throw TypeError("Symbol is not a constructor!");var t=p(arguments.length>0?arguments[0]:void 0),n=function(e){this===H&&n.call(W,e),o(this,F)&&o(this[F],t)&&(this[F][t]=!1),U(this,t,O(1,e))};return i&&J&&U(H,t,{configurable:!0,set:n}),G(t)},f(L[k],"toString",function(){return this._k}),j.f=V,P.f=z,e(33).f=_.f=Z,e(19).f=X,e(34).f=tt,i&&!e(18)&&f(H,"propertyIsEnumerable",X,!0),v.f=function(t){return G(d(t))}),u(u.G+u.W+u.F*!K,{Symbol:L});for(var nt="hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","),et=0;nt.length>et;)d(nt[et++]);for(var nt=E(d.store),et=0;nt.length>et;)y(nt[et++]);u(u.S+u.F*!K,"Symbol",{for:function(t){return o(B,t+="")?B[t]:B[t]=L(t)},keyFor:function(t){if($(t))return h(B,t);throw TypeError(t+" is not a symbol!")},useSetter:function(){J=!0},useSimple:function(){J=!1}}),u(u.S+u.F*!K,"Object",{create:Q,defineProperty:z,defineProperties:Y,getOwnPropertyDescriptor:V,getOwnPropertyNames:Z,getOwnPropertySymbols:tt}),N&&u(u.S+u.F*(!K||a(function(){var t=L();return"[null]"!=C([t])||"{}"!=C({a:t})||"{}"!=C(Object(t))})),"JSON",{stringify:function(t){if(void 0!==t&&!$(t)){for(var n,e,r=[t],o=1;arguments.length>o;)r.push(arguments[o++]);return n=r[1],"function"==typeof n&&(e=n),!e&&x(n)||(n=function(t,n){if(e&&(n=e.call(this,t,n)),!$(n))return n}),r[1]=n,C.apply(N,r)}}}),L[k][q]||e(5)(L[k],q,L[k].valueOf),l(L,"Symbol"),l(Math,"Math",!0),l(r.JSON,"JSON",!0)},function(t,n,e){e(25)("asyncIterator")},function(t,n,e){e(25)("observable")},function(t,n,e){e(62);for(var r=e(1),o=e(5),i=e(17),u=e(7)("toStringTag"),f=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],c=0;c<5;c++){var a=f[c],s=r[a],l=s&&s.prototype;l&&!l[u]&&o(l,u,a),i[a]=i.Array}},function(t,n){"use strict";var e={versions:function(){var t=window.navigator.userAgent;return{trident:t.indexOf("Trident")>-1,presto:t.indexOf("Presto")>-1,webKit:t.indexOf("AppleWebKit")>-1,gecko:t.indexOf("Gecko")>-1&&t.indexOf("KHTML")==-1,mobile:!!t.match(/AppleWebKit.*Mobile.*/),ios:!!t.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),android:t.indexOf("Android")>-1||t.indexOf("Linux")>-1,iPhone:t.indexOf("iPhone")>-1||t.indexOf("Mac")>-1,iPad:t.indexOf("iPad")>-1,webApp:t.indexOf("Safari")==-1,weixin:t.indexOf("MicroMessenger")==-1}}()};t.exports=e},function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}var o=e(40),i=r(o),u=function(){function t(t,n,e){return n||e?String.fromCharCode(n||e):o[t]||t}function n(t){return l[t]}var e=/&quot;|&lt;|&gt;|&amp;|&nbsp;|&apos;|&#(\d+);|&#(\d+)/g,r=/['<> "&]/g,o={"&quot;":'"',"&lt;":"<","&gt;":">","&amp;":"&","&nbsp;":" "},f=/\u00a0/g,c=/<br\s*\/?>/gi,a=/\r?\n/g,s=/\s/g,l={};for(var p in o)l[o[p]]=p;return o["&apos;"]="'",l["'"]="&#39;",{encode:function(t){return t?(""+t).replace(r,n).replace(a,"<br/>").replace(s,"&nbsp;"):""},decode:function(n){return n?(""+n).replace(c,"\n").replace(e,t).replace(f," "):""},encodeBase16:function(t){if(!t)return t;t+="";for(var n=[],e=0,r=t.length;r>e;e++)n.push(t.charCodeAt(e).toString(16).toUpperCase());return n.join("")},encodeBase16forJSON:function(t){if(!t)return t;t=t.replace(/[\u4E00-\u9FBF]/gi,function(t){return escape(t).replace("%u","\\u")});for(var n=[],e=0,r=t.length;r>e;e++)n.push(t.charCodeAt(e).toString(16).toUpperCase());return n.join("")},decodeBase16:function(t){if(!t)return t;t+="";for(var n=[],e=0,r=t.length;r>e;e+=2)n.push(String.fromCharCode("0x"+t.slice(e,e+2)));return n.join("")},encodeObject:function(t){if(t instanceof Array)for(var n=0,e=t.length;e>n;n++)t[n]=u.encodeObject(t[n]);else if("object"==("undefined"==typeof t?"undefined":(0,i.default)(t)))for(var r in t)t[r]=u.encodeObject(t[r]);else if("string"==typeof t)return u.encode(t);return t},loadScript:function(t){var n=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(n),n.setAttribute("src",t)},addLoadEvent:function(t){var n=window.onload;"function"!=typeof window.onload?window.onload=t:window.onload=function(){n(),t()}}}}();t.exports=u},function(t,n){function e(t,n){t.classList?t.classList.add(n):t.className+=" "+n}t.exports=e},function(t,n){function e(t,n){if(t.classList)t.classList.remove(n);else{var e=new RegExp("(^|\\b)"+n.split(" ").join("|")+"(\\b|$)","gi");t.className=t.className.replace(e," ")}}t.exports=e},,,function(t,n){"use strict";function e(){var t=document.querySelector("#page-nav");if(t&&!document.querySelector("#page-nav .extend.prev")&&(t.innerHTML='<a class="extend prev disabled" rel="prev">&laquo; Prev</a>'+t.innerHTML),t&&!document.querySelector("#page-nav .extend.next")&&(t.innerHTML=t.innerHTML+'<a class="extend next disabled" rel="next">Next &raquo;</a>'),yiliaConfig&&yiliaConfig.open_in_new){var n=document.querySelectorAll(".article-entry a:not(.article-more-a)");n.forEach(function(t){t.setAttribute("target","_blank")})}var e=document.querySelector("#js-aboutme");e&&0!==e.length&&(e.innerHTML=e.innerText)}t.exports={init:e}},,,,,,,,,function(t,n){function e(t,n){if("string"==typeof n)return t.insertAdjacentHTML("afterend",n);var e=t.nextSibling;return e?t.parentNode.insertBefore(n,e):t.parentNode.appendChild(n)}t.exports=e}])</script><script src="/./main.2d7529.js"></script><script>!function(){var e=function(e){var t=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(t),t.setAttribute("src",e)};e("/slider.885efe.js")}()</script>
+
+
+    
+<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+  <div class="tools-nav header-menu">
+    
+    
+      
+      
+      
+    
+      
+      
+      
+    
+    
+
+    <ul style="width: 70%">
+    
+    
+      
+      <li style="width: 50%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
+      
+        
+      
+      <li style="width: 50%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+      
+        
+    </ul>
+  </div>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Perl</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">hydra</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
+    
+
+    
+
+    
+    	<section class="tools-section tools-section-me" q-show="aboutme">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">这个人很懒,什么都没留下</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
