@@ -184,6 +184,133 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Docker-SSH" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/virtualization/Docker-SSH/">Docker-SSH</a>
+    </h1>
+  
+
+        
+        <a href="/virtualization/Docker-SSH/" class="archive-article-date">
+  	<time datetime="2016-01-20T11:55:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-01-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><blockquote>
+<p>使用一个ubuntu，配置好ssh服务再打包成image</p>
+<h1 id="使用commit构建"><a href="#使用commit构建" class="headerlink" title="使用commit构建"></a>使用commit构建</h1><h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>docker run -it ubuntu:14.04 /bin/bash<br>更新镜像并安装ssh-server<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get updte</div><div class="line">apt-get install openssh-server</div></pre></td></tr></table></figure></p>
+<p>配置ssh</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p /var/run/sshd</div><div class="line">/usr/sbin/sshd -D &amp;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>检查ssh是否运行成功的命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -tunlp</div></pre></td></tr></table></figure></p>
+<p>pam登录限制<br>vim /etc/pam.d/sshd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">注释掉</div><div class="line">session required pam_loginuid.so的</div></pre></td></tr></table></figure></p>
+<p>如果要使用密码进行ssh认证的话<br>vim /etc/ssh/sshd_config<br>取消注释<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PasswordAuthentication yes</div></pre></td></tr></table></figure></p>
+<p>使用密钥认证的话<br>在auchorized_keys文件中写入ssh client的id_rsa.pub内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /root/.ssh</div><div class="line">vi /root/.ssh/auchorized_keys</div></pre></td></tr></table></figure></p>
+<p>创建自动启动SSH脚本</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vi /run.sh</div><div class="line">chmod +x run.sh</div></pre></td></tr></table></figure>
+<blockquote>
+<p>文件内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">/usr/sbin/sshd -D</div></pre></td></tr></table></figure></p>
+<p>退出容器</p>
+<h2 id="保存镜像"><a href="#保存镜像" class="headerlink" title="保存镜像"></a>保存镜像</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker commit eb6bf1856445 sshd:ubuntu2</div></pre></td></tr></table></figure>
+<p>查看生成的镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  .ssh docker images sshd:ubuntu2</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">sshd                ubuntu2             d9a07f6fd3f8        34 minutes ago      283.6 MB</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="使用SSH-Server镜像"><a href="#使用SSH-Server镜像" class="headerlink" title="使用SSH Server镜像"></a>使用SSH Server镜像</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -p 10000:22 -d sshd:ubuntu2 /run.sh</div></pre></td></tr></table></figure>
+<blockquote>
+<p>镜像启动成功</p>
+<p>使用密码登录成功</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgpatq43j30jc0d90tu.jpg" alt="使用密码登录"></p>
+<blockquote>
+<p>使用密钥登录成功</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgpz1xerj30jv0dhwfw.jpg" alt="使用密钥登录成功"></p>
+<h1 id="使用Dockerfile构建"><a href="#使用Dockerfile构建" class="headerlink" title="使用Dockerfile构建"></a>使用Dockerfile构建</h1><blockquote>
+<p>在宿主主机中创建相关文件</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir test_ssh_in_docker</div><div class="line">cd test_ssh_in_docker</div><div class="line">touch Dockerfile run.sh</div></pre></td></tr></table></figure>
+<blockquote>
+<p>cat run.sh</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vi /run.sh</div><div class="line">chmod +x run.sh</div></pre></td></tr></table></figure>
+<blockquote>
+<p>cat Dockerfile</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">➜  test_ssh_in_docker cat Dockerfile</div><div class="line">FROM ubuntu:14.04</div><div class="line"></div><div class="line">MAINTAINER by tp.</div><div class="line"></div><div class="line">RUN apt-get -qq update -y</div><div class="line"></div><div class="line"><span class="comment">#install SSH-Server</span></div><div class="line">RUN apt-get -qq install openssh-server -y</div><div class="line">RUN mkdir -p /var/run/sshd</div><div class="line">RUN mkdir -p /root/.ssh</div><div class="line">RUN sed -ri <span class="string">'s/session required pam_loginuid.so/#session required pam.loginuid.so/g'</span> /etc/pam.d/sshd</div><div class="line"></div><div class="line"><span class="comment">#copy ssh server config file</span></div><div class="line">ADD authorized_keys /root/.ssh/authorized_keys</div><div class="line">ADD run.sh /run.sh</div><div class="line">RUN chmod 755 /run.sh</div><div class="line"></div><div class="line"><span class="comment">#open ssh port</span></div><div class="line">EXPOSE 22</div><div class="line"></div><div class="line"><span class="comment">#start sshd server</span></div><div class="line">CMD [<span class="string">"/run.sh"</span>]</div></pre></td></tr></table></figure>
+<blockquote>
+<p>目录下所有文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  test_ssh_in_docker ls</div><div class="line">authorized_keys  Dockerfile  run.sh</div></pre></td></tr></table></figure></p>
+<p>build镜像<br>➜  test_ssh_in_docker docker build -t sshd:dockerfile3 .</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgqdrgbzj30rh0kv75x.jpg" alt="build镜像"></p>
+<blockquote>
+<p>创建容器并SSH<br>docker run -d -p 10244:22 sshd:dockerfile3<br>ssh 127.0.0.1 -p 10244</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgqpn3s4j310l0dcq50.jpg" alt="ssh success"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/virtualization/Docker-SSH/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Xen-Server安装教程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1050,119 +1177,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Docker笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker笔记/">Docker 笔记</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker笔记/" class="archive-article-date">
-  	<time datetime="2015-03-18T07:16:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h1><blockquote>
-<p>Docker官方脚本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -sSL https://get.docker.com/ | sh</div></pre></td></tr></table></figure></p>
-<p>阿里云脚本</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -sSL http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/internet | sh -</div></pre></td></tr></table></figure>
-<blockquote>
-<p>DaoCloud脚本</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -sSL https://get.daocloud.io/docker | sh</div></pre></td></tr></table></figure>
-<h1 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h1><h2 id="退出正在运行的容器"><a href="#退出正在运行的容器" class="headerlink" title="退出正在运行的容器"></a>退出正在运行的容器</h2><blockquote>
-<p>不是终止</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">先ctrl+p再ctrl+q</div></pre></td></tr></table></figure>
-<h2 id="检查Docker服务是否运行"><a href="#检查Docker服务是否运行" class="headerlink" title="检查Docker服务是否运行"></a>检查Docker服务是否运行</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps aux | grep docker</div></pre></td></tr></table></figure>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtbzad6eqj30ny012jra.jpg" alt="检查Docker服务是否运行"></p>
-<h2 id="查找镜像"><a href="#查找镜像" class="headerlink" title="查找镜像"></a>查找镜像</h2><blockquote>
-<p>以kali为例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker search kali</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtc0d7o9oj30yz06rwf7.jpg" alt="search docker image"></p>
-<h2 id="删除所有没有运行的容器"><a href="#删除所有没有运行的容器" class="headerlink" title="删除所有没有运行的容器"></a>删除所有没有运行的容器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker rm $(docker ps -a | grep Exited | awk &apos;&#123;print $1&#125;&apos;)</div><div class="line">bcb7eddb6e6f</div><div class="line">c9175726acaf</div><div class="line">115104b12746</div><div class="line">934a087667bd</div><div class="line">8b20759d9e60</div><div class="line">d484e3abffa1</div></pre></td></tr></table></figure>
-<h1 id="修改镜像名字"><a href="#修改镜像名字" class="headerlink" title="修改镜像名字"></a>修改镜像名字</h1><blockquote>
-<p>before</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">daocloud.io/library/ubuntu     xenial-20160809     f8d79ba03c00        13 days ago         126.4 MB</div></pre></td></tr></table></figure>
-<blockquote>
-<p>改名<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker tag daocloud.io/library/ubuntu:xenial-20160809 ubuntu:latest</div></pre></td></tr></table></figure></p>
-<p>可以看到除了REPOSITORY和TAG  其他的都一样<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">daocloud.io/library/ubuntu     xenial-20160809     f8d79ba03c00        13 days ago         126.4 MB</div><div class="line">ubuntu                         latest              f8d79ba03c00        13 days ago         126.4 MB</div></pre></td></tr></table></figure></p>
-<p>然后删除之前的别名</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker rmi daocloud.io/library/ubuntu:xenial-20160809</div><div class="line">Untagged: daocloud.io/library/ubuntu:xenial-20160809</div><div class="line">Untagged: daocloud.io/library/ubuntu@sha256:746fa32ad3473c57c6a80b9addc1629937778b074b885dcdd9f3366250605850</div></pre></td></tr></table></figure>
-<h2 id="设置docker开机启动"><a href="#设置docker开机启动" class="headerlink" title="设置docker开机启动"></a>设置docker开机启动</h2><blockquote>
-<p>如果没设置docker服务开机启动的话，先运行命令<br>chkconfig –add docker<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">在运行docker run的时候再加上命令 --restart=always</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="修改容器配置"><a href="#修改容器配置" class="headerlink" title="修改容器配置"></a>修改容器配置</h2><blockquote>
-<p>对于已经在运行的容器，可通过如下命令进入容器中进行配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker exec -it $container_id /bin/bash</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="修改源"><a href="#修改源" class="headerlink" title="修改源"></a>修改源</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">新版的 Docker 使用 /etc/docker/daemon.json（Linux） 或者 %programdata%\docker\config\daemon.json（Windows） 来配置 Daemon。</div><div class="line"></div><div class="line">请在该配置文件中加入（没有该文件的话，请先建一个）：</div><div class="line"></div><div class="line">&#123;</div><div class="line">  &quot;registry-mirrors&quot;: [&quot;https://docker.mirrors.ustc.edu.cn&quot;]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1256,14 +1270,6 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
@@ -1272,11 +1278,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1305,6 +1319,10 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">提权</a>
               </li>
              
               <li class="article-tag-list-item">

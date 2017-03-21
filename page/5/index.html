@@ -184,6 +184,119 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Docker笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/virtualization/Docker笔记/">Docker 笔记</a>
+    </h1>
+  
+
+        
+        <a href="/virtualization/Docker笔记/" class="archive-article-date">
+  	<time datetime="2015-03-18T07:16:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h1><blockquote>
+<p>Docker官方脚本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -sSL https://get.docker.com/ | sh</div></pre></td></tr></table></figure></p>
+<p>阿里云脚本</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -sSL http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/internet | sh -</div></pre></td></tr></table></figure>
+<blockquote>
+<p>DaoCloud脚本</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -sSL https://get.daocloud.io/docker | sh</div></pre></td></tr></table></figure>
+<h1 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h1><h2 id="退出正在运行的容器"><a href="#退出正在运行的容器" class="headerlink" title="退出正在运行的容器"></a>退出正在运行的容器</h2><blockquote>
+<p>不是终止</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">先ctrl+p再ctrl+q</div></pre></td></tr></table></figure>
+<h2 id="检查Docker服务是否运行"><a href="#检查Docker服务是否运行" class="headerlink" title="检查Docker服务是否运行"></a>检查Docker服务是否运行</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps aux | grep docker</div></pre></td></tr></table></figure>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtbzad6eqj30ny012jra.jpg" alt="检查Docker服务是否运行"></p>
+<h2 id="查找镜像"><a href="#查找镜像" class="headerlink" title="查找镜像"></a>查找镜像</h2><blockquote>
+<p>以kali为例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker search kali</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtc0d7o9oj30yz06rwf7.jpg" alt="search docker image"></p>
+<h2 id="删除所有没有运行的容器"><a href="#删除所有没有运行的容器" class="headerlink" title="删除所有没有运行的容器"></a>删除所有没有运行的容器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker rm $(docker ps -a | grep Exited | awk &apos;&#123;print $1&#125;&apos;)</div><div class="line">bcb7eddb6e6f</div><div class="line">c9175726acaf</div><div class="line">115104b12746</div><div class="line">934a087667bd</div><div class="line">8b20759d9e60</div><div class="line">d484e3abffa1</div></pre></td></tr></table></figure>
+<h1 id="修改镜像名字"><a href="#修改镜像名字" class="headerlink" title="修改镜像名字"></a>修改镜像名字</h1><blockquote>
+<p>before</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">daocloud.io/library/ubuntu     xenial-20160809     f8d79ba03c00        13 days ago         126.4 MB</div></pre></td></tr></table></figure>
+<blockquote>
+<p>改名<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker tag daocloud.io/library/ubuntu:xenial-20160809 ubuntu:latest</div></pre></td></tr></table></figure></p>
+<p>可以看到除了REPOSITORY和TAG  其他的都一样<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">daocloud.io/library/ubuntu     xenial-20160809     f8d79ba03c00        13 days ago         126.4 MB</div><div class="line">ubuntu                         latest              f8d79ba03c00        13 days ago         126.4 MB</div></pre></td></tr></table></figure></p>
+<p>然后删除之前的别名</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker rmi daocloud.io/library/ubuntu:xenial-20160809</div><div class="line">Untagged: daocloud.io/library/ubuntu:xenial-20160809</div><div class="line">Untagged: daocloud.io/library/ubuntu@sha256:746fa32ad3473c57c6a80b9addc1629937778b074b885dcdd9f3366250605850</div></pre></td></tr></table></figure>
+<h2 id="设置docker开机启动"><a href="#设置docker开机启动" class="headerlink" title="设置docker开机启动"></a>设置docker开机启动</h2><blockquote>
+<p>如果没设置docker服务开机启动的话，先运行命令<br>chkconfig –add docker<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">在运行docker run的时候再加上命令 --restart=always</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="修改容器配置"><a href="#修改容器配置" class="headerlink" title="修改容器配置"></a>修改容器配置</h2><blockquote>
+<p>对于已经在运行的容器，可通过如下命令进入容器中进行配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker exec -it $container_id /bin/bash</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="修改源"><a href="#修改源" class="headerlink" title="修改源"></a>修改源</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">新版的 Docker 使用 /etc/docker/daemon.json（Linux） 或者 %programdata%\docker\config\daemon.json（Windows） 来配置 Daemon。</div><div class="line"></div><div class="line">请在该配置文件中加入（没有该文件的话，请先建一个）：</div><div class="line"></div><div class="line">&#123;</div><div class="line">  &quot;registry-mirrors&quot;: [&quot;https://docker.mirrors.ustc.edu.cn&quot;]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/virtualization/Docker笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-开发环境" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -369,14 +482,6 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
@@ -385,11 +490,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -418,6 +531,10 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">提权</a>
               </li>
              
               <li class="article-tag-list-item">

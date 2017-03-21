@@ -184,6 +184,128 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-solr分布式环境配置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/solr分布式环境配置/">solr分布式环境配置</a>
+    </h1>
+  
+
+        
+        <a href="/devops/solr分布式环境配置/" class="archive-article-date">
+  	<time datetime="2016-10-20T11:44:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="搭建zookeeper集群"><a href="#搭建zookeeper集群" class="headerlink" title="搭建zookeeper集群"></a>搭建zookeeper集群</h1><blockquote>
+<p>使用的是三个节点，分别为<br>192.168.64.132  node2<br>192.168.64.130  node1<br>192.168.64.131  node3</p>
+<h2 id="在节点中分别配置主机名IP隐射关系"><a href="#在节点中分别配置主机名IP隐射关系" class="headerlink" title="在节点中分别配置主机名IP隐射关系"></a>在节点中分别配置主机名IP隐射关系</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo &apos;192.168.64.132  node2\n192.168.64.130  node1\n192.168.64.131  node3&apos;   &gt;&gt; /etc/hosts &amp;&amp;  source /etc/hosts</div></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="创建相关文件夹"><a href="#创建相关文件夹" class="headerlink" title="创建相关文件夹"></a>创建相关文件夹</h2><blockquote>
+<p>在各节点根目录中创建 soft文件夹并将下载好的zookeeper解压至该文件夹<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -zxvf zookeeper-3.5.2-alpha.tar.gz -C /soft/</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="新建zookeeper数据存储文件夹和日志存储文件夹"><a href="#新建zookeeper数据存储文件夹和日志存储文件夹" class="headerlink" title="新建zookeeper数据存储文件夹和日志存储文件夹"></a>新建zookeeper数据存储文件夹和日志存储文件夹</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /soft/zookeeper-data</div><div class="line">mkdir /soft/zookeeper-data/logs</div></pre></td></tr></table></figure>
+<h2 id="新建节点标示"><a href="#新建节点标示" class="headerlink" title="新建节点标示"></a>新建节点标示</h2><blockquote>
+<p>以node1为例<br>其他节点以此类推<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo 1 &gt; /soft/zookeeper-data/myid</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="编辑配置文件"><a href="#编辑配置文件" class="headerlink" title="编辑配置文件"></a>编辑配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /soft/zookeeper-3.5.2-alpha/</div><div class="line">mv conf/zoo_sample.cfg conf/zoo.cfg</div><div class="line">vim /conf/zoo.cfg</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">dataDir=/soft/zookeeper-data</div><div class="line">dataLogDir=/soft/zookeeper-data/logs</div><div class="line">server.1=node1:2888:3888</div><div class="line">server.2=node2:2888:3888</div><div class="line">server.3=node3:2888:3888</div></pre></td></tr></table></figure>
+<h2 id="配置完成后把配置发送到其他两台机子"><a href="#配置完成后把配置发送到其他两台机子" class="headerlink" title="配置完成后把配置发送到其他两台机子"></a>配置完成后把配置发送到其他两台机子</h2><h2 id="启动zookeeper"><a href="#启动zookeeper" class="headerlink" title="启动zookeeper"></a>启动zookeeper</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  zookeeper-3.5.2-alpha bin/zkServer.sh start conf/zoo.cfg</div><div class="line">/usr/bin/java</div><div class="line">ZooKeeper JMX enabled by default</div><div class="line">Using config: conf/zoo.cfg</div><div class="line">Starting zookeeper ... STARTED</div></pre></td></tr></table></figure>
+<blockquote>
+<p>验证是否启动成功</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜  zookeeper-3.5.2-alpha bin/zkServer.sh status conf/zoo.cfg</div><div class="line">/usr/bin/java</div><div class="line">ZooKeeper JMX enabled by default</div><div class="line">Using config: conf/zoo.cfg</div><div class="line">Client port found: 2181. Client address: localhost.</div><div class="line">Mode: leader</div></pre></td></tr></table></figure>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtjnfmkdpj30fh02yq30.jpg" alt=""></p>
+<h1 id="安装Java环境"><a href="#安装Java环境" class="headerlink" title="安装Java环境"></a>安装Java环境</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install openjdk-8-jre-headless</div></pre></td></tr></table></figure>
+<h1 id="运行solr"><a href="#运行solr" class="headerlink" title="运行solr"></a>运行solr</h1><blockquote>
+<p>解压 并运行下载好的solr<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">tar -zxvf solr-6.2.1.tgz</div><div class="line">root@tp-ubuntu:/opt/solr-6.2.1# ./bin/solr start</div><div class="line">Waiting up to 30 seconds to see Solr running on port 8983 [-]  </div><div class="line">Started Solr server on port 8983 (pid=20810). Happy searching!</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>效果图</p>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtjnv45nmj30ql0ke0tw.jpg" alt="效果图"></p>
+<h1 id="创建-solr目录"><a href="#创建-solr目录" class="headerlink" title="创建/solr目录"></a>创建/solr目录</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># 进入zookeeper后台命令，默认连接本地localhost:2181</div><div class="line">./zookeeper/bin/zkCli.sh</div><div class="line"></div><div class="line"># 创建目录</div><div class="line">create /solr &quot;solr&quot;</div></pre></td></tr></table></figure>
+<h2 id="初始化solr配置文件"><a href="#初始化solr配置文件" class="headerlink" title="初始化solr配置文件"></a>初始化solr配置文件</h2><blockquote>
+<p>上传solr自带配置文件到zookeeper的/solr/configs目录下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./bin/solr zk -z localhost:2181/solr -upconfig -n solr -d example/example-DIH/solr/solr</div></pre></td></tr></table></figure></p>
+<p>参数说明<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-upconfig to move a configset from the local machine to Zookeeper.</div><div class="line">-n configName    Name of the configset in Zookeeper that will be the destinatino of &apos;upconfig&apos; and the source for &apos;downconfig&apos;.</div><div class="line">-d confdir       The local directory the configuration will be uploaded from</div><div class="line">-z zkHost        Zookeeper connection string.</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h4 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">使用自定义ZooKeeper connection string启动Solr。该选项只能在-c选项，即SolrCloud模式下使用。如果该选项未提供，Solr将启动内置ZooKeeper实例</div><div class="line">如果指定ZooKeeper连接字符串，例如&quot;-z 192.168.64.133:2181&quot;，Solr将连接到ZooKeeper并加入集群。如果以cloud模式启动，但没有指定-z选项，则Solr启动内置ZooKeeper服务器，坚挺在Solr端口+1000，例如Solr在端口8983，则内置ZooKeeper监听在端口9983</div></pre></td></tr></table></figure>
+<blockquote>
+<p>查看zookeeper目录：<br>以前的schema.xml换成了managed-schema文件，具体配置文档：<br><a href="https://cwiki.apache.org/confluence/display/solr/Documents%2C+Fields%2C+and+Schema+Design" target="_blank" rel="external">https://cwiki.apache.org/confluence/display/solr/Documents%2C+Fields%2C+and+Schema+Design</a></p>
+</blockquote>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtjoaij71j30fh02yq30.jpg" alt=""></p>
+<h2 id="使用solr自带的jetty启动服务"><a href="#使用solr自带的jetty启动服务" class="headerlink" title="使用solr自带的jetty启动服务"></a>使用solr自带的jetty启动服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /soft/solr</div><div class="line">bin/solr start -c -m 1g -z node1:2181/solr,node2:2181/solr,node3:2181/solr -p 8983</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-c：cloud模式启动</div><div class="line">-m：最大内存使用</div><div class="line">-z：zookeeper集群地址</div><div class="line">-p：启动服务端口</div></pre></td></tr></table></figure>
+<h3 id="分别在其他节点上也以此方式启动solr"><a href="#分别在其他节点上也以此方式启动solr" class="headerlink" title="分别在其他节点上也以此方式启动solr"></a>分别在其他节点上也以此方式启动solr</h3><h2 id="创建collections集群"><a href="#创建collections集群" class="headerlink" title="创建collections集群"></a>创建collections集群</h2><blockquote>
+<p>1.通过浏览器访问<a href="http://192.168.64.130:8983/solr" target="_blank" rel="external">http://192.168.64.130:8983/solr</a><br>创建集群</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtjomenefj30ff0dr74u.jpg" alt=""></p>
+<blockquote>
+<p>或者通过restful api创建collections集群</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl &apos;http://localhost:8983/solr/admin/collections?action=CREATE&amp;name=solr&amp;numShards=3&amp;replicationFactor=2&amp;maxShardsPerNode=2&apos;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">name：待创建Collection的名称</div><div class="line">configset：collection在zookeeper中的配置目录</div><div class="line">numShards：分片的数量</div><div class="line">replicationFactor：复制副本的数量</div><div class="line">maxShardsPerNode：默认值为1，注意三个数值：numShards、replicationFactor、liveSolrNode，一个正常的solrCloud集群不容许同一个liveSolrNode上部署同一个shard的多个replic，因此当maxShardsPerNode=1时，numShards*replicationFactor&gt;liveSolrNode时，报错。因此正确时因满足以下条件：</div><div class="line">numShards*replicationFactor&lt;liveSolrNode*maxShardsPerNode</div></pre></td></tr></table></figure>
+<h2 id="最终效果图"><a href="#最终效果图" class="headerlink" title="最终效果图"></a>最终效果图</h2><p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtjovwp62j31hc0gqab9.jpg" alt=""></p>
+<h1 id="导入配置"><a href="#导入配置" class="headerlink" title="导入配置"></a>导入配置</h1><blockquote>
+<p>最后一条命令需要指定到具体配置目录<br>执行命令结束后，需要到也没reload下core<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bash /dat0/solr/server/scripts/cloud-scripts/zkcli.sh -cmd linkconfig -zkhost localhost:9983 -collection cninfo -confname cninfoconf</div><div class="line">bash /dat0/solr/server/scripts/cloud-scripts/zkcli.sh -cmd upconfig -zkhost localhost:9983 -confname cninfoconf -confdir /dat0/solr/server/cloud/conf/</div></pre></td></tr></table></figure></p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Solr</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/devops/solr分布式环境配置/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-LVM相关介绍" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1088,107 +1210,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-OSSIM-新建邮件提醒" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/sec/OSSIM-新建邮件提醒/">OSSIM-新建邮件提醒</a>
-    </h1>
-  
-
-        
-        <a href="/sec/OSSIM-新建邮件提醒/" class="archive-article-date">
-  	<time datetime="2016-07-27T11:53:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="修改OSSIM-ossim-setup-conf文件"><a href="#修改OSSIM-ossim-setup-conf文件" class="headerlink" title="修改OSSIM ossim_setup.conf文件"></a>修改OSSIM ossim_setup.conf文件</h1><blockquote>
-<p>相关操作见 <a href="https://www.alienvault.com/forums/discussion/925/ossim-4-email-notification" target="_blank" rel="external">https://www.alienvault.com/forums/discussion/925/ossim-4-email-notification</a></p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">1 - Edit the file /etc/ossim/ossim_setup.conf the editor they like.</div><div class="line">2 - Change the following parameters:</div><div class="line">email_notify=user@company.com</div><div class="line">mailserver_relay=xxx.xxx.xxx.xxx</div><div class="line">3 - Save the changes and <span class="built_in">exit</span> the editor.</div><div class="line">4 - run ossim-reconfig</div><div class="line">5 - Send a <span class="built_in">test</span> mail:</div><div class="line"><span class="built_in">echo</span> <span class="string">"text"</span> | mail <span class="_">-s</span> <span class="string">"Subject"</span> user@domain.com</div><div class="line">6 - Check the mail delivery system is functioning properly:</div><div class="line">tail <span class="_">-f</span> /var/<span class="built_in">log</span>/mail.log</div></pre></td></tr></table></figure>
-<blockquote>
-<p>临时申请了个邮箱把信息填写如下：</p>
-</blockquote>
-<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtjx09rmaj309608d3yu.jpg" alt=""></p>
-<h1 id="OSSIM-Web端相关设置"><a href="#OSSIM-Web端相关设置" class="headerlink" title="OSSIM Web端相关设置"></a>OSSIM Web端相关设置</h1><h2 id="创建发生邮件的操作"><a href="#创建发生邮件的操作" class="headerlink" title="创建发生邮件的操作"></a>创建发生邮件的操作</h2><blockquote>
-<p>相关设置见 <a href="https://www.alienvault.com/documentation/usm-v5/policy-management/create-action-send-email.htm" target="_blank" rel="external">https://www.alienvault.com/documentation/usm-v5/policy-management/create-action-send-email.htm</a></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">From Configuration &gt; Threat Intelligence, click the ACTIONS tab.</div><div class="line"></div><div class="line">Click New.</div></pre></td></tr></table></figure>
-<blockquote>
-<p>设置好名称、描述、发件邮箱、收件人、邮件主题和邮件内容，TYPE必须选择为Send an email message<br>如下图所示</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtjxre3p0j31if18ewiu.jpg" alt=""></p>
-<blockquote>
-<p>创建触发发送邮件的条件<br>操作步骤 <a href="https://www.alienvault.com/documentation/usm-v5/policy-management/create-ext-pol-trigger-email.htm" target="_blank" rel="external">https://www.alienvault.com/documentation/usm-v5/policy-management/create-ext-pol-trigger-email.htm</a></p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtjybtcu6j30ze1d8dk0.jpg" alt=""></p>
-<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtjyyxeihj31551gagp2.jpg" alt=""></p>
-<blockquote>
-<p>效果图</p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtjzvy9h3j30eh0i4js2.jpg" alt=""></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">OSSIM</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/sec/OSSIM-新建邮件提醒/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1282,14 +1303,6 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
@@ -1298,11 +1311,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1331,6 +1352,10 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">提权</a>
               </li>
              
               <li class="article-tag-list-item">

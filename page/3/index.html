@@ -184,6 +184,107 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-OSSIM-新建邮件提醒" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/OSSIM-新建邮件提醒/">OSSIM-新建邮件提醒</a>
+    </h1>
+  
+
+        
+        <a href="/sec/OSSIM-新建邮件提醒/" class="archive-article-date">
+  	<time datetime="2016-07-27T11:53:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="修改OSSIM-ossim-setup-conf文件"><a href="#修改OSSIM-ossim-setup-conf文件" class="headerlink" title="修改OSSIM ossim_setup.conf文件"></a>修改OSSIM ossim_setup.conf文件</h1><blockquote>
+<p>相关操作见 <a href="https://www.alienvault.com/forums/discussion/925/ossim-4-email-notification" target="_blank" rel="external">https://www.alienvault.com/forums/discussion/925/ossim-4-email-notification</a></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">1 - Edit the file /etc/ossim/ossim_setup.conf the editor they like.</div><div class="line">2 - Change the following parameters:</div><div class="line">email_notify=user@company.com</div><div class="line">mailserver_relay=xxx.xxx.xxx.xxx</div><div class="line">3 - Save the changes and <span class="built_in">exit</span> the editor.</div><div class="line">4 - run ossim-reconfig</div><div class="line">5 - Send a <span class="built_in">test</span> mail:</div><div class="line"><span class="built_in">echo</span> <span class="string">"text"</span> | mail <span class="_">-s</span> <span class="string">"Subject"</span> user@domain.com</div><div class="line">6 - Check the mail delivery system is functioning properly:</div><div class="line">tail <span class="_">-f</span> /var/<span class="built_in">log</span>/mail.log</div></pre></td></tr></table></figure>
+<blockquote>
+<p>临时申请了个邮箱把信息填写如下：</p>
+</blockquote>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtjx09rmaj309608d3yu.jpg" alt=""></p>
+<h1 id="OSSIM-Web端相关设置"><a href="#OSSIM-Web端相关设置" class="headerlink" title="OSSIM Web端相关设置"></a>OSSIM Web端相关设置</h1><h2 id="创建发生邮件的操作"><a href="#创建发生邮件的操作" class="headerlink" title="创建发生邮件的操作"></a>创建发生邮件的操作</h2><blockquote>
+<p>相关设置见 <a href="https://www.alienvault.com/documentation/usm-v5/policy-management/create-action-send-email.htm" target="_blank" rel="external">https://www.alienvault.com/documentation/usm-v5/policy-management/create-action-send-email.htm</a></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">From Configuration &gt; Threat Intelligence, click the ACTIONS tab.</div><div class="line"></div><div class="line">Click New.</div></pre></td></tr></table></figure>
+<blockquote>
+<p>设置好名称、描述、发件邮箱、收件人、邮件主题和邮件内容，TYPE必须选择为Send an email message<br>如下图所示</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtjxre3p0j31if18ewiu.jpg" alt=""></p>
+<blockquote>
+<p>创建触发发送邮件的条件<br>操作步骤 <a href="https://www.alienvault.com/documentation/usm-v5/policy-management/create-ext-pol-trigger-email.htm" target="_blank" rel="external">https://www.alienvault.com/documentation/usm-v5/policy-management/create-ext-pol-trigger-email.htm</a></p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtjybtcu6j30ze1d8dk0.jpg" alt=""></p>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtjyyxeihj31551gagp2.jpg" alt=""></p>
+<blockquote>
+<p>效果图</p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtjzvy9h3j30eh0i4js2.jpg" alt=""></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">OSSIM</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/OSSIM-新建邮件提醒/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-OSSIM-Add-Linux-Agent" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1229,133 +1330,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Docker-SSH" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker-SSH/">Docker-SSH</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker-SSH/" class="archive-article-date">
-  	<time datetime="2016-01-20T11:55:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-01-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><blockquote>
-<p>使用一个ubuntu，配置好ssh服务再打包成image</p>
-<h1 id="使用commit构建"><a href="#使用commit构建" class="headerlink" title="使用commit构建"></a>使用commit构建</h1><h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>docker run -it ubuntu:14.04 /bin/bash<br>更新镜像并安装ssh-server<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get updte</div><div class="line">apt-get install openssh-server</div></pre></td></tr></table></figure></p>
-<p>配置ssh</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p /var/run/sshd</div><div class="line">/usr/sbin/sshd -D &amp;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>检查ssh是否运行成功的命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -tunlp</div></pre></td></tr></table></figure></p>
-<p>pam登录限制<br>vim /etc/pam.d/sshd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">注释掉</div><div class="line">session required pam_loginuid.so的</div></pre></td></tr></table></figure></p>
-<p>如果要使用密码进行ssh认证的话<br>vim /etc/ssh/sshd_config<br>取消注释<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PasswordAuthentication yes</div></pre></td></tr></table></figure></p>
-<p>使用密钥认证的话<br>在auchorized_keys文件中写入ssh client的id_rsa.pub内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /root/.ssh</div><div class="line">vi /root/.ssh/auchorized_keys</div></pre></td></tr></table></figure></p>
-<p>创建自动启动SSH脚本</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vi /run.sh</div><div class="line">chmod +x run.sh</div></pre></td></tr></table></figure>
-<blockquote>
-<p>文件内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">/usr/sbin/sshd -D</div></pre></td></tr></table></figure></p>
-<p>退出容器</p>
-<h2 id="保存镜像"><a href="#保存镜像" class="headerlink" title="保存镜像"></a>保存镜像</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker commit eb6bf1856445 sshd:ubuntu2</div></pre></td></tr></table></figure>
-<p>查看生成的镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  .ssh docker images sshd:ubuntu2</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">sshd                ubuntu2             d9a07f6fd3f8        34 minutes ago      283.6 MB</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="使用SSH-Server镜像"><a href="#使用SSH-Server镜像" class="headerlink" title="使用SSH Server镜像"></a>使用SSH Server镜像</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -p 10000:22 -d sshd:ubuntu2 /run.sh</div></pre></td></tr></table></figure>
-<blockquote>
-<p>镜像启动成功</p>
-<p>使用密码登录成功</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgpatq43j30jc0d90tu.jpg" alt="使用密码登录"></p>
-<blockquote>
-<p>使用密钥登录成功</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgpz1xerj30jv0dhwfw.jpg" alt="使用密钥登录成功"></p>
-<h1 id="使用Dockerfile构建"><a href="#使用Dockerfile构建" class="headerlink" title="使用Dockerfile构建"></a>使用Dockerfile构建</h1><blockquote>
-<p>在宿主主机中创建相关文件</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir test_ssh_in_docker</div><div class="line">cd test_ssh_in_docker</div><div class="line">touch Dockerfile run.sh</div></pre></td></tr></table></figure>
-<blockquote>
-<p>cat run.sh</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vi /run.sh</div><div class="line">chmod +x run.sh</div></pre></td></tr></table></figure>
-<blockquote>
-<p>cat Dockerfile</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">➜  test_ssh_in_docker cat Dockerfile</div><div class="line">FROM ubuntu:14.04</div><div class="line"></div><div class="line">MAINTAINER by tp.</div><div class="line"></div><div class="line">RUN apt-get -qq update -y</div><div class="line"></div><div class="line"><span class="comment">#install SSH-Server</span></div><div class="line">RUN apt-get -qq install openssh-server -y</div><div class="line">RUN mkdir -p /var/run/sshd</div><div class="line">RUN mkdir -p /root/.ssh</div><div class="line">RUN sed -ri <span class="string">'s/session required pam_loginuid.so/#session required pam.loginuid.so/g'</span> /etc/pam.d/sshd</div><div class="line"></div><div class="line"><span class="comment">#copy ssh server config file</span></div><div class="line">ADD authorized_keys /root/.ssh/authorized_keys</div><div class="line">ADD run.sh /run.sh</div><div class="line">RUN chmod 755 /run.sh</div><div class="line"></div><div class="line"><span class="comment">#open ssh port</span></div><div class="line">EXPOSE 22</div><div class="line"></div><div class="line"><span class="comment">#start sshd server</span></div><div class="line">CMD [<span class="string">"/run.sh"</span>]</div></pre></td></tr></table></figure>
-<blockquote>
-<p>目录下所有文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  test_ssh_in_docker ls</div><div class="line">authorized_keys  Dockerfile  run.sh</div></pre></td></tr></table></figure></p>
-<p>build镜像<br>➜  test_ssh_in_docker docker build -t sshd:dockerfile3 .</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgqdrgbzj30rh0kv75x.jpg" alt="build镜像"></p>
-<blockquote>
-<p>创建容器并SSH<br>docker run -d -p 10244:22 sshd:dockerfile3<br>ssh 127.0.0.1 -p 10244</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtgqpn3s4j310l0dcq50.jpg" alt="ssh success"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker-SSH/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1449,14 +1423,6 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
@@ -1465,11 +1431,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1498,6 +1472,10 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">提权</a>
               </li>
              
               <li class="article-tag-list-item">
