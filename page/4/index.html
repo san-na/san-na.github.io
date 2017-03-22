@@ -184,6 +184,185 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-旁路镜像、端口镜像、旁路监控" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/旁路镜像、端口镜像、旁路监控/">旁路镜像、端口镜像、旁路监控</a>
+    </h1>
+  
+
+        
+        <a href="/devops/旁路镜像、端口镜像、旁路监控/" class="archive-article-date">
+  	<time datetime="2016-03-20T02:27:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-03-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="常见的网络监控模式可以分为两种"><a href="#常见的网络监控模式可以分为两种" class="headerlink" title="常见的网络监控模式可以分为两种"></a>常见的网络监控模式可以分为两种</h1><blockquote>
+<p>一种是旁路监控模式<br> 另一种是串联监控模式。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">“旁路监控模式”一般是指通过交换机等网络设备的“端口镜像”功能来实现监控，在此模式下，监控设备只需要连接到交换机的指定镜像端口，所以形象的称之为“旁路监控”。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">而串联模式一般是通过网关、网桥或者代理服务器的模式来进行监控，由于监控设备做为网关或者网桥串联在网络中，所以称之为“串联监控模式”。</div></pre></td></tr></table></figure>
+<h2 id="旁路模式的优缺点"><a href="#旁路模式的优缺点" class="headerlink" title="旁路模式的优缺点"></a>旁路模式的优缺点</h2><blockquote>
+<p>优点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">旁路监控模式部署起来比较灵活方便，只需要在交换机上面配置镜像端口即可。不会影响现有的网络结构。而串联模式一般要作为网关、网桥或者代理服务器，所以需要对现有网络结构进行变动。</div><div class="line">旁路模式分析的是镜像端口拷贝过来的数据，对原始传递的数据包不会造成延时，不会对网速造成任何影响。而串联模式是串联在网络中的，那么所有的数据必须先经过监控系统，通过监控系统的分析检查之后，才能够发送到各个客户端，所以会对网速有一定的延时。</div><div class="line">旁路监控设备一旦故障或者停止运行，不会影响现有网络。而串联监控设备如果出现故障，会导致网络中断。</div></pre></td></tr></table></figure></p>
+<p>缺点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">需要交换机或者路由支持“端口镜像”功能才可以实现监控。</div><div class="line">旁路模式采用发送RST包的方式来断开TCP连接，不能禁止UDP通讯。对于UDP应用，一般还需要在路由器上面禁止UDP端口进行配合。而串联模式不存在该问题。</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="串联模式的优缺点"><a href="#串联模式的优缺点" class="headerlink" title="串联模式的优缺点"></a>串联模式的优缺点</h2><blockquote>
+<p>优点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">利用windows自带的“网关”、“网桥”功能即可实现，不需要硬件设备的支持。</div><div class="line">可以禁止UDP通讯数据包。</div></pre></td></tr></table></figure></p>
+<p>缺点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">需要更改现有的网络结构。</div><div class="line">与“旁路监控”相比较，“网关”、“网桥”的配置更加复杂些。</div><div class="line">由于是串联模式，当局域网电脑台数多时，对网速有少许的影响。这个主要取决于电脑的硬件配置。</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="交换机镜像端口配置"><a href="#交换机镜像端口配置" class="headerlink" title="交换机镜像端口配置"></a>交换机镜像端口配置</h2><blockquote>
+<p>用户模式：查看初始化相关信息<br>特权模式：查看所有信息、调试、保持配置信息<br>全局模式：配置所有信息、针对整个路由器或交换机的所有接口<br>接口模式：针对某一个接口的配置<br>线控模式：对路由器进行控制的接口配置</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sw-1#show monitor      检查是否已存在镜像的配置</div><div class="line">sw-1#conf t                    进入全局模式</div><div class="line">sw-1&lt;config&gt;#monitor session 2 source int f0/12 both         监控端口f0/12（外网口或叫被镜像端口）  both代表双向监听数据   rx代表接收数据   tx代表发送数据</div><div class="line">sw-1&lt;config&gt;#monitor session 2 destination int f0/24         把信息复制到f0/24（镜像端口）</div><div class="line">sw-1&lt;config&gt;#end        返回</div><div class="line">sw-1#show monitor session 2</div><div class="line">把F0/12 进来的出去的数据复制一份给F0/24，这样我们在晟为就可以截取到数据了。</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">others</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/devops/旁路镜像、端口镜像、旁路监控/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Centos-vsftpd" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/Centos-vsftpd/">Centos vsftpd</a>
+    </h1>
+  
+
+        
+        <a href="/devops/Centos-vsftpd/" class="archive-article-date">
+  	<time datetime="2016-03-14T13:27:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-03-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="安装vsftpd"><a href="#安装vsftpd" class="headerlink" title="安装vsftpd"></a>安装vsftpd</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install vsftpd</div></pre></td></tr></table></figure>
+<h1 id="设置开机启动"><a href="#设置开机启动" class="headerlink" title="设置开机启动"></a>设置开机启动</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chkconfig vsftpd on</div></pre></td></tr></table></figure>
+<h1 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service vsftpd start</div></pre></td></tr></table></figure>
+<h1 id="添加用户组和用户"><a href="#添加用户组和用户" class="headerlink" title="添加用户组和用户"></a>添加用户组和用户</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">groupadd ftp</div></pre></td></tr></table></figure>
+<blockquote>
+<p>mkdir /srv/ftp/test<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">useradd -g ftp -M -d /srv/ftp/test -s /sbin/nologin test</div></pre></td></tr></table></figure></p>
+<p>-g接的是用户组<br>-M表示不设置它的主目录，假设如果没有-M，则在/home下会有跟用户名(zhujin)一样的目录。<br>-d后面接的是用zhujin登陆FTP的时候，它的初始目录。<br>-s 后面接/sbin/nologin表示用户不需要登录系统，因为我们只需要用来登陆FTP<br>zhujin表示用户名了</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">passwd <span class="built_in">test</span></div></pre></td></tr></table></figure>
+<h1 id="修改目录权限"><a href="#修改目录权限" class="headerlink" title="修改目录权限"></a>修改目录权限</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chown -R <span class="built_in">test</span>:ftp /srv/ftp/<span class="built_in">test</span></div><div class="line">/etc/init.d/vsftpd restart</div></pre></td></tr></table></figure>
+<h1 id="相关安全设置"><a href="#相关安全设置" class="headerlink" title="相关安全设置"></a>相关安全设置</h1><blockquote>
+<p>防止跨目录<br>在/etc/vsftpd/vsftpd.conf 下添加</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chroot_list_enable=YES</div><div class="line">chroot_list_file=/etc/vsftpd/chroot_list</div></pre></td></tr></table></figure>
+<blockquote>
+<p>把想要限制的用户写入/etc/vsftpd/chroot_list文件中再重启vsftp服务即可</p>
+<h1 id="禁止匿名登录"><a href="#禁止匿名登录" class="headerlink" title="禁止匿名登录"></a>禁止匿名登录</h1></blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">anonymous_enable=NO</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/devops/Centos-vsftpd/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Docker-SSH" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1000,183 +1179,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Docker私有仓库" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker私有仓库/">Docker私有仓库</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker私有仓库/" class="archive-article-date">
-  	<time datetime="2015-03-20T12:20:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="搭建仓库"><a href="#搭建仓库" class="headerlink" title="搭建仓库"></a>搭建仓库</h1><blockquote>
-<p>使用docker-registry进行私有仓库搭建</p>
-<h2 id="基于容器"><a href="#基于容器" class="headerlink" title="基于容器"></a>基于容器</h2><p>docker pull registry</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#运行容器并将镜像存储到宿主主机/opt/data/registry目录</div><div class="line">docker run -d -p 5000 -v /opt/data/registry:/tmp/registry /registry</div></pre></td></tr></table></figure>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><blockquote>
-<p>打开浏览器输入<a href="http://127.0.0.1:5000/v2" target="_blank" rel="external">http://127.0.0.1:5000/v2</a></p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtfgogy03j30dg03o0so.jpg" alt="安装成功"></p>
-<h2 id="上传镜像"><a href="#上传镜像" class="headerlink" title="上传镜像"></a>上传镜像</h2><blockquote>
-<p>通过docker tag将该镜像标志为要推送到私有仓库</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker tag sshd:dockerfile3 127.0.0.1:5000/sshd</div><div class="line">docker push 127.0.0.1:5000/sshd</div></pre></td></tr></table></figure>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfh6m1i0j30pg08ft9e.jpg" alt="push success"></p>
-<h2 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker pull 127.0.0.1:5000/sshd</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker私有仓库/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-supervisor-使用笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/devops/supervisor-使用笔记/">supervisor 使用笔记</a>
-    </h1>
-  
-
-        
-        <a href="/devops/supervisor-使用笔记/" class="archive-article-date">
-  	<time datetime="2015-03-20T10:38:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pip install supervisor</div></pre></td></tr></table></figure>
-<h1 id="生成配置文件"><a href="#生成配置文件" class="headerlink" title="生成配置文件"></a>生成配置文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo echo_supervisord_conf &gt; /etc/supervisord.conf</div><div class="line"># 如果上面的命令报错，则使用</div><div class="line">sudo su - root -c &quot;echo_supervisord_conf &gt; /etc/supervisord.conf&quot;</div></pre></td></tr></table></figure>
-<h1 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h1><blockquote>
-<p>sudo vim /etc/supervisord.conf<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div></pre></td><td class="code"><pre><div class="line">➜  /etc cat supervisord.conf</div><div class="line">; Sample supervisor config file.</div><div class="line">;</div><div class="line">; For more information on the config file, please see:</div><div class="line">; http://supervisord.org/configuration.html</div><div class="line">;</div><div class="line">; Notes:</div><div class="line">;  - Shell expansion (&quot;~&quot; or &quot;$HOME&quot;) is not supported.  Environment</div><div class="line">;    variables can be expanded using this syntax: &quot;%(ENV_HOME)s&quot;.</div><div class="line">;  - Comments must have a leading space: &quot;a=b ;comment&quot; not &quot;a=b;comment&quot;.</div><div class="line"></div><div class="line">[unix_http_server]</div><div class="line">file=/private/var/run/supervisor.sock   ; (the path to the socket file)</div><div class="line">;chmod=0700                 ; socket file mode (default 0700)</div><div class="line">;chown=nobody:nogroup       ; socket file uid:gid owner</div><div class="line">;username=user              ; (default is no username (open server))</div><div class="line">;password=123               ; (default is no password (open server))</div><div class="line"></div><div class="line">;[inet_http_server]         ; inet (TCP) server disabled by default</div><div class="line">;port=127.0.0.1:9001        ; (ip_address:port specifier, *:port for all iface)</div><div class="line">;username=user              ; (default is no username (open server))</div><div class="line">;password=123               ; (default is no password (open server))</div><div class="line"></div><div class="line">[supervisord]</div><div class="line">logfile=/var/log/supervisor/supervisord.log ; (main log file;default $CWD/supervisord.log)</div><div class="line">logfile_maxbytes=50MB        ; (max main logfile bytes b4 rotation;default 50MB)</div><div class="line">logfile_backups=10           ; (num of main logfile rotation backups;default 10)</div><div class="line">loglevel=info                ; (log level;default info; others: debug,warn,trace)</div><div class="line">pidfile=/tmp/supervisord.pid ; (supervisord pidfile;default supervisord.pid)</div><div class="line">nodaemon=false               ; (start in foreground if true;default false)</div><div class="line">minfds=1024                  ; (min. avail startup file descriptors;default 1024)</div><div class="line">minprocs=200                 ; (min. avail process descriptors;default 200)</div><div class="line">;umask=022                   ; (process file creation umask;default 022)</div><div class="line">;user=chrism                 ; (default is current user, required if root)</div><div class="line">;identifier=supervisor       ; (supervisord identifier, default is &apos;supervisor&apos;)</div><div class="line">;directory=/tmp              ; (default is not to cd during start)</div><div class="line">;nocleanup=true              ; (don&apos;t clean up tempfiles at start;default false)</div><div class="line">;childlogdir=/tmp            ; (&apos;AUTO&apos; child log dir, default $TEMP)</div><div class="line">;environment=KEY=&quot;value&quot;     ; (key value pairs to add to environment)</div><div class="line">;strip_ansi=false            ; (strip ansi escape codes in logs; def. false)</div><div class="line"></div><div class="line">; the below section must remain in the config file for RPC</div><div class="line">; (supervisorctl/web interface) to work, additional interfaces may be</div><div class="line">; added by defining them in separate rpcinterface: sections</div><div class="line">[rpcinterface:supervisor]</div><div class="line">supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface</div><div class="line"></div><div class="line">[supervisorctl]</div><div class="line">serverurl=unix:///private/var/run/supervisor.sock ; use a unix:// URL  for a unix socket</div><div class="line">;serverurl=http://127.0.0.1:9001 ; use an http:// url to specify an inet socket</div><div class="line">;username=chris              ; should be same as http_username if set</div><div class="line">;password=123                ; should be same as http_password if set</div><div class="line">;prompt=mysupervisor         ; cmd line prompt (default &quot;supervisor&quot;)</div><div class="line">;history_file=~/.sc_history  ; use readline history if available</div><div class="line"></div><div class="line">; The below sample program section shows all possible program subsection values,</div><div class="line">; create one or more &apos;real&apos; program: sections to be able to control them under</div><div class="line">; supervisor.</div><div class="line"></div><div class="line">;[program:theprogramname]</div><div class="line">;command=/bin/cat              ; the program (relative uses PATH, can take args)</div><div class="line">;process_name=%(program_name)s ; process_name expr (default %(program_name)s)</div><div class="line">;numprocs=1                    ; number of processes copies to start (def 1)</div><div class="line">;directory=/tmp                ; directory to cwd to before exec (def no cwd)</div><div class="line">;umask=022                     ; umask for process (default None)</div><div class="line">;priority=999                  ; the relative start priority (default 999)</div><div class="line">;autostart=true                ; start at supervisord start (default: true)</div><div class="line">;startsecs=1                   ; # of secs prog must stay up to be running (def. 1)</div><div class="line">;startretries=3                ; max # of serial start failures when starting (default 3)</div><div class="line">;autorestart=unexpected        ; when to restart if exited after running (def: unexpected)</div><div class="line">;exitcodes=0,2                 ; &apos;expected&apos; exit codes used with autorestart (default 0,2)</div><div class="line">;stopsignal=QUIT               ; signal used to kill process (default TERM)</div><div class="line">;stopwaitsecs=10               ; max num secs to wait b4 SIGKILL (default 10)</div><div class="line">;stopasgroup=false             ; send stop signal to the UNIX process group (default false)</div><div class="line">;killasgroup=false             ; SIGKILL the UNIX process group (def false)</div><div class="line">;user=chrism                   ; setuid to this UNIX account to run the program</div><div class="line">;redirect_stderr=true          ; redirect proc stderr to stdout (default false)</div><div class="line">;stdout_logfile=/a/path        ; stdout log path, NONE for none; default AUTO</div><div class="line">;stdout_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB)</div><div class="line">;stdout_logfile_backups=10     ; # of stdout logfile backups (default 10)</div><div class="line">;stdout_capture_maxbytes=1MB   ; number of bytes in &apos;capturemode&apos; (default 0)</div><div class="line">;stdout_events_enabled=false   ; emit events on stdout writes (default false)</div><div class="line">;stderr_logfile=/a/path        ; stderr log path, NONE for none; default AUTO</div><div class="line">;stderr_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB)</div><div class="line">;stderr_logfile_backups=10     ; # of stderr logfile backups (default 10)</div><div class="line">;stderr_capture_maxbytes=1MB   ; number of bytes in &apos;capturemode&apos; (default 0)</div><div class="line">;stderr_events_enabled=false   ; emit events on stderr writes (default false)</div><div class="line">;environment=A=&quot;1&quot;,B=&quot;2&quot;       ; process environment additions (def no adds)</div><div class="line">;serverurl=AUTO                ; override serverurl computation (childutils)</div><div class="line"></div><div class="line">; The below sample eventlistener section shows all possible</div><div class="line">; eventlistener subsection values, create one or more &apos;real&apos;</div><div class="line">; eventlistener: sections to be able to handle event notifications</div><div class="line">; sent by supervisor.</div><div class="line"></div><div class="line">;[eventlistener:theeventlistenername]</div><div class="line">;command=/bin/eventlistener    ; the program (relative uses PATH, can take args)</div><div class="line">;process_name=%(program_name)s ; process_name expr (default %(program_name)s)</div><div class="line">;numprocs=1                    ; number of processes copies to start (def 1)</div><div class="line">;events=EVENT                  ; event notif. types to subscribe to (req&apos;d)</div><div class="line">;buffer_size=10                ; event buffer queue size (default 10)</div><div class="line">;directory=/tmp                ; directory to cwd to before exec (def no cwd)</div><div class="line">;umask=022                     ; umask for process (default None)</div><div class="line">;priority=-1                   ; the relative start priority (default -1)</div><div class="line">;autostart=true                ; start at supervisord start (default: true)</div><div class="line">;startsecs=1                   ; # of secs prog must stay up to be running (def. 1)</div><div class="line">;startretries=3                ; max # of serial start failures when starting (default 3)</div><div class="line">;autorestart=unexpected        ; autorestart if exited after running (def: unexpected)</div><div class="line">;exitcodes=0,2                 ; &apos;expected&apos; exit codes used with autorestart (default 0,2)</div><div class="line">;stopsignal=QUIT               ; signal used to kill process (default TERM)</div><div class="line">;stopwaitsecs=10               ; max num secs to wait b4 SIGKILL (default 10)</div><div class="line">;stopasgroup=false             ; send stop signal to the UNIX process group (default false)</div><div class="line">;killasgroup=false             ; SIGKILL the UNIX process group (def false)</div><div class="line">;user=chrism                   ; setuid to this UNIX account to run the program</div><div class="line">;redirect_stderr=false         ; redirect_stderr=true is not allowed for eventlisteners</div><div class="line">;stdout_logfile=/a/path        ; stdout log path, NONE for none; default AUTO</div><div class="line">;stdout_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB)</div><div class="line">;stdout_logfile_backups=10     ; # of stdout logfile backups (default 10)</div><div class="line">;stdout_events_enabled=false   ; emit events on stdout writes (default false)</div><div class="line">;stderr_logfile=/a/path        ; stderr log path, NONE for none; default AUTO</div><div class="line">;stderr_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB)</div><div class="line">;stderr_logfile_backups=10     ; # of stderr logfile backups (default 10)</div><div class="line">;stderr_events_enabled=false   ; emit events on stderr writes (default false)</div><div class="line">;environment=A=&quot;1&quot;,B=&quot;2&quot;       ; process environment additions</div><div class="line">;serverurl=AUTO                ; override serverurl computation (childutils)</div><div class="line"></div><div class="line">; The below sample group section shows all possible group values,</div><div class="line">; create one or more &apos;real&apos; group: sections to create &quot;heterogeneous&quot;</div><div class="line">; process groups.</div><div class="line"></div><div class="line">;[group:thegroupname]</div><div class="line">;programs=progname1,progname2  ; each refers to &apos;x&apos; in [program:x] definitions</div><div class="line">;priority=999                  ; the relative start priority (default 999)</div><div class="line"></div><div class="line">; The [include] section can just contain the &quot;files&quot; setting.  This</div><div class="line">; setting can list multiple files (separated by whitespace or</div><div class="line">; newlines).  It can also contain wildcards.  The filenames are</div><div class="line">; interpreted as relative to this file.  Included files *cannot*</div><div class="line">; include files themselves.</div><div class="line"></div><div class="line">[include]</div><div class="line">files = /etc/supervisord.d/*.ini</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h1 id="创建目录"><a href="#创建目录" class="headerlink" title="创建目录"></a>创建目录</h1><blockquote>
-<p>sudo su - root -c “mkdir -p /etc/supervisord.d”<br>以后supervisord.d 就存放进程的管理脚本</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[program:somejob]</div><div class="line">command=/usr/bin/python /Users/tp/code/phone/phone_web/spider/yumi/run_spider_yumi.py 3</div><div class="line">directroy=/Users/tp/code/phone/phone/phone_web/spider/yumi</div><div class="line">autostart=true</div><div class="line">autorestart=true</div><div class="line">startretries=3</div><div class="line">user=tp</div><div class="line">stdout_logfile=/Users/tp/temp/super/%(program_name)s.log</div><div class="line">stderr_logfile=/Users/tp/temp/super/%(program_name)s.log</div></pre></td></tr></table></figure>
-<h1 id="启动supervisor"><a href="#启动supervisor" class="headerlink" title="启动supervisor"></a>启动supervisor</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo supervisor -c /etc/supervisord.conf</div></pre></td></tr></table></figure>
-<h1 id="supervisord-重载"><a href="#supervisord-重载" class="headerlink" title="supervisord 重载"></a>supervisord 重载</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">supervisorctl reread</div><div class="line">supervisorctl update</div></pre></td></tr></table></figure>
-<h1 id="查看supervisor进程"><a href="#查看supervisor进程" class="headerlink" title="查看supervisor进程"></a>查看supervisor进程</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo supervisorctl</div></pre></td></tr></table></figure>
-<h1 id="进程重载"><a href="#进程重载" class="headerlink" title="进程重载"></a>进程重载</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo supervisorctl reload somejob</div></pre></td></tr></table></figure>
-<h1 id="关闭进程"><a href="#关闭进程" class="headerlink" title="关闭进程"></a>关闭进程</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo supervisorctl stop somejob</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/devops/supervisor-使用笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1294,6 +1296,10 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
@@ -1306,15 +1312,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Perl</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1334,11 +1344,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">前端</a>
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">

