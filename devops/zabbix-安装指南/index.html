@@ -8,28 +8,22 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>zabbix 安装指南 | SanNa&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="安装 PHP Mysql
+  <meta name="description" content="添加仓库
 
-12sudo apt-get updatesudo apt-get install zabbix-server-mysql php-mysql zabbix-frontend-php apache2 mysql-server php libapache2-mod-php php-mysql php-bcmath php-mbstring php-gd
-
-修改zabbi">
+12345678910111213141516171819202122232425For Ubuntu 16.04 LTS:$ wget http://repo.zabbix.com/zabbix/3.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.0-1+xenial_all.deb$ sudo dpkg -i zabbix">
 <meta property="og:type" content="article">
 <meta property="og:title" content="zabbix 安装指南">
 <meta property="og:url" content="http://yoursite.com/devops/zabbix-安装指南/index.html">
 <meta property="og:site_name" content="SanNa's Blog">
-<meta property="og:description" content="安装 PHP Mysql
+<meta property="og:description" content="添加仓库
 
-12sudo apt-get updatesudo apt-get install zabbix-server-mysql php-mysql zabbix-frontend-php apache2 mysql-server php libapache2-mod-php php-mysql php-bcmath php-mbstring php-gd
-
-修改zabbi">
-<meta property="og:updated_time" content="2017-03-24T13:10:25.000Z">
+12345678910111213141516171819202122232425For Ubuntu 16.04 LTS:$ wget http://repo.zabbix.com/zabbix/3.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.0-1+xenial_all.deb$ sudo dpkg -i zabbix">
+<meta property="og:updated_time" content="2017-03-24T13:25:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="zabbix 安装指南">
-<meta name="twitter:description" content="安装 PHP Mysql
+<meta name="twitter:description" content="添加仓库
 
-12sudo apt-get updatesudo apt-get install zabbix-server-mysql php-mysql zabbix-frontend-php apache2 mysql-server php libapache2-mod-php php-mysql php-bcmath php-mbstring php-gd
-
-修改zabbi">
+12345678910111213141516171819202122232425For Ubuntu 16.04 LTS:$ wget http://repo.zabbix.com/zabbix/3.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.0-1+xenial_all.deb$ sudo dpkg -i zabbix">
   
     <link rel="alternative" href="/atom.xml" title="SanNa&#39;s Blog" type="application/atom+xml">
   
@@ -216,6 +210,14 @@ var _hmt = _hmt || [];
     <div class="article-entry" itemprop="articleBody">
       
         <ul>
+<li>添加仓库</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">For Ubuntu 16.04 LTS:</div><div class="line"></div><div class="line">$ wget http://repo.zabbix.com/zabbix/3.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.0-1+xenial_all.deb</div><div class="line">$ sudo dpkg -i zabbix-release_3.0-1+xenial_all.deb</div><div class="line">$ sudo apt-get update</div><div class="line"></div><div class="line">For Ubuntu 14.04 LTS:</div><div class="line"></div><div class="line">$ wget http://repo.zabbix.com/zabbix/3.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.0-1+trusty_all.deb</div><div class="line">$ sudo dpkg -i zabbix-release_3.0-1+trusty_all.deb</div><div class="line">$ sudo apt-get update</div><div class="line"></div><div class="line"></div><div class="line">For Debian 8:</div><div class="line"></div><div class="line">$ wget http://repo.zabbix.com/zabbix/3.0/debian/pool/main/z/zabbix-release/zabbix-release_3.0-1+jessie_all.deb</div><div class="line">$ sudo dpkg -i zabbix-release_3.0-1+jessie_all.deb</div><div class="line">$ sudo apt-get update</div><div class="line"></div><div class="line"></div><div class="line">For Debian 7:</div><div class="line"></div><div class="line">$ http://repo.zabbix.com/zabbix/3.0/debian/pool/main/z/zabbix-release/zabbix-release_3.0-1+wheezy_all.deb</div><div class="line">$ sudo dpkg -i zabbix-release_3.0-1+wheezy_all.deb</div><div class="line">$ sudo apt-get update</div></pre></td></tr></table></figure>
+<ul>
+<li>安装zabbix server</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install zabbix-server-mysql zabbix-frontend-php</div></pre></td></tr></table></figure>
+<ul>
 <li>安装 PHP Mysql</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install zabbix-server-mysql php-mysql zabbix-frontend-php apache2 mysql-server php libapache2-mod-php php-mysql php-bcmath php-mbstring php-gd</div></pre></td></tr></table></figure>
@@ -533,19 +535,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
