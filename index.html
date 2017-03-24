@@ -232,11 +232,11 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">TensorFlow</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">TensorFlow</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -475,6 +475,110 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/others/pycharm激活码/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-zabbix-安装指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/zabbix-安装指南/">zabbix 安装指南</a>
+    </h1>
+  
+
+        
+        <a href="/devops/zabbix-安装指南/" class="archive-article-date">
+  	<time datetime="2017-02-24T08:19:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>安装 PHP Mysql</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install zabbix-server-mysql php-mysql zabbix-frontend-php apache2 mysql-server php libapache2-mod-php php-mysql php-bcmath php-mbstring php-gd</div></pre></td></tr></table></figure>
+<ul>
+<li>修改zabbix server 配置文件<blockquote>
+<p>sudo vim /etc/zabbix/zabbix_server.conf</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">DBName=zabbix</div><div class="line">DBUser=zabbix</div><div class="line">DBPassword=Your.Password.Here</div></pre></td></tr></table></figure>
+<ul>
+<li>创建zabbix数据库用户和数据库 并授权</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ mysql -u root -p</div><div class="line"></div><div class="line">mysql&gt; CREATE DATABASE zabbix;</div><div class="line">mysql&gt; GRANT ALL on zabbix.* to zabbix@localhost IDENTIFIED BY <span class="string">'password'</span>;</div><div class="line">mysql&gt; FLUSH PRIVILEGES;</div></pre></td></tr></table></figure>
+<ul>
+<li>导入数据</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> /usr/share/doc/zabbix-server-mysql</div><div class="line">$ zcat create.sql.gz | mysql -u root -p zabbixdb</div></pre></td></tr></table></figure>
+<ul>
+<li>重启Apache和zabbix</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo service apache2 restart</div><div class="line">sudo service zabbix-server restart</div></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="http://localhost/zabbix" target="_blank" rel="external">http://localhost/zabbix</a></p>
+<p>如果页面404</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ln <span class="_">-s</span> /etc/zabbix/apache.conf /etc/apache2/conf-available/zabbix.conf</div><div class="line"></div><div class="line">a2enconf zabbix.conf</div><div class="line">service apache2 reload</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">zabbix</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/devops/zabbix-安装指南/">展开全文 >></a>
         </p>
       
 
@@ -966,98 +1070,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Nginx-自签发SSL配置实例" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/devops/Nginx-自签发SSL配置实例/">Nginx 自签发SSL配置实例</a>
-    </h1>
-  
-
-        
-        <a href="/devops/Nginx-自签发SSL配置实例/" class="archive-article-date">
-  	<time datetime="2016-11-25T11:31:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="env"><a href="#env" class="headerlink" title="env"></a>env</h1><blockquote>
-<p>Debian Linux</p>
-</blockquote>
-<h1 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install nginx</div></pre></td></tr></table></figure>
-<h1 id="创建自签发SSL证书"><a href="#创建自签发SSL证书" class="headerlink" title="创建自签发SSL证书"></a>创建自签发SSL证书</h1><blockquote>
-<p>我是把证书相关信息放在<br>/etc/nginx/ssl/文件夹中所以先创建该文件夹</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir /etc/nginx/ssl</div></pre></td></tr></table></figure>
-<blockquote>
-<p>创建SSL证书<br>gencert.sh<br>该文件我也放在/etc/nginx/ssl目录下</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line"><span class="comment"># create self-signed server certificate:</span></div><div class="line"></div><div class="line"><span class="built_in">read</span> -p <span class="string">"Enter your domain [www.example.com]: "</span> DOMAIN</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"Create server key..."</span></div><div class="line"></div><div class="line">openssl genrsa -des3 -out <span class="variable">$DOMAIN</span>.key 1024</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"Create server certificate signing request..."</span></div><div class="line"></div><div class="line">SUBJECT=<span class="string">"/C=US/ST=Mars/L=iTranswarp/O=iTranswarp/OU=iTranswarp/CN=<span class="variable">$DOMAIN</span>"</span></div><div class="line"></div><div class="line">openssl req -new -subj <span class="variable">$SUBJECT</span> -key <span class="variable">$DOMAIN</span>.key -out <span class="variable">$DOMAIN</span>.csr</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"Remove password..."</span></div><div class="line"></div><div class="line">mv <span class="variable">$DOMAIN</span>.key <span class="variable">$DOMAIN</span>.origin.key</div><div class="line">openssl rsa -in <span class="variable">$DOMAIN</span>.origin.key -out <span class="variable">$DOMAIN</span>.key</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"Sign SSL certificate..."</span></div><div class="line"></div><div class="line">openssl x509 -req -days 3650 -in <span class="variable">$DOMAIN</span>.csr -signkey <span class="variable">$DOMAIN</span>.key -out <span class="variable">$DOMAIN</span>.crt</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"TODO:"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Copy <span class="variable">$DOMAIN</span>.crt to /etc/nginx/ssl/<span class="variable">$DOMAIN</span>.crt"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Copy <span class="variable">$DOMAIN</span>.key to /etc/nginx/ssl/<span class="variable">$DOMAIN</span>.key"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Add configuration in nginx:"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"server &#123;"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"    ..."</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"    listen 443 ssl;"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"    ssl_certificate     /etc/nginx/ssl/<span class="variable">$DOMAIN</span>.crt;"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"    ssl_certificate_key /etc/nginx/ssl/<span class="variable">$DOMAIN</span>.key;"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"&#125;"</span></div></pre></td></tr></table></figure>
-<blockquote>
-<p>操作方法如下图<br>说明 <a href="https://www.trustasia.com/help/nginx-generate-csr.htm" target="_blank" rel="external">https://www.trustasia.com/help/nginx-generate-csr.htm</a></p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtj9ob34yj30jm0jnq50.jpg" alt="图片标题"></p>
-<blockquote>
-<p>效果图</p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtja45eeyj30my0kzjsp.jpg" alt="图片标题"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/devops/Nginx-自签发SSL配置实例/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1143,6 +1155,14 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
               </li>
              
@@ -1156,14 +1176,6 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1183,19 +1195,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+                <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1207,7 +1211,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1219,15 +1231,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Solr</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">前端</a>
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
              
               <li class="article-tag-list-item">
