@@ -184,6 +184,93 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-杂谈-远程管理、SELinux、Raid等" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/杂谈-远程管理、SELinux、Raid等/">[杂谈]远程管理、SELinux、Raid等</a>
+    </h1>
+  
+
+        
+        <a href="/devops/杂谈-远程管理、SELinux、Raid等/" class="archive-article-date">
+  	<time datetime="2016-04-20T11:49:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-04-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="常见远程管理工具方式"><a href="#常见远程管理工具方式" class="headerlink" title="常见远程管理工具方式"></a>常见远程管理工具方式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">RDP: remote desktop protocol 协议，Windows远程桌面管理</div><div class="line">telnet: CLI 界面下的远程管理，几乎所有操作系统都有，不过内容是明文传送</div><div class="line">SSH: secure shell CLI界面下的远程管理，几乎所有操作系统都有，内容加密传送，类UNIX系统下主要的远程管理方式(Linux BSD MaxOS X)</div><div class="line">RFB remote framebuffer,图形化远程管理协议，VNC--Virtual Network Computing 使用的协议，主要为类UNIX系统下主要的图形化远程管理方式</div></pre></td></tr></table></figure>
+<h1 id="SELinux"><a href="#SELinux" class="headerlink" title="SELinux"></a>SELinux</h1><blockquote>
+<p>Secure Enhandced Linux 安全增强Linux是由NSA针对及时基础结构安全开发的一个全新的Linux安全策略机制。SELinux允许管理员更加灵鹤的定义安全策略。<br>SELinux是一个内核级的安全机制，从2.6内核之后集成在内核当中，对其修改一般需要去重启才能生效</p>
+</blockquote>
+<h2 id="基本概览"><a href="#基本概览" class="headerlink" title="基本概览"></a>基本概览</h2><blockquote>
+<p>所有的安全机制都是对两样东西做出限制：进程和系统资源(文件、网络套接字、系统调用等)。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SELinux针对这两种类型定义了两个基本概念：域(domain)和上下文(context)</div><div class="line">前者针对进程进行限制</div><div class="line">后者针对系统资源进行限制</div></pre></td></tr></table></figure>
+<blockquote>
+<p>ps -Z可以查看进程的域<br>ls -Z 可以查看文件的上下文信息</p>
+</blockquote>
+<h1 id="RAID"><a href="#RAID" class="headerlink" title="RAID"></a>RAID</h1><blockquote>
+<p>现代硬盘的缺陷 IO性能极弱 稳定性极差<br>RAID廉价磁盘冗余阵列技术是通过多磁盘并行运行来提高计算机的存储IO性能<br>RAID分为很多种类，称之为RAID级别，</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">RAID 0  读写性能</div><div class="line">RAID 1 读取性能、冗余性</div><div class="line">RAID 5 读写性能、冗余性(1块硬盘)</div><div class="line">RAID 6 读写性能、冗余性(2块硬盘)</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/devops/杂谈-远程管理、SELinux、Raid等/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-kali-install-VPN-Client" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1068,101 +1155,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Docker构建镜像-Dockerfile" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker构建镜像-Dockerfile/">Docker构建镜像-Dockerfile</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker构建镜像-Dockerfile/" class="archive-article-date">
-  	<time datetime="2015-03-27T14:25:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="通过dockerfile构建镜像"><a href="#通过dockerfile构建镜像" class="headerlink" title="通过dockerfile构建镜像"></a>通过dockerfile构建镜像</h1><blockquote>
-<p>Docker提供了一种标准化的DSL，你只需要编写一个Dockerfile，运行docker build指令，就可以构建自己的Image<br>Dockerfile指令<br><a href="https://docs.docker.com/engine/reference/builder/" target="_blank" rel="external">https://docs.docker.com/engine/reference/builder/</a></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo cat Dockerfile</div><div class="line">FROM debian</div><div class="line">RUN echo &quot;Hello docker!&quot;</div><div class="line">RUN apt-get update &amp;&amp; apt-get install -y \</div><div class="line">nginx</div><div class="line">RUN echo &apos;Nginx install success&apos; &gt; /var/www/html/index.html</div><div class="line">EXPOSE 80</div></pre></td></tr></table></figure>
-<blockquote>
-<p>构建镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo docker build -t=&quot;debian/nginx:2&quot; .</div><div class="line">Sending build context to Docker daemon 2.048 kB</div><div class="line">Step 1 : FROM debian</div><div class="line"> ---&gt; 1b01529cc499</div><div class="line">Step 2 : RUN echo &quot;Hello docker!&quot;</div><div class="line"> ---&gt; Using cache</div><div class="line"> ---&gt; 3791785c0268</div><div class="line">Step 3 : RUN apt-get update &amp;&amp; apt-get install -y nginx</div><div class="line"> ---&gt; Using cache</div><div class="line"> ---&gt; 47fcc445f762</div><div class="line">****************************************</div><div class="line">Successfully built 26eee4e7b4e4</div></pre></td></tr></table></figure></p>
-<p>查看构建成功后的镜像<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  DockerfileDemo docker images debian/nginx:2</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">debian/nginx        2                   26eee4e7b4e4        6 minutes ago       196.4 MB</div></pre></td></tr></table></figure></p>
-<p>使用该 镜像创建容器<br>-d 告诉容器以分离的方式在后台运行<br>nginx -g “daemon off;” 以前台的方式启动Nginx，作为Web容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker run -itd  -p 80 debian/nginx:2 nginx -g &quot;daemon off;&quot;</div><div class="line">b329360da168141902fc623b71f5cc79540bdffad26b1802e504988925ffec54</div><div class="line">➜  ~ docker port b329360da168141902fc623b71f5cc79540bdffad26b1802e504988925ffec54</div><div class="line">80/tcp -&gt; 0.0.0.0:32769</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="推送镜像至仓库"><a href="#推送镜像至仓库" class="headerlink" title="推送镜像至仓库"></a>推送镜像至仓库</h2><blockquote>
-<p>以docker hub为例</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker push r65q89/test</div></pre></td></tr></table></figure>
-<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><h3 id="查看镜像构建历史"><a href="#查看镜像构建历史" class="headerlink" title="查看镜像构建历史"></a>查看镜像构建历史</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="built_in">history</span> debian/nginx:2</div><div class="line">IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT</div><div class="line">26eee4e7b4e4        10 minutes ago      /bin/sh -c <span class="comment">#(nop)  EXPOSE 80/tcp                0 B                 </span></div><div class="line">fe16089c6b6f        11 minutes ago      /bin/sh -c <span class="built_in">echo</span> <span class="string">'Nginx install success'</span> &gt; /va   22 B                </div><div class="line">5c40a6f4eee9        11 minutes ago      /bin/sh -c service nginx start                  3 B                 </div><div class="line">47fcc445f762        12 minutes ago      /bin/sh -c apt-get update &amp;&amp; apt-get install    71.29 MB            </div><div class="line">3791785c0268        17 minutes ago      /bin/sh -c <span class="built_in">echo</span> <span class="string">"Hello docker!"</span>                 0 B                 </div><div class="line">1b01529cc499        3 weeks ago         /bin/sh -c <span class="comment">#(nop) CMD ["/bin/bash"]             0 B                 </span></div><div class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c <span class="comment">#(nop) ADD file:0e0565652aa852f620   125.1 MB</span></div></pre></td></tr></table></figure>
-<h3 id="查看某容器端口映射情况"><a href="#查看某容器端口映射情况" class="headerlink" title="查看某容器端口映射情况"></a>查看某容器端口映射情况</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker port 容器id</div></pre></td></tr></table></figure>
-<blockquote>
-<p>或者这样查看所有docker映射的端口</p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtft761tij30p9026glm.jpg" alt="端口映射"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker构建镜像-Dockerfile/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1248,11 +1240,11 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1276,11 +1268,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
+                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1288,15 +1280,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Perl</a>
+                <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1305,6 +1293,10 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Perl</a>
               </li>
              
               <li class="article-tag-list-item">
