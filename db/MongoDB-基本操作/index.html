@@ -12,9 +12,11 @@
 以更美观的方式输出
 
 1db.number.find().pretty()
-获取数据库的所有聚合名称12&amp;gt; db.getCollectionNames();[ &amp;quot;phone_number&amp;quot;, &amp;quot;system.indexes&amp;quot; ]
-统计数据库特定聚合所有记录数量12db.phone_number.count()16119524
-获取数据">
+条件查询条件操作符1234(&amp;gt;) 大于 - $gt(&amp;lt;) 小于 - $lt(&amp;gt;=) 大于等于 - $gte(&amp;lt;= ) 小于等于 - $lte
+
+比如查询uid大于100的一些记录
+
+1db.sedb.find(&amp;#123;uid:&amp;#123;$gt:100&amp;#125;&amp;#125;)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MongoDB 基本操作">
 <meta property="og:url" content="http://yoursite.com/db/MongoDB-基本操作/index.html">
@@ -23,20 +25,24 @@
 以更美观的方式输出
 
 1db.number.find().pretty()
-获取数据库的所有聚合名称12&amp;gt; db.getCollectionNames();[ &amp;quot;phone_number&amp;quot;, &amp;quot;system.indexes&amp;quot; ]
-统计数据库特定聚合所有记录数量12db.phone_number.count()16119524
-获取数据">
+条件查询条件操作符1234(&amp;gt;) 大于 - $gt(&amp;lt;) 小于 - $lt(&amp;gt;=) 大于等于 - $gte(&amp;lt;= ) 小于等于 - $lte
+
+比如查询uid大于100的一些记录
+
+1db.sedb.find(&amp;#123;uid:&amp;#123;$gt:100&amp;#125;&amp;#125;)">
 <meta property="og:image" content="https://ww4.sinaimg.cn/large/006tNc79gy1fdtcdrfxiej30mf0gswhj.jpg">
-<meta property="og:updated_time" content="2017-03-20T08:19:37.000Z">
+<meta property="og:updated_time" content="2017-03-30T03:10:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MongoDB 基本操作">
 <meta name="twitter:description" content="基本操作基本查询
 以更美观的方式输出
 
 1db.number.find().pretty()
-获取数据库的所有聚合名称12&amp;gt; db.getCollectionNames();[ &amp;quot;phone_number&amp;quot;, &amp;quot;system.indexes&amp;quot; ]
-统计数据库特定聚合所有记录数量12db.phone_number.count()16119524
-获取数据">
+条件查询条件操作符1234(&amp;gt;) 大于 - $gt(&amp;lt;) 小于 - $lt(&amp;gt;=) 大于等于 - $gte(&amp;lt;= ) 小于等于 - $lte
+
+比如查询uid大于100的一些记录
+
+1db.sedb.find(&amp;#123;uid:&amp;#123;$gt:100&amp;#125;&amp;#125;)">
 <meta name="twitter:image" content="https://ww4.sinaimg.cn/large/006tNc79gy1fdtcdrfxiej30mf0gswhj.jpg">
   
     <link rel="alternative" href="/atom.xml" title="SanNa&#39;s Blog" type="application/atom+xml">
@@ -227,6 +233,12 @@ var _hmt = _hmt || [];
 <p>以更美观的方式输出</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.number.find().pretty()</div></pre></td></tr></table></figure>
+<h2 id="条件查询"><a href="#条件查询" class="headerlink" title="条件查询"></a>条件查询</h2><h3 id="条件操作符"><a href="#条件操作符" class="headerlink" title="条件操作符"></a>条件操作符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(&gt;) 大于 - $gt</div><div class="line">(&lt;) 小于 - $lt</div><div class="line">(&gt;=) 大于等于 - $gte</div><div class="line">(&lt;= ) 小于等于 - $lte</div></pre></td></tr></table></figure>
+<blockquote>
+<p>比如查询uid大于100的一些记录</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.sedb.find(&#123;uid:&#123;<span class="variable">$gt</span>:100&#125;&#125;)</div></pre></td></tr></table></figure>
+<h3 id="判断字段是否存在"><a href="#判断字段是否存在" class="headerlink" title="判断字段是否存在"></a>判断字段是否存在</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">查询所有存在age字段的记录</div><div class="line"></div><div class="line">db.users.find(&#123;age: &#123;$exists: true&#125;&#125;);</div><div class="line"></div><div class="line">查询所有不存在name字段的记录</div><div class="line"></div><div class="line">db.users.find(&#123;name: &#123;$exists: false&#125;&#125;);</div><div class="line"></div><div class="line"></div><div class="line"># 比如</div><div class="line">db.sedb.count(&#123;&apos;username&apos;:&quot;%&quot;,uid:&#123;$gt:100&#125;,email:&#123;$exists:false&#125;&#125;)</div></pre></td></tr></table></figure>
 <h2 id="获取数据库的所有聚合名称"><a href="#获取数据库的所有聚合名称" class="headerlink" title="获取数据库的所有聚合名称"></a>获取数据库的所有聚合名称</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt; db.getCollectionNames();</div><div class="line">[ &quot;phone_number&quot;, &quot;system.indexes&quot; ]</div></pre></td></tr></table></figure>
 <h2 id="统计数据库特定聚合所有记录数量"><a href="#统计数据库特定聚合所有记录数量" class="headerlink" title="统计数据库特定聚合所有记录数量"></a>统计数据库特定聚合所有记录数量</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">db.phone_number.count()</div><div class="line">16119524</div></pre></td></tr></table></figure>
 <h2 id="获取数据库特定聚合的索引"><a href="#获取数据库特定聚合的索引" class="headerlink" title="获取数据库特定聚合的索引"></a>获取数据库特定聚合的索引</h2><blockquote>
@@ -472,19 +484,11 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -496,15 +500,23 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
+                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
               </li>
              
               <li class="article-tag-list-item">
