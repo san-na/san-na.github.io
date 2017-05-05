@@ -184,6 +184,140 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Node-js学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/others/Node-js学习笔记/">Node.js学习笔记</a>
+    </h1>
+  
+
+        
+        <a href="/others/Node-js学习笔记/" class="archive-article-date">
+  	<time datetime="2016-06-03T14:00:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="新建http服务"><a href="#新建http服务" class="headerlink" title="新建http服务"></a>新建http服务</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)  </span>&#123;</div><div class="line">    response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">    <span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'访问'</span>);</div><div class="line">        response.write(<span class="string">'hello,world'</span>);</div><div class="line">        response.end(<span class="string">"response.end"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure>
+<h1 id="使用function"><a href="#使用function" class="headerlink" title="使用function"></a>使用function</h1><blockquote>
+<p>目录结构</p>
+<p>tp@V:/mnt/d/Node.js$ tree<br>.<br>├── hello.js<br>├── models<br>│   └── otherfuns.js<br>└── n2_funcall.js<br>n2_funcall.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> otherfun = <span class="built_in">require</span>(<span class="string">"./models/otherfuns.js"</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">		response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		otherfun[<span class="string">'fun3'</span>](response);</div><div class="line">		otherfun[<span class="string">'fun2'</span>](response);<span class="comment">//也可以用otherfun.fun2(response)</span></div><div class="line">		response.end(<span class="string">"response.end"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure>
+<blockquote>
+<p>otherfuns.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">fun2</span>:<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"我是fun2"</span>);</div><div class="line">		res.write(<span class="string">"Hello, I am fun2"</span>);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">fun3</span>:<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"I am fun3"</span>);</div><div class="line">		res.write(<span class="string">"Hello, I am fun3"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>效果</p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtdapfssuj30cw061dfw.jpg" alt=""></p>
+<h1 id="使用模块"><a href="#使用模块" class="headerlink" title="使用模块"></a>使用模块</h1><blockquote>
+<p>models/User.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">User</span>(<span class="params">id, name, age</span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.id=id;</div><div class="line">	<span class="keyword">this</span>.name=name;</div><div class="line">	<span class="keyword">this</span>.age=age;</div><div class="line">	<span class="keyword">this</span>.enter=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name+<span class="string">"进入图书馆"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = User;</div></pre></td></tr></table></figure>
+<blockquote>
+<blockquote>
+<p>models/Teacher.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> User = <span class="built_in">require</span>(<span class="string">'./User'</span>);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Teacher</span>(<span class="params">id,name,age</span>)</span>&#123;</div><div class="line">	User.apply(<span class="keyword">this</span>,[id,name,age]);</div><div class="line">	<span class="keyword">this</span>.teach=<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">		res.write(<span class="keyword">this</span>.name+<span class="string">"讲课"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = Teacher;</div><div class="line"><span class="string">``</span><span class="string">`JavaScript</span></div><div class="line">&gt;n3_modelcall.js</div></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+<p>var http = require(‘http’);</p>
+<p>// var User = require(“./models/User”);<br>var Teacher = require(“./models/Teacher”)</p>
+<p>http.createServer(function (request, response){<br>    response.writeHead(200, {‘Content-Type’: ‘text/html; charset=utf-8’});<br>    if(request.url!==”/favicon.ico”){<br>        //funname = ‘fun3’;<br>        teacher = new Teacher(1,’我来’,18);<br>        // user.id =1;<br>        // user.name=’我来’;<br>        // user.age=18;<br>        teacher.enter();<br>        teacher.teach(response);<br>        response.end(“response.end”);<br>    }</p>
+<p>}).listen(8000);<br>console.log(“Server running at <a href="http://127.0.0.1:8000/" target="_blank" rel="external">http://127.0.0.1:8000/</a>“);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">![](https://ww2.sinaimg.cn/large/006tNc79gy1fdtdb7fgu8j30b8058gln.jpg)</div><div class="line"></div><div class="line"># 使用路由</div><div class="line">&gt;models/route.js</div><div class="line">```JavaScript</div><div class="line">module.exports=&#123;</div><div class="line">	login:function(req, res)&#123;</div><div class="line">		res.write(&quot;I am login module.&quot;);</div><div class="line">	&#125;,</div><div class="line">	admin:function(req, res)&#123;</div><div class="line">		res.write(&quot;I am admin module.&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>n4_rout.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line">		response.end(<span class="string">"response.end"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtdd3yrcwj30b8058gln.jpg" alt=""></p>
+<h1 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h1><blockquote>
+<p>models/route.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./optfile'</span>);</div><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">login</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/login.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">admin</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/admin.html'</span>, recall);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>models/optfile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">readfileSync</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path</span>)</span>&#123;<span class="comment">//同步读取</span></div><div class="line">		<span class="keyword">var</span> data = fs.readFileSync(path, <span class="string">'utf-8'</span>);</div><div class="line">		<span class="built_in">console</span>.log(data);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'同步方法执行完毕'</span>);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">readfile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, recall</span>)</span>&#123;<span class="comment">//异步读取</span></div><div class="line">		fs.readFile(path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(err)&#123;</div><div class="line">				<span class="built_in">console</span>.log(err);</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			<span class="built_in">console</span>.log(data.toString());</div><div class="line">			recall(data);</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'异步方法执行完毕'</span>);</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>n5_readfile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line"><span class="comment">//var optfile = require('./models/optfile');</span></div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+<p>views/login.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">This is login page.</div></pre></td></tr></table></figure></p>
+<p>views/admin.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">This is admin page.</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtdbleg2tj30pz082jrt.jpg" alt="读文件"></p>
+<h1 id="写文件"><a href="#写文件" class="headerlink" title="写文件"></a>写文件</h1><blockquote>
+<p>models/optfile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data, recall</span>)</span>&#123;<span class="comment">//异步方式</span></div><div class="line">		fs.writeFile(path, data, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="keyword">throw</span> err;</div><div class="line">			&#125;</div><div class="line">			<span class="built_in">console</span>.log(<span class="string">'It\'s Saved!'</span>);<span class="comment">//文件被保存</span></div><div class="line">			recall(<span class="string">"write file success."</span>);</div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writeFileSync</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data</span>)</span>&#123;<span class="comment">//同步方式</span></div><div class="line">		fs.writeFileSync(path, data);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"同步写文件完成"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>models/route.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./optfile'</span>);</div><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">login</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/login.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">admin</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/admin.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.writefile(<span class="string">'./views/test.txt'</span>, <span class="string">'write file ok1.'</span>, recall);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>n6_writefile.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line"><span class="comment">//var optfile = require('./models/optfile');</span></div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtddiqzcwj30sy0740ss.jpg" alt="写文件"></p>
+<h1 id="读取图片"><a href="#读取图片" class="headerlink" title="读取图片"></a>读取图片</h1><blockquote>
+<p>models/optfile.js<br>仅能显示图片<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">readImg</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, res</span>)</span>&#123;</div><div class="line">		fs.readFile(path, <span class="string">'binary'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, file</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="built_in">console</span>.log(err);</div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">'输出文件'</span>);</div><div class="line">				res.write(file, <span class="string">'binary'</span>);</div><div class="line">				res.end();</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>n7_readimg.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./models/optfile'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'image/jpeg'</span>&#125;);</div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'访问'</span>);</div><div class="line">    optfile.readImg(<span class="string">'./images/1.png'</span>, response);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"move on"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtde06l42j30pa0c2gmo.jpg" alt="读取图片"></p>
+<h1 id="路由改造"><a href="#路由改造" class="headerlink" title="路由改造"></a>路由改造</h1><blockquote>
+<p>models/optfile.js<br>可显示文本和图片<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data, recall</span>)</span>&#123;<span class="comment">//异步方式</span></div><div class="line">		fs.writeFile(path, data, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="keyword">throw</span> err;</div><div class="line">			&#125;</div><div class="line">			<span class="built_in">console</span>.log(<span class="string">'It\'s Saved!'</span>);<span class="comment">//文件被保存</span></div><div class="line">			recall(<span class="string">"write file success."</span>);</div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writeFileSync</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, data</span>)</span>&#123;<span class="comment">//同步方式</span></div><div class="line">		fs.writeFileSync(path, data);</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"同步写文件完成"</span>);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">readImg</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, res</span>)</span>&#123;</div><div class="line">		fs.readFile(path, <span class="string">'binary'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, file</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (err)&#123;</div><div class="line">				<span class="built_in">console</span>.log(err);</div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">'输出文件'</span>);</div><div class="line">				res.write(file, <span class="string">'binary'</span>);</div><div class="line">				res.end();</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">readfile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">path, recall</span>)</span>&#123;<span class="comment">//异步读取</span></div><div class="line">			fs.readFile(path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">					<span class="keyword">if</span>(err)&#123;</div><div class="line">							<span class="built_in">console</span>.log(err);</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">					<span class="built_in">console</span>.log(data.toString());</div><div class="line">					recall(data);</div><div class="line">			&#125;</div><div class="line">	&#125;);</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'异步方法执行完毕'</span>);</div><div class="line">&#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>models/route.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> optfile = <span class="built_in">require</span>(<span class="string">'./optfile'</span>);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRecall</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/html; charset=utf-8'</span>&#125;);</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">		res.write(data);</div><div class="line">		res.end(<span class="string">" "</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> recall;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports=&#123;</div><div class="line">	<span class="attr">login</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		recall = getRecall(req, res);</div><div class="line">		optfile.readfile(<span class="string">'./views/login.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line"></div><div class="line">	<span class="attr">admin</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.readfile(<span class="string">'./views/admin.html'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">writefile</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">recall</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">			res.write(data);</div><div class="line">			res.end(<span class="string">" "</span>);</div><div class="line">		&#125;</div><div class="line">		optfile.writefile(<span class="string">'./views/test.txt'</span>, <span class="string">'write file ok1.'</span>, recall);</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">showimg</span>:<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">		res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'image/jpeg'</span>&#125;);</div><div class="line">		optfile.readImg(<span class="string">'./images/1.png'</span>, res);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>n8_routhtml.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./models/route'</span>);</div><div class="line"></div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>)</span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(request.url!==<span class="string">"/favicon.ico"</span>)&#123;</div><div class="line">		<span class="keyword">var</span> pathname = url.parse(request.url).pathname;</div><div class="line">		pathname = pathname.replace(<span class="regexp">/\//</span>, <span class="string">''</span>);</div><div class="line">		<span class="built_in">console</span>.log(pathname);</div><div class="line">		router[pathname](request, response);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Server running at http://127.0.0.1:8000/"</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtdefobhpj30ig0epq3q.jpg" alt="路由改造效果图"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Node.js</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/others/Node-js学习笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-MongoDB-基本操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1038,137 +1172,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Docker-跨主机连接" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker-跨主机连接/">Docker-跨主机连接</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker-跨主机连接/" class="archive-article-date">
-  	<time datetime="2015-07-03T11:47:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-07-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="使用网桥"><a href="#使用网桥" class="headerlink" title="使用网桥"></a>使用网桥</h1><blockquote>
-<p>配置简单、不依赖第三方软件；将容器和物理机放在同一网段</p>
-</blockquote>
-<h2 id="网络设置"><a href="#网络设置" class="headerlink" title="网络设置"></a>网络设置</h2><blockquote>
-<p>vim /etc/network/interfaces</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">auto br0</div><div class="line">iface br0 inet static</div><div class="line">netmask 255.255.255.0</div><div class="line">gateway 101.210.55.1</div><div class="line">bridge_ports eth0</div></pre></td></tr></table></figure>
-<blockquote>
-<p>Docker网络设置<br>vim /etc/default/docker</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-b指定使用自定义网桥</div><div class="line">-b=br0</div><div class="line">--fixed-cidr限制ip地址分配范围</div><div class="line">host1: 101.211.55.64/26</div><div class="line">101.211.55.65~101.211.55.126</div></pre></td></tr></table></figure>
-<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><blockquote>
-<p>使用自定义网桥<br>在启动docker服务的时候，使用-b BEIDGE 或者–bridge=BEIDGE来指定使用的网桥</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#停止服务并删除旧的网桥</div><div class="line">service docker stop</div><div class="line">brctl delbr docker0</div><div class="line">#创建新的网桥</div><div class="line">brctl addbr bridge0</div><div class="line">ip addr add 192.168.5.1/24 dev bridge0</div></pre></td></tr></table></figure>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtg9gcy3yj30h106fgm0.jpg" alt="使用自定义网桥"></p>
-<blockquote>
-<p>ip addr show bridge0</p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtg9tule6j30j708pt9p.jpg" alt="网桥创建成功"></p>
-<blockquote>
-<p>配置Docker服务<br>默认桥接到创建的网桥上<br>echo ‘DOCKER_OPTS=”-b=bridge0”‘ &gt;&gt; /etc/default/docker<br>service docker start<br>新建容器进行测试</p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtga8c8msj30hk0cggmt.jpg" alt="独立网桥测试成功"></p>
-<h1 id="使用Open-vSwitch"><a href="#使用Open-vSwitch" class="headerlink" title="使用Open vSwitch"></a>使用Open vSwitch</h1><blockquote>
-<p>高质量、多层虚拟交换机 使用GRE协议<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GRE 通用路由协议封装</div><div class="line">隧道技术是一种通过使用互联网络的基础设施在网络之间传递数据的方式，使用隧道传送的数据可以是不同协议的数据帧或包，隧道协议将其它协议的数据帧或包重新封装然后通过隧道发送；新的帧头提供路由信息，以便通过互联网传递被封装的负载数据。</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><blockquote>
-<p>apt-get install openvswitch-switch<br>apt-get install bridge-utils</p>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>pc1=192.168.1.110<br>pc2=192.168.1.55<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#建立网桥</div><div class="line">ovs-vsctl add-br obr0</div><div class="line">#添加GRE连接</div><div class="line">ovs-vsctl add-port obr0 gre0</div><div class="line">#配置Docker容器虚拟网桥</div><div class="line">set interface gre0 type=gre options:remote_ip=192.168.1.55</div><div class="line">root@tp-ubuntu:/etc/default# ovs-vsctl show</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">brctl addbr br0</div><div class="line">ifconfig br0 192.168.11.1 netmask 255.255.255.0</div><div class="line">brctl addif br0 obr0</div><div class="line">sudo brctl show</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">58fa415c-67aa-477d-93b7-6ac0f32fe49d</div><div class="line">    Bridge &quot;obr0&quot;</div><div class="line">        Port &quot;gre0&quot;</div><div class="line">            Interface &quot;gre0&quot;</div><div class="line">                type: gre</div><div class="line">                options: &#123;remote_ip=&quot;192.168.1.55&quot;&#125;</div><div class="line">        Port &quot;obr0&quot;</div><div class="line">            Interface &quot;obr0&quot;</div><div class="line">                type: internal</div><div class="line">    ovs_version: &quot;2.5.0&quot;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>修改Docker配置文件<br>为虚拟网桥添加ovs接口<br>vim /etc/default/docker<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">BRIDGE=br0</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h1 id="使用weave"><a href="#使用weave" class="headerlink" title="使用weave"></a>使用weave</h1><blockquote>
-<p>原理：建立一个虚拟的网络，用于将运行在不同主机的Docker容器连接起来</p>
-<h2 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget -O /usr/bin/weave https://raw.githubusercontent.com/zettio/weave/master/weave &amp;&amp; chmod a+x /usr/bin/weave</div></pre></td></tr></table></figure>
-<p>weave操作</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">安装weave</div><div class="line">启动weave</div><div class="line">    weave launch</div><div class="line">连接不同主机</div><div class="line">通过weave 启动容器</div></pre></td></tr></table></figure>
-<h1 id="启动虚拟机"><a href="#启动虚拟机" class="headerlink" title="启动虚拟机"></a>启动虚拟机</h1><blockquote>
-<p>客户机1<br>192.168.1.110<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave luanch</div></pre></td></tr></table></figure></p>
-<p>客户机2</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave launch 192.168.1.110</div></pre></td></tr></table></figure>
-<blockquote>
-<p>虚拟机1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave run 192.168.11.2/24 -it ubuntu:14.04 /bin/bash</div></pre></td></tr></table></figure></p>
-<p>虚拟机2</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">weave run 192.168.11.3/24 -it ubuntu:14.04 /bin/bash</div></pre></td></tr></table></figure>
-<blockquote>
-<p>查看weave路由状态<br>weave ps<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">容器重启问题</div><div class="line">如果使用weave，则就不能再使用docker自带的auto-restart feature（如docker run –restart=always redis），因为weave是在docker之外为容器配置的网络，容器重启的时候docker本身不会做这些事情。因而，还需额外的工具来管理容器的状态（比如systemd, upstart等），这些工具要调用weave命令（weave run/start/attach）来启动容器。</div></pre></td></tr></table></figure></p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker-跨主机连接/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1254,11 +1257,15 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1270,15 +1277,7 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1295,6 +1294,10 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1346,11 +1349,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
             
             <div class="clearfix"></div>
