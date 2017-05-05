@@ -184,6 +184,86 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Golang-折腾笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/others/Golang-折腾笔记/">Golang折腾笔记</a>
+    </h1>
+  
+
+        
+        <a href="/others/Golang-折腾笔记/" class="archive-article-date">
+  	<time datetime="2017-03-31T07:59:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><blockquote>
+<p>env Mac OS</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install go</div></pre></td></tr></table></figure>
+<blockquote>
+<p>设置PATH和GOPATH,将如下内容写入.zshrc在家目录创建.gopath目录</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/usr/<span class="built_in">local</span>/opt/go/libexec/bin</div><div class="line"><span class="built_in">export</span> GOPATH=/Users/tp/.gopath</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Go</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/others/Golang-折腾笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-数据处理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -239,11 +319,11 @@ var _hmt = _hmt || [];
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据处理</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MongoDB</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MongoDB</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据处理</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -334,11 +414,11 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">TensorFlow</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">TensorFlow</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -1011,105 +1091,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Python-pyodbc-连接SQL-Server" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/devops/Python-pyodbc-连接SQL-Server/">Python pyodbc 连接SQL Server</a>
-    </h1>
-  
-
-        
-        <a href="/devops/Python-pyodbc-连接SQL-Server/" class="archive-article-date">
-  	<time datetime="2017-01-22T14:28:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
-<p>最近在处理数据，有一批数据是在MSSQL中的，打算导出整理后扔到MongoDB中<br>网上找了下 Python有个叫pyodbc的库，自己本地在Mac上跑起来没啥问题，<br>不过将脚本迁移到Server上run的时候遇到了些问题，所以记录下</p>
-</blockquote>
-<h2 id="Run-On-Mac"><a href="#Run-On-Mac" class="headerlink" title="Run On Mac"></a>Run On Mac</h2><blockquote>
-<p>直接安装微软官方的安装教程，就能跑起来</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div><div class="line">brew tap microsoft/msodbcsql https://github.com/Microsoft/homebrew-msodbcsql</div><div class="line">brew update</div><div class="line">brew install msodbcsql</div><div class="line"><span class="comment">#for silent install ACCEPT_EULA=y brew install msodbcsql</span></div><div class="line">sudo pip install pyodbc==3.1.1</div></pre></td></tr></table></figure>
-<h2 id="Run-On-CentOS-Server"><a href="#Run-On-CentOS-Server" class="headerlink" title="Run On CentOS Server"></a>Run On CentOS Server</h2><blockquote>
-<p>服务器用的是CentOS<br>需要先安装gcc和python-devel</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install python-devel gcc -y</div></pre></td></tr></table></figure>
-<blockquote>
-<p>然后再安装微软的这个<a href="https://docs.microsoft.com/en-us/sql/connect/odbc/linux/installing-the-microsoft-odbc-driver-for-sql-server-on-linux" target="_blank" rel="external">教程</a>来,就能跑起来了，<br>我的是CentOS 7,所以安装步骤为</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo su</div><div class="line">curl https://packages.microsoft.com/config/rhel/7/prod.repo &gt; /etc/yum.repos.d/mssql-release.repo</div><div class="line"><span class="built_in">exit</span></div><div class="line">sudo yum remove unixODBC-utf16 unixODBC-utf16-devel <span class="comment">#to avoid conflicts</span></div><div class="line">sudo ACCEPT_EULA=Y yum install msodbcsql-13.1.4.0-1 mssql-tools-14.0.3.0-1 unixODBC-devel</div></pre></td></tr></table></figure>
-<blockquote>
-<p>而且我用的是zsh，所以后将相关环境变量放到zshrc就好了</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">'export PATH="$PATH:/opt/mssql-tools/bin"'</span> &gt;&gt; ~/.zshrc</div><div class="line"><span class="built_in">echo</span> <span class="string">'export PATH="$PATH:/opt/mssql-tools/bin"'</span> &gt;&gt; ~/.zshrc</div><div class="line"><span class="built_in">source</span> ~/.zshrc</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SQL Server</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/devops/Python-pyodbc-连接SQL-Server/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1195,19 +1176,11 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1219,7 +1192,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1227,15 +1212,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1243,11 +1224,7 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1259,7 +1236,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1271,11 +1256,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
+                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
+                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1283,11 +1268,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
             
             <div class="clearfix"></div>

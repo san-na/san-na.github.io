@@ -184,6 +184,105 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Python-pyodbc-连接SQL-Server" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/Python-pyodbc-连接SQL-Server/">Python pyodbc 连接SQL Server</a>
+    </h1>
+  
+
+        
+        <a href="/devops/Python-pyodbc-连接SQL-Server/" class="archive-article-date">
+  	<time datetime="2017-01-22T14:28:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
+<p>最近在处理数据，有一批数据是在MSSQL中的，打算导出整理后扔到MongoDB中<br>网上找了下 Python有个叫pyodbc的库，自己本地在Mac上跑起来没啥问题，<br>不过将脚本迁移到Server上run的时候遇到了些问题，所以记录下</p>
+</blockquote>
+<h2 id="Run-On-Mac"><a href="#Run-On-Mac" class="headerlink" title="Run On Mac"></a>Run On Mac</h2><blockquote>
+<p>直接安装微软官方的安装教程，就能跑起来</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div><div class="line">brew tap microsoft/msodbcsql https://github.com/Microsoft/homebrew-msodbcsql</div><div class="line">brew update</div><div class="line">brew install msodbcsql</div><div class="line"><span class="comment">#for silent install ACCEPT_EULA=y brew install msodbcsql</span></div><div class="line">sudo pip install pyodbc==3.1.1</div></pre></td></tr></table></figure>
+<h2 id="Run-On-CentOS-Server"><a href="#Run-On-CentOS-Server" class="headerlink" title="Run On CentOS Server"></a>Run On CentOS Server</h2><blockquote>
+<p>服务器用的是CentOS<br>需要先安装gcc和python-devel</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install python-devel gcc -y</div></pre></td></tr></table></figure>
+<blockquote>
+<p>然后再安装微软的这个<a href="https://docs.microsoft.com/en-us/sql/connect/odbc/linux/installing-the-microsoft-odbc-driver-for-sql-server-on-linux" target="_blank" rel="external">教程</a>来,就能跑起来了，<br>我的是CentOS 7,所以安装步骤为</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo su</div><div class="line">curl https://packages.microsoft.com/config/rhel/7/prod.repo &gt; /etc/yum.repos.d/mssql-release.repo</div><div class="line"><span class="built_in">exit</span></div><div class="line">sudo yum remove unixODBC-utf16 unixODBC-utf16-devel <span class="comment">#to avoid conflicts</span></div><div class="line">sudo ACCEPT_EULA=Y yum install msodbcsql-13.1.4.0-1 mssql-tools-14.0.3.0-1 unixODBC-devel</div></pre></td></tr></table></figure>
+<blockquote>
+<p>而且我用的是zsh，所以后将相关环境变量放到zshrc就好了</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">'export PATH="$PATH:/opt/mssql-tools/bin"'</span> &gt;&gt; ~/.zshrc</div><div class="line"><span class="built_in">echo</span> <span class="string">'export PATH="$PATH:/opt/mssql-tools/bin"'</span> &gt;&gt; ~/.zshrc</div><div class="line"><span class="built_in">source</span> ~/.zshrc</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SQL Server</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/devops/Python-pyodbc-连接SQL-Server/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-一些前端工具" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1187,108 +1286,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Centos-6-6-Install-OSSEC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/sec/Centos-6-6-Install-OSSEC/">Centos 6.6 Install OSSEC</a>
-    </h1>
-  
-
-        
-        <a href="/sec/Centos-6-6-Install-OSSEC/" class="archive-article-date">
-  	<time datetime="2016-08-27T12:22:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
-<p>OSSEC是一款开源的基于主机的入侵检测系统，可以简称为HIDS。它具备日志分析，文件完整性检查，策略监控，rootkit检测，实时报警以及联动响应等功能。它支持多种操作系统：Linux、Windows、MacOS、Solaris、HP-UX、AIX。属于企业安全之利器。</p>
-<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>CentOS 6.6</p>
-<h1 id="安装关联库和软件"><a href="#安装关联库和软件" class="headerlink" title="安装关联库和软件"></a>安装关联库和软件</h1><p>首先我们安装需要用到的关联库和软件，由于我们最终是需要把日志导入到MySQL中进行分析，以及需要通过web程序对报警结果进行展示，同时需要把本机当做SMTP，所以需要在本机安装MySQL、Apache和sendmail服务。在当前的终端中执行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install wget gcc make mysql mysql-server mysql-devel httpd php php-mysql sendmail</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h1 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@ossec-server ~]# /etc/init.d/httpd start</div><div class="line">[root@ossec-server ~]# /etc/init.d/mysqld start</div><div class="line">[root@ossec-server ~]# /etc/init.d/sendmail start</div></pre></td></tr></table></figure>
-<h2 id="Mysql相关配置"><a href="#Mysql相关配置" class="headerlink" title="Mysql相关配置"></a>Mysql相关配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@ossec-server ~]# mysql -uroot -p</div><div class="line">mysql&gt; create database ossec;</div><div class="line">mysql&gt; grant INSERT,SELECT,UPDATE,CREATE,DELETE,EXECUTE on ossec.* to ossec@localhost;</div><div class="line">mysql&gt; set password for ossec@localhost=PASSWORD(&apos;ossec&apos;);</div><div class="line">mysql&gt; flush privileges;</div><div class="line">mysql&gt; exit</div></pre></td></tr></table></figure>
-<h1 id="安装OSSEC服务端"><a href="#安装OSSEC服务端" class="headerlink" title="安装OSSEC服务端"></a>安装OSSEC服务端</h1><blockquote>
-<p>首先通过官网的链接下载当前的最新稳定版本 2.8.3 的服务端包，同时解压。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">wget https://akamai.bintray.com/87/87c7a1904d5c08c7cff3e42bd47c055b14b08faa?__gda__=exp=1465265745~hmac=3dacb2ddfc1c2aff8eeeff60f6c1ec8cbebf3dab98370b6894f3d87399be85ed&amp;response-content-disposition=attachment%3Bfilename%3D%22ossec-hids-2.8.3.tar.gz%22&amp;response-content-type=application%2Fgzip</div><div class="line"></div><div class="line">重命名文件</div><div class="line">mv 87c7a1904d5c08c7cff3e42bd47c055b14b08faa\?__gda__\=exp\=1465265745~hmac\=3dacb2ddfc1c2aff8eeeff60f6c1ec8cbebf3dab98370b6894f3d87399be85ed ossec.tar.gz</div><div class="line">解压</div><div class="line">[root@CentOS-6 ~]<span class="comment"># tar -zxf ossec.tar.gz</span></div><div class="line">[root@CentOS-6 ~]<span class="comment"># ls</span></div><div class="line">–                                         ossec-hids-2.8.3</div><div class="line">anaconda-ks.cfg                           ossec.tar.gz</div></pre></td></tr></table></figure>
-<blockquote>
-<p>为了使OSSEC支持MySQL，需要在安装前执行make setdb命令，如下</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 ossec-hids-2.8.3]<span class="comment"># cd src</span></div><div class="line">[root@CentOS-6 src]<span class="comment"># ls</span></div><div class="line">addagent      error_messages    LOCATION      os_crypto    os_regex   syscheckd</div><div class="line">agentlessd    external          logcollector  os_csyslogd  os_xml     tests</div><div class="line">analysisd     headers           Makeall       os_dbd       os_zlib    util</div><div class="line">client-agent  init              Makefile      os_execd     remoted    VERSION</div><div class="line">config        InstallAgent.sh   monitord      os_maild     rootcheck  win32</div><div class="line">Config.Make   InstallServer.sh  os_auth       os_net       shared</div><div class="line">[root@CentOS-6 src]<span class="comment"># make setdb</span></div><div class="line">Info: Compiled with MySQL support.</div><div class="line">Info: Compiled with PostgreSQL support.</div><div class="line">[root@CentOS-6 src]<span class="comment"># cd ..</span></div></pre></td></tr></table></figure>
-<blockquote>
-<p>执行安装脚本</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 ossec-hids-2.8.3]# ./install.sh</div><div class="line">which: no host in (/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)</div><div class="line"></div><div class="line">  ** Para instalação em português, escolha [br].</div><div class="line">  ** 要使用中文进行安装, 请选择 [cn].</div><div class="line">  ** Fur eine deutsche Installation wohlen Sie [de].</div><div class="line">  ** Για εγκατάσταση στα Ελληνικά, επιλέξτε [el].</div><div class="line">  ** For installation in English, choose [en].</div><div class="line">  ** Para instalar en Español , eliga [es].</div><div class="line">  ** Pour une installation en français, choisissez [fr]</div><div class="line">  ** A Magyar nyelvű telepítéshez válassza [hu].</div><div class="line">  ** Per l&apos;installazione in Italiano, scegli [it].</div><div class="line">  ** 日本語でインストールします．選択して下さい．[jp].</div><div class="line">  ** Voor installatie in het Nederlands, kies [nl].</div><div class="line">  ** Aby instalować w języku Polskim, wybierz [pl].</div><div class="line">  ** Для инструкций по установке на русском ,введите [ru].</div><div class="line">  ** Za instalaciju na srpskom, izaberi [sr].</div><div class="line">  ** Türkçe kurulum için seçin [tr].</div><div class="line">  (en/br/cn/de/el/es/fr/hu/it/jp/nl/pl/ru/sr/tr) [en]: cn</div><div class="line">which: no host in (/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)</div></pre></td></tr></table></figure>
-<blockquote>
-<p>安装完成标识</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">感谢使用 OSSEC HIDS. 如果您有任何疑问,建议或您找到任何bug, 请通过　contact@ossec.net 或邮件列表 ossec-list@ossec.net 联系我们.</div><div class="line">( http://www.ossec.net/en/mailing_lists.html ).</div><div class="line"></div><div class="line">您可以在　http://www.ossec.net 获得更多信息</div><div class="line"></div><div class="line">--- 请按　ENTER 结束安装 (下面可能有更多信息). ---</div><div class="line"></div><div class="line">直到碰到上面内容，说明安装完成。</div></pre></td></tr></table></figure>
-<h1 id="配置服务端，使其工作正常"><a href="#配置服务端，使其工作正常" class="headerlink" title="配置服务端，使其工作正常"></a>配置服务端，使其工作正常</h1><blockquote>
-<p>执行下面命令启用数据库支持<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 bin]# /var/ossec/bin/ossec-control enable database</div></pre></td></tr></table></figure></p>
-<p>导入MySQL表结构到MySQL中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 bin]# mysql -uossec -p ossec &lt; ~/ossec-hids-2.8.3/src/os_dbd/mysql.schema</div></pre></td></tr></table></figure></p>
-<p>修改部分配置文件的权限，否则会启动服务失败：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 etc]# chmod u+w /var/ossec/etc/ossec.conf</div></pre></td></tr></table></figure></p>
-<p>启动服务</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 /]<span class="comment"># /etc/init.d/ossec-hids start</span></div><div class="line">Starting ossec-hids:                                       [确定]</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">OSSEC</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/sec/Centos-6-6-Install-OSSEC/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1374,19 +1371,11 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1398,7 +1387,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1406,15 +1407,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1422,11 +1419,7 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1438,7 +1431,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1450,11 +1451,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
+                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
+                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1462,11 +1463,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
             
             <div class="clearfix"></div>

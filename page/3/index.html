@@ -184,6 +184,108 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Centos-6-6-Install-OSSEC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Centos-6-6-Install-OSSEC/">Centos 6.6 Install OSSEC</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Centos-6-6-Install-OSSEC/" class="archive-article-date">
+  	<time datetime="2016-08-27T12:22:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
+<p>OSSEC是一款开源的基于主机的入侵检测系统，可以简称为HIDS。它具备日志分析，文件完整性检查，策略监控，rootkit检测，实时报警以及联动响应等功能。它支持多种操作系统：Linux、Windows、MacOS、Solaris、HP-UX、AIX。属于企业安全之利器。</p>
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>CentOS 6.6</p>
+<h1 id="安装关联库和软件"><a href="#安装关联库和软件" class="headerlink" title="安装关联库和软件"></a>安装关联库和软件</h1><p>首先我们安装需要用到的关联库和软件，由于我们最终是需要把日志导入到MySQL中进行分析，以及需要通过web程序对报警结果进行展示，同时需要把本机当做SMTP，所以需要在本机安装MySQL、Apache和sendmail服务。在当前的终端中执行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install wget gcc make mysql mysql-server mysql-devel httpd php php-mysql sendmail</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@ossec-server ~]# /etc/init.d/httpd start</div><div class="line">[root@ossec-server ~]# /etc/init.d/mysqld start</div><div class="line">[root@ossec-server ~]# /etc/init.d/sendmail start</div></pre></td></tr></table></figure>
+<h2 id="Mysql相关配置"><a href="#Mysql相关配置" class="headerlink" title="Mysql相关配置"></a>Mysql相关配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@ossec-server ~]# mysql -uroot -p</div><div class="line">mysql&gt; create database ossec;</div><div class="line">mysql&gt; grant INSERT,SELECT,UPDATE,CREATE,DELETE,EXECUTE on ossec.* to ossec@localhost;</div><div class="line">mysql&gt; set password for ossec@localhost=PASSWORD(&apos;ossec&apos;);</div><div class="line">mysql&gt; flush privileges;</div><div class="line">mysql&gt; exit</div></pre></td></tr></table></figure>
+<h1 id="安装OSSEC服务端"><a href="#安装OSSEC服务端" class="headerlink" title="安装OSSEC服务端"></a>安装OSSEC服务端</h1><blockquote>
+<p>首先通过官网的链接下载当前的最新稳定版本 2.8.3 的服务端包，同时解压。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">wget https://akamai.bintray.com/87/87c7a1904d5c08c7cff3e42bd47c055b14b08faa?__gda__=exp=1465265745~hmac=3dacb2ddfc1c2aff8eeeff60f6c1ec8cbebf3dab98370b6894f3d87399be85ed&amp;response-content-disposition=attachment%3Bfilename%3D%22ossec-hids-2.8.3.tar.gz%22&amp;response-content-type=application%2Fgzip</div><div class="line"></div><div class="line">重命名文件</div><div class="line">mv 87c7a1904d5c08c7cff3e42bd47c055b14b08faa\?__gda__\=exp\=1465265745~hmac\=3dacb2ddfc1c2aff8eeeff60f6c1ec8cbebf3dab98370b6894f3d87399be85ed ossec.tar.gz</div><div class="line">解压</div><div class="line">[root@CentOS-6 ~]<span class="comment"># tar -zxf ossec.tar.gz</span></div><div class="line">[root@CentOS-6 ~]<span class="comment"># ls</span></div><div class="line">–                                         ossec-hids-2.8.3</div><div class="line">anaconda-ks.cfg                           ossec.tar.gz</div></pre></td></tr></table></figure>
+<blockquote>
+<p>为了使OSSEC支持MySQL，需要在安装前执行make setdb命令，如下</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 ossec-hids-2.8.3]<span class="comment"># cd src</span></div><div class="line">[root@CentOS-6 src]<span class="comment"># ls</span></div><div class="line">addagent      error_messages    LOCATION      os_crypto    os_regex   syscheckd</div><div class="line">agentlessd    external          logcollector  os_csyslogd  os_xml     tests</div><div class="line">analysisd     headers           Makeall       os_dbd       os_zlib    util</div><div class="line">client-agent  init              Makefile      os_execd     remoted    VERSION</div><div class="line">config        InstallAgent.sh   monitord      os_maild     rootcheck  win32</div><div class="line">Config.Make   InstallServer.sh  os_auth       os_net       shared</div><div class="line">[root@CentOS-6 src]<span class="comment"># make setdb</span></div><div class="line">Info: Compiled with MySQL support.</div><div class="line">Info: Compiled with PostgreSQL support.</div><div class="line">[root@CentOS-6 src]<span class="comment"># cd ..</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>执行安装脚本</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 ossec-hids-2.8.3]# ./install.sh</div><div class="line">which: no host in (/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)</div><div class="line"></div><div class="line">  ** Para instalação em português, escolha [br].</div><div class="line">  ** 要使用中文进行安装, 请选择 [cn].</div><div class="line">  ** Fur eine deutsche Installation wohlen Sie [de].</div><div class="line">  ** Για εγκατάσταση στα Ελληνικά, επιλέξτε [el].</div><div class="line">  ** For installation in English, choose [en].</div><div class="line">  ** Para instalar en Español , eliga [es].</div><div class="line">  ** Pour une installation en français, choisissez [fr]</div><div class="line">  ** A Magyar nyelvű telepítéshez válassza [hu].</div><div class="line">  ** Per l&apos;installazione in Italiano, scegli [it].</div><div class="line">  ** 日本語でインストールします．選択して下さい．[jp].</div><div class="line">  ** Voor installatie in het Nederlands, kies [nl].</div><div class="line">  ** Aby instalować w języku Polskim, wybierz [pl].</div><div class="line">  ** Для инструкций по установке на русском ,введите [ru].</div><div class="line">  ** Za instalaciju na srpskom, izaberi [sr].</div><div class="line">  ** Türkçe kurulum için seçin [tr].</div><div class="line">  (en/br/cn/de/el/es/fr/hu/it/jp/nl/pl/ru/sr/tr) [en]: cn</div><div class="line">which: no host in (/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>安装完成标识</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">感谢使用 OSSEC HIDS. 如果您有任何疑问,建议或您找到任何bug, 请通过　contact@ossec.net 或邮件列表 ossec-list@ossec.net 联系我们.</div><div class="line">( http://www.ossec.net/en/mailing_lists.html ).</div><div class="line"></div><div class="line">您可以在　http://www.ossec.net 获得更多信息</div><div class="line"></div><div class="line">--- 请按　ENTER 结束安装 (下面可能有更多信息). ---</div><div class="line"></div><div class="line">直到碰到上面内容，说明安装完成。</div></pre></td></tr></table></figure>
+<h1 id="配置服务端，使其工作正常"><a href="#配置服务端，使其工作正常" class="headerlink" title="配置服务端，使其工作正常"></a>配置服务端，使其工作正常</h1><blockquote>
+<p>执行下面命令启用数据库支持<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 bin]# /var/ossec/bin/ossec-control enable database</div></pre></td></tr></table></figure></p>
+<p>导入MySQL表结构到MySQL中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 bin]# mysql -uossec -p ossec &lt; ~/ossec-hids-2.8.3/src/os_dbd/mysql.schema</div></pre></td></tr></table></figure></p>
+<p>修改部分配置文件的权限，否则会启动服务失败：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 etc]# chmod u+w /var/ossec/etc/ossec.conf</div></pre></td></tr></table></figure></p>
+<p>启动服务</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@CentOS-6 /]<span class="comment"># /etc/init.d/ossec-hids start</span></div><div class="line">Starting ossec-hids:                                       [确定]</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">OSSEC</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Centos-6-6-Install-OSSEC/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-通过msf获取指定主机端口、服务、和版本信息" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1226,106 +1328,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-MongoDB-基本操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/db/MongoDB-基本操作/">MongoDB 基本操作</a>
-    </h1>
-  
-
-        
-        <a href="/db/MongoDB-基本操作/" class="archive-article-date">
-  	<time datetime="2016-05-20T03:23:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-05-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><h2 id="基本查询"><a href="#基本查询" class="headerlink" title="基本查询"></a>基本查询</h2><blockquote>
-<p>以更美观的方式输出</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.number.find().pretty()</div></pre></td></tr></table></figure>
-<h2 id="条件查询"><a href="#条件查询" class="headerlink" title="条件查询"></a>条件查询</h2><h3 id="条件操作符"><a href="#条件操作符" class="headerlink" title="条件操作符"></a>条件操作符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(&gt;) 大于 - $gt</div><div class="line">(&lt;) 小于 - $lt</div><div class="line">(&gt;=) 大于等于 - $gte</div><div class="line">(&lt;= ) 小于等于 - $lte</div></pre></td></tr></table></figure>
-<blockquote>
-<p>比如查询uid大于100的一些记录</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.sedb.find(&#123;uid:&#123;<span class="variable">$gt</span>:100&#125;&#125;)</div></pre></td></tr></table></figure>
-<h3 id="判断字段是否存在"><a href="#判断字段是否存在" class="headerlink" title="判断字段是否存在"></a>判断字段是否存在</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">查询所有存在age字段的记录</div><div class="line"></div><div class="line">db.users.find(&#123;age: &#123;$exists: true&#125;&#125;);</div><div class="line"></div><div class="line">查询所有不存在name字段的记录</div><div class="line"></div><div class="line">db.users.find(&#123;name: &#123;$exists: false&#125;&#125;);</div><div class="line"></div><div class="line"></div><div class="line"># 比如</div><div class="line">db.sedb.count(&#123;&apos;username&apos;:&quot;%&quot;,uid:&#123;$gt:100&#125;,email:&#123;$exists:false&#125;&#125;)</div></pre></td></tr></table></figure>
-<h2 id="获取数据库的所有聚合名称"><a href="#获取数据库的所有聚合名称" class="headerlink" title="获取数据库的所有聚合名称"></a>获取数据库的所有聚合名称</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt; db.getCollectionNames();</div><div class="line">[ &quot;phone_number&quot;, &quot;system.indexes&quot; ]</div></pre></td></tr></table></figure>
-<h2 id="统计数据库特定聚合所有记录数量"><a href="#统计数据库特定聚合所有记录数量" class="headerlink" title="统计数据库特定聚合所有记录数量"></a>统计数据库特定聚合所有记录数量</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">db.phone_number.count()</div><div class="line">16119524</div></pre></td></tr></table></figure>
-<h2 id="获取数据库特定聚合的索引"><a href="#获取数据库特定聚合的索引" class="headerlink" title="获取数据库特定聚合的索引"></a>获取数据库特定聚合的索引</h2><blockquote>
-<p>比如获取phone_number聚合的所有索引<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone_number.getIndexes()</div><div class="line">[</div><div class="line">	&#123;</div><div class="line">		&quot;v&quot; : 1,</div><div class="line">		&quot;key&quot; : &#123;</div><div class="line">			&quot;_id&quot; : 1</div><div class="line">		&#125;,</div><div class="line">		&quot;name&quot; : &quot;_id_&quot;,</div><div class="line">		&quot;ns&quot; : &quot;blacklist.phone_number&quot;</div><div class="line">	&#125;</div><div class="line">]</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="添加索引"><a href="#添加索引" class="headerlink" title="添加索引"></a>添加索引</h2><blockquote>
-<p>为phone_number的phone字段添加索引<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone_number.ensureIndex(&#123;&quot;phone&quot;:1&#125;)</div><div class="line">&#123;</div><div class="line">	&quot;createdCollectionAutomatically&quot; : false,</div><div class="line">	&quot;numIndexesBefore&quot; : 1,</div><div class="line">	&quot;numIndexesAfter&quot; : 2,</div><div class="line">	&quot;ok&quot; : 1</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>再查看索引情况验证一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone_number.getIndexes()</div><div class="line">[</div><div class="line">	&#123;</div><div class="line">		&quot;v&quot; : 1,</div><div class="line">		&quot;key&quot; : &#123;</div><div class="line">			&quot;_id&quot; : 1</div><div class="line">		&#125;,</div><div class="line">		&quot;name&quot; : &quot;_id_&quot;,</div><div class="line">		&quot;ns&quot; : &quot;blacklist.phone_number&quot;</div><div class="line">	&#125;,</div><div class="line">	&#123;</div><div class="line">		&quot;v&quot; : 1,</div><div class="line">		&quot;key&quot; : &#123;</div><div class="line">			&quot;phone&quot; : 1</div><div class="line">		&#125;,</div><div class="line">		&quot;name&quot; : &quot;phone_1&quot;,</div><div class="line">		&quot;ns&quot; : &quot;blacklist.phone_number&quot;</div><div class="line">	&#125;</div><div class="line">]</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h1 id="分组查询group-count"><a href="#分组查询group-count" class="headerlink" title="分组查询group count"></a>分组查询group count</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone.aggregate([&#123;$group:&#123;_id:&quot;$source&quot;, num_tutorial:&#123;$sum:1&#125;&#125;&#125;])</div><div class="line">&#123; &quot;_id&quot; : &quot;youm&quot;, &quot;num_tutorial&quot; : 449 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;tianma168&quot;, &quot;num_tutorial&quot; : 349 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;dingdkj&quot;, &quot;num_tutorial&quot; : 3259 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ypyun&quot;, &quot;num_tutorial&quot; : 10192 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ilezan&quot;, &quot;num_tutorial&quot; : 43685 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ism168&quot;, &quot;num_tutorial&quot; : 2856 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;iyylw&quot;, &quot;num_tutorial&quot; : 16284 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;iqiyi&quot;, &quot;num_tutorial&quot; : 1 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;xudan123.com&quot;, &quot;num_tutorial&quot; : 74808 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;vim6&quot;, &quot;num_tutorial&quot; : 26927 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yzm1&quot;, &quot;num_tutorial&quot; : 449854 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;feiq&quot;, &quot;num_tutorial&quot; : 46670 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;83r.com&quot;, &quot;num_tutorial&quot; : 144898 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;maz8&quot;, &quot;num_tutorial&quot; : 81461 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;kuaima9&quot;, &quot;num_tutorial&quot; : 138903 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;bmyzm&quot;, &quot;num_tutorial&quot; : 6015 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;sunvarma.com&quot;, &quot;num_tutorial&quot; : 45164 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ema6&quot;, &quot;num_tutorial&quot; : 54819 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yma0.com&quot;, &quot;num_tutorial&quot; : 417669 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;creditease&quot;, &quot;num_tutorial&quot; : 101747 &#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>如果需要排序的话<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone.aggregate([&#123;$group:&#123;_id:&quot;$source&quot;, count:&#123;$sum:1&#125;&#125;&#125;,&#123;$sort:&#123;&quot;count&quot;:-1&#125;&#125;])</div><div class="line">&#123; &quot;_id&quot; : &quot;other&quot;, &quot;count&quot; : 6133225 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ly.com&quot;, &quot;count&quot; : 5235378 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;zmyzm.com&quot;, &quot;count&quot; : 1038465 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;f02.cn&quot;, &quot;count&quot; : 644959 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;shjmpt.com&quot;, &quot;count&quot; : 502440 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yzm1&quot;, &quot;count&quot; : 449854 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yma0.com&quot;, &quot;count&quot; : 417669 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;6yzm.com&quot;, &quot;count&quot; : 297152 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;taomapt.com&quot;, &quot;count&quot; : 187613 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;83r.com&quot;, &quot;count&quot; : 144898 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;kuaima9&quot;, &quot;count&quot; : 138903 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;creditease&quot;, &quot;count&quot; : 101747 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;tongdun&quot;, &quot;count&quot; : 95012 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;aliqin&quot;, &quot;count&quot; : 87845 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;maz8&quot;, &quot;count&quot; : 81461 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;xudan123.com&quot;, &quot;count&quot; : 74808 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ema6&quot;, &quot;count&quot; : 54819 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;feiq&quot;, &quot;count&quot; : 46670 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;sunvarma.com&quot;, &quot;count&quot; : 45164 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yayayama.com&quot;, &quot;count&quot; : 44941 &#125;</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h2 id="MongoDB-唯一索引自动删除重复记录"><a href="#MongoDB-唯一索引自动删除重复记录" class="headerlink" title="MongoDB 唯一索引自动删除重复记录"></a>MongoDB 唯一索引自动删除重复记录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">coll.ensureIndex(&#123;productid:1&#125;) // 在productid上建立普通索引</div><div class="line">coll.ensureIndex(&#123;district:1, plate:1&#125;) // 多字段索引</div><div class="line">coll.ensureIndex(&#123;productid:1&#125;, &#123;unique:true&#125;) // 唯一索引</div><div class="line">coll.ensureIndex(&#123;productid:1&#125;, &#123;unique:true, dropDups:true&#125;) // 建索引时，如果遇到索引字段值已经出现过的情况，则删除重复记录</div><div class="line">coll.getIndexes() // 查看索引</div><div class="line">coll.dropIndex(&#123;productid:1&#125;) // 删除单个索</div></pre></td></tr></table></figure>
-<h1 id="Python-相关"><a href="#Python-相关" class="headerlink" title="Python 相关"></a>Python 相关</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">import requests</div><div class="line">import json</div><div class="line">from datetime import datetime</div><div class="line">from pymongo import MongoClient</div><div class="line"></div><div class="line"></div><div class="line">&apos;&apos;&apos;连接到mongodb数据库&apos;&apos;&apos;</div><div class="line"># 使用默认链接</div><div class="line">client = MongoClient()</div><div class="line"># 数据库名为gznu_all_student_info</div><div class="line">db = client.gznu_all_student_info</div><div class="line"># 数据库中相关表记录</div><div class="line"></div><div class="line"># 学院相关信息</div><div class="line">college_collection = db.college</div><div class="line"># 班级相关信息</div><div class="line">class_collection = db.class_</div><div class="line">all_class_collection = db.all_class</div><div class="line"># 学生信息</div><div class="line">students_collection = db.students</div><div class="line"></div><div class="line">def _save_class_code(url, college_code):</div><div class="line">    &apos;&apos;&apos;将班级信息保持到数据库中&apos;&apos;&apos;</div><div class="line"></div><div class="line">    print &apos;[*] 正在将班级&#123;&#125;信息保存到数据库中&apos;.format(college_code)</div><div class="line">    info = get_info(url)</div><div class="line">    for i in json.loads(info):</div><div class="line">        for j in i[&apos;children&apos;]:</div><div class="line">            item = &#123;&#125;</div><div class="line">            item[&apos;class_code&apos;] = j[&apos;id&apos;]</div><div class="line">            item[&apos;text&apos;] = j[&apos;text&apos;]</div><div class="line">            item[&apos;college_code&apos;] = college_code</div><div class="line">            item[&apos;update&apos;] = datetime.now()</div><div class="line">            class_collection.insert(item)</div></pre></td></tr></table></figure>
-<h1 id="mongodb-config"><a href="#mongodb-config" class="headerlink" title="mongodb.config"></a>mongodb.config</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">port=27017</div><div class="line">dbpath=/data/db/</div><div class="line">fork=true</div><div class="line">logpath=/data/logs/mongodb.log</div><div class="line">logappend=true</div><div class="line">noauth=true</div><div class="line">nohttpinterface=true</div><div class="line">rest=false</div></pre></td></tr></table></figure>
-<h1 id="导入json文件数据"><a href="#导入json文件数据" class="headerlink" title="导入json文件数据"></a>导入json文件数据</h1><p>将json数据导入到blacklist的phone_number集合中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongoimport -h 127.0.0.1 -d blacklist -c phone_number --file blacklist3.json</div></pre></td></tr></table></figure></p>
-<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtcdrfxiej30mf0gswhj.jpg" alt="mongoimport"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MongoDB</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/db/" class="article-tag-list-link color3">db</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/db/MongoDB-基本操作/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1411,19 +1413,11 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1435,7 +1429,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1443,15 +1449,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1459,11 +1461,7 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1475,7 +1473,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1487,11 +1493,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
+                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
+                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1499,11 +1505,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
             
             <div class="clearfix"></div>

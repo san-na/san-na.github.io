@@ -31,7 +31,7 @@
 
 1db.sedb.find(&amp;#123;uid:&amp;#123;$gt:100&amp;#125;&amp;#125;)">
 <meta property="og:image" content="https://ww4.sinaimg.cn/large/006tNc79gy1fdtcdrfxiej30mf0gswhj.jpg">
-<meta property="og:updated_time" content="2017-03-30T03:17:45.000Z">
+<meta property="og:updated_time" content="2017-05-05T05:49:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MongoDB 基本操作">
 <meta name="twitter:description" content="基本操作基本查询
@@ -257,6 +257,14 @@ var _hmt = _hmt || [];
 <h1 id="mongodb-config"><a href="#mongodb-config" class="headerlink" title="mongodb.config"></a>mongodb.config</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">port=27017</div><div class="line">dbpath=/data/db/</div><div class="line">fork=true</div><div class="line">logpath=/data/logs/mongodb.log</div><div class="line">logappend=true</div><div class="line">noauth=true</div><div class="line">nohttpinterface=true</div><div class="line">rest=false</div></pre></td></tr></table></figure>
 <h1 id="导入json文件数据"><a href="#导入json文件数据" class="headerlink" title="导入json文件数据"></a>导入json文件数据</h1><p>将json数据导入到blacklist的phone_number集合中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongoimport -h 127.0.0.1 -d blacklist -c phone_number --file blacklist3.json</div></pre></td></tr></table></figure></p>
 <p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtcdrfxiej30mf0gswhj.jpg" alt="mongoimport"></p>
+<h1 id="多实例配置"><a href="#多实例配置" class="headerlink" title="多实例配置"></a>多实例配置</h1><blockquote>
+<p>如果想同一台机器跑多个MongoDB，则在启动Mongo的时候指定不同的端口即可，如</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 第一个Mongo</span></div><div class="line">  /dat0/mongodb/bin/mongod --dbpath=/data/db/ --fork --logpath=/data/logs/mongodb.log</div><div class="line"></div><div class="line"><span class="comment"># 第二个Mongo</span></div><div class="line">/dat0/mongodb/bin/mongod --port 27018 --dbpath=/data/data1.5t/mongodb/ --fork --logpath=/data/logs/mongodb-1.5t.log</div></pre></td></tr></table></figure>
+<blockquote>
+<p>要使用第二个Mongo，加上端口就好</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  ~ mongo --port 27018</div><div class="line">MongoDB shell version: 3.2.9</div><div class="line">connecting to: 127.0.0.1:27018/<span class="built_in">test</span></div><div class="line">Server has startup warnings:</div></pre></td></tr></table></figure>
 
       
 
@@ -484,19 +492,11 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -508,7 +508,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -516,15 +528,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -532,11 +540,7 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -548,7 +552,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -560,11 +572,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
+                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
+                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -572,11 +584,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
             
             <div class="clearfix"></div>

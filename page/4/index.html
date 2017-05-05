@@ -184,6 +184,114 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-MongoDB-基本操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/db/MongoDB-基本操作/">MongoDB 基本操作</a>
+    </h1>
+  
+
+        
+        <a href="/db/MongoDB-基本操作/" class="archive-article-date">
+  	<time datetime="2016-05-20T03:23:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-05-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><h2 id="基本查询"><a href="#基本查询" class="headerlink" title="基本查询"></a>基本查询</h2><blockquote>
+<p>以更美观的方式输出</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.number.find().pretty()</div></pre></td></tr></table></figure>
+<h2 id="条件查询"><a href="#条件查询" class="headerlink" title="条件查询"></a>条件查询</h2><h3 id="条件操作符"><a href="#条件操作符" class="headerlink" title="条件操作符"></a>条件操作符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(&gt;) 大于 - $gt</div><div class="line">(&lt;) 小于 - $lt</div><div class="line">(&gt;=) 大于等于 - $gte</div><div class="line">(&lt;= ) 小于等于 - $lte</div></pre></td></tr></table></figure>
+<blockquote>
+<p>比如查询uid大于100的一些记录</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.sedb.find(&#123;uid:&#123;<span class="variable">$gt</span>:100&#125;&#125;)</div></pre></td></tr></table></figure>
+<h3 id="判断字段是否存在"><a href="#判断字段是否存在" class="headerlink" title="判断字段是否存在"></a>判断字段是否存在</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">查询所有存在age字段的记录</div><div class="line"></div><div class="line">db.users.find(&#123;age: &#123;$exists: true&#125;&#125;);</div><div class="line"></div><div class="line">查询所有不存在name字段的记录</div><div class="line"></div><div class="line">db.users.find(&#123;name: &#123;$exists: false&#125;&#125;);</div><div class="line"></div><div class="line"></div><div class="line"># 比如</div><div class="line">db.sedb.count(&#123;&apos;username&apos;:&quot;%&quot;,uid:&#123;$gt:100&#125;,email:&#123;$exists:false&#125;&#125;)</div></pre></td></tr></table></figure>
+<h2 id="获取数据库的所有聚合名称"><a href="#获取数据库的所有聚合名称" class="headerlink" title="获取数据库的所有聚合名称"></a>获取数据库的所有聚合名称</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt; db.getCollectionNames();</div><div class="line">[ &quot;phone_number&quot;, &quot;system.indexes&quot; ]</div></pre></td></tr></table></figure>
+<h2 id="统计数据库特定聚合所有记录数量"><a href="#统计数据库特定聚合所有记录数量" class="headerlink" title="统计数据库特定聚合所有记录数量"></a>统计数据库特定聚合所有记录数量</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">db.phone_number.count()</div><div class="line">16119524</div></pre></td></tr></table></figure>
+<h2 id="获取数据库特定聚合的索引"><a href="#获取数据库特定聚合的索引" class="headerlink" title="获取数据库特定聚合的索引"></a>获取数据库特定聚合的索引</h2><blockquote>
+<p>比如获取phone_number聚合的所有索引<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone_number.getIndexes()</div><div class="line">[</div><div class="line">	&#123;</div><div class="line">		&quot;v&quot; : 1,</div><div class="line">		&quot;key&quot; : &#123;</div><div class="line">			&quot;_id&quot; : 1</div><div class="line">		&#125;,</div><div class="line">		&quot;name&quot; : &quot;_id_&quot;,</div><div class="line">		&quot;ns&quot; : &quot;blacklist.phone_number&quot;</div><div class="line">	&#125;</div><div class="line">]</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="添加索引"><a href="#添加索引" class="headerlink" title="添加索引"></a>添加索引</h2><blockquote>
+<p>为phone_number的phone字段添加索引<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone_number.ensureIndex(&#123;&quot;phone&quot;:1&#125;)</div><div class="line">&#123;</div><div class="line">	&quot;createdCollectionAutomatically&quot; : false,</div><div class="line">	&quot;numIndexesBefore&quot; : 1,</div><div class="line">	&quot;numIndexesAfter&quot; : 2,</div><div class="line">	&quot;ok&quot; : 1</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>再查看索引情况验证一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone_number.getIndexes()</div><div class="line">[</div><div class="line">	&#123;</div><div class="line">		&quot;v&quot; : 1,</div><div class="line">		&quot;key&quot; : &#123;</div><div class="line">			&quot;_id&quot; : 1</div><div class="line">		&#125;,</div><div class="line">		&quot;name&quot; : &quot;_id_&quot;,</div><div class="line">		&quot;ns&quot; : &quot;blacklist.phone_number&quot;</div><div class="line">	&#125;,</div><div class="line">	&#123;</div><div class="line">		&quot;v&quot; : 1,</div><div class="line">		&quot;key&quot; : &#123;</div><div class="line">			&quot;phone&quot; : 1</div><div class="line">		&#125;,</div><div class="line">		&quot;name&quot; : &quot;phone_1&quot;,</div><div class="line">		&quot;ns&quot; : &quot;blacklist.phone_number&quot;</div><div class="line">	&#125;</div><div class="line">]</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="分组查询group-count"><a href="#分组查询group-count" class="headerlink" title="分组查询group count"></a>分组查询group count</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone.aggregate([&#123;$group:&#123;_id:&quot;$source&quot;, num_tutorial:&#123;$sum:1&#125;&#125;&#125;])</div><div class="line">&#123; &quot;_id&quot; : &quot;youm&quot;, &quot;num_tutorial&quot; : 449 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;tianma168&quot;, &quot;num_tutorial&quot; : 349 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;dingdkj&quot;, &quot;num_tutorial&quot; : 3259 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ypyun&quot;, &quot;num_tutorial&quot; : 10192 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ilezan&quot;, &quot;num_tutorial&quot; : 43685 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ism168&quot;, &quot;num_tutorial&quot; : 2856 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;iyylw&quot;, &quot;num_tutorial&quot; : 16284 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;iqiyi&quot;, &quot;num_tutorial&quot; : 1 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;xudan123.com&quot;, &quot;num_tutorial&quot; : 74808 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;vim6&quot;, &quot;num_tutorial&quot; : 26927 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yzm1&quot;, &quot;num_tutorial&quot; : 449854 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;feiq&quot;, &quot;num_tutorial&quot; : 46670 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;83r.com&quot;, &quot;num_tutorial&quot; : 144898 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;maz8&quot;, &quot;num_tutorial&quot; : 81461 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;kuaima9&quot;, &quot;num_tutorial&quot; : 138903 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;bmyzm&quot;, &quot;num_tutorial&quot; : 6015 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;sunvarma.com&quot;, &quot;num_tutorial&quot; : 45164 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ema6&quot;, &quot;num_tutorial&quot; : 54819 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yma0.com&quot;, &quot;num_tutorial&quot; : 417669 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;creditease&quot;, &quot;num_tutorial&quot; : 101747 &#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>如果需要排序的话<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&gt; db.phone.aggregate([&#123;$group:&#123;_id:&quot;$source&quot;, count:&#123;$sum:1&#125;&#125;&#125;,&#123;$sort:&#123;&quot;count&quot;:-1&#125;&#125;])</div><div class="line">&#123; &quot;_id&quot; : &quot;other&quot;, &quot;count&quot; : 6133225 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ly.com&quot;, &quot;count&quot; : 5235378 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;zmyzm.com&quot;, &quot;count&quot; : 1038465 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;f02.cn&quot;, &quot;count&quot; : 644959 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;shjmpt.com&quot;, &quot;count&quot; : 502440 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yzm1&quot;, &quot;count&quot; : 449854 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yma0.com&quot;, &quot;count&quot; : 417669 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;6yzm.com&quot;, &quot;count&quot; : 297152 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;taomapt.com&quot;, &quot;count&quot; : 187613 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;83r.com&quot;, &quot;count&quot; : 144898 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;kuaima9&quot;, &quot;count&quot; : 138903 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;creditease&quot;, &quot;count&quot; : 101747 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;tongdun&quot;, &quot;count&quot; : 95012 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;aliqin&quot;, &quot;count&quot; : 87845 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;maz8&quot;, &quot;count&quot; : 81461 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;xudan123.com&quot;, &quot;count&quot; : 74808 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;ema6&quot;, &quot;count&quot; : 54819 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;feiq&quot;, &quot;count&quot; : 46670 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;sunvarma.com&quot;, &quot;count&quot; : 45164 &#125;</div><div class="line">&#123; &quot;_id&quot; : &quot;yayayama.com&quot;, &quot;count&quot; : 44941 &#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="MongoDB-唯一索引自动删除重复记录"><a href="#MongoDB-唯一索引自动删除重复记录" class="headerlink" title="MongoDB 唯一索引自动删除重复记录"></a>MongoDB 唯一索引自动删除重复记录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">coll.ensureIndex(&#123;productid:1&#125;) // 在productid上建立普通索引</div><div class="line">coll.ensureIndex(&#123;district:1, plate:1&#125;) // 多字段索引</div><div class="line">coll.ensureIndex(&#123;productid:1&#125;, &#123;unique:true&#125;) // 唯一索引</div><div class="line">coll.ensureIndex(&#123;productid:1&#125;, &#123;unique:true, dropDups:true&#125;) // 建索引时，如果遇到索引字段值已经出现过的情况，则删除重复记录</div><div class="line">coll.getIndexes() // 查看索引</div><div class="line">coll.dropIndex(&#123;productid:1&#125;) // 删除单个索</div></pre></td></tr></table></figure>
+<h1 id="Python-相关"><a href="#Python-相关" class="headerlink" title="Python 相关"></a>Python 相关</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">import requests</div><div class="line">import json</div><div class="line">from datetime import datetime</div><div class="line">from pymongo import MongoClient</div><div class="line"></div><div class="line"></div><div class="line">&apos;&apos;&apos;连接到mongodb数据库&apos;&apos;&apos;</div><div class="line"># 使用默认链接</div><div class="line">client = MongoClient()</div><div class="line"># 数据库名为gznu_all_student_info</div><div class="line">db = client.gznu_all_student_info</div><div class="line"># 数据库中相关表记录</div><div class="line"></div><div class="line"># 学院相关信息</div><div class="line">college_collection = db.college</div><div class="line"># 班级相关信息</div><div class="line">class_collection = db.class_</div><div class="line">all_class_collection = db.all_class</div><div class="line"># 学生信息</div><div class="line">students_collection = db.students</div><div class="line"></div><div class="line">def _save_class_code(url, college_code):</div><div class="line">    &apos;&apos;&apos;将班级信息保持到数据库中&apos;&apos;&apos;</div><div class="line"></div><div class="line">    print &apos;[*] 正在将班级&#123;&#125;信息保存到数据库中&apos;.format(college_code)</div><div class="line">    info = get_info(url)</div><div class="line">    for i in json.loads(info):</div><div class="line">        for j in i[&apos;children&apos;]:</div><div class="line">            item = &#123;&#125;</div><div class="line">            item[&apos;class_code&apos;] = j[&apos;id&apos;]</div><div class="line">            item[&apos;text&apos;] = j[&apos;text&apos;]</div><div class="line">            item[&apos;college_code&apos;] = college_code</div><div class="line">            item[&apos;update&apos;] = datetime.now()</div><div class="line">            class_collection.insert(item)</div></pre></td></tr></table></figure>
+<h1 id="mongodb-config"><a href="#mongodb-config" class="headerlink" title="mongodb.config"></a>mongodb.config</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">port=27017</div><div class="line">dbpath=/data/db/</div><div class="line">fork=true</div><div class="line">logpath=/data/logs/mongodb.log</div><div class="line">logappend=true</div><div class="line">noauth=true</div><div class="line">nohttpinterface=true</div><div class="line">rest=false</div></pre></td></tr></table></figure>
+<h1 id="导入json文件数据"><a href="#导入json文件数据" class="headerlink" title="导入json文件数据"></a>导入json文件数据</h1><p>将json数据导入到blacklist的phone_number集合中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongoimport -h 127.0.0.1 -d blacklist -c phone_number --file blacklist3.json</div></pre></td></tr></table></figure></p>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtcdrfxiej30mf0gswhj.jpg" alt="mongoimport"></p>
+<h1 id="多实例配置"><a href="#多实例配置" class="headerlink" title="多实例配置"></a>多实例配置</h1><blockquote>
+<p>如果想同一台机器跑多个MongoDB，则在启动Mongo的时候指定不同的端口即可，如</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 第一个Mongo</span></div><div class="line">  /dat0/mongodb/bin/mongod --dbpath=/data/db/ --fork --logpath=/data/logs/mongodb.log</div><div class="line"></div><div class="line"><span class="comment"># 第二个Mongo</span></div><div class="line">/dat0/mongodb/bin/mongod --port 27018 --dbpath=/data/data1.5t/mongodb/ --fork --logpath=/data/logs/mongodb-1.5t.log</div></pre></td></tr></table></figure>
+<blockquote>
+<p>要使用第二个Mongo，加上端口就好</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  ~ mongo --port 27018</div><div class="line">MongoDB shell version: 3.2.9</div><div class="line">connecting to: 127.0.0.1:27018/<span class="built_in">test</span></div><div class="line">Server has startup warnings:</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MongoDB</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/db/" class="article-tag-list-link color3">db</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/db/MongoDB-基本操作/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-杂谈-远程管理、SELinux、Raid等" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1060,101 +1168,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Docker-容器间通信" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Docker-容器间通信/">Docker-容器间通信</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Docker-容器间通信/" class="archive-article-date">
-  	<time datetime="2015-06-19T22:35:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="pipework"><a href="#pipework" class="headerlink" title="pipework"></a>pipework</h1><blockquote>
-<p><a href="https://github.com/jpetazzo/pipework" target="_blank" rel="external">https://github.com/jpetazzo/pipework</a></p>
-<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>在同一宿主主机中创建两台容器，通过pipework创建网桥进行通讯</p>
-<h4 id="c1"><a href="#c1" class="headerlink" title="c1"></a>c1</h4><p>docker run –name c1 -it ubuntu:14.04</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtfx8vx82j30hc0ad75b.jpg" alt="c1"></p>
-<h4 id="c2"><a href="#c2" class="headerlink" title="c2"></a>c2</h4><blockquote>
-<p>docker run –name c2 -it ubuntu:14.04</p>
-</blockquote>
-<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtfxkm169j30gy0abgmm.jpg" alt="c2"></p>
-<blockquote>
-<p>创建网桥<br>git clone <a href="https://github.com/jpetazzo/pipework.git" target="_blank" rel="external">https://github.com/jpetazzo/pipework.git</a></p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  pipework git:(master) ./pipework br1 c1 192.168.11.1/24</div><div class="line">➜  pipework git:(master) ./pipework br1 c2 192.168.11.2/24</div><div class="line"> brctl show</div></pre></td></tr></table></figure>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtfxvtbynj30i20a0my7.jpg" alt="创建网桥"></p>
-<blockquote>
-<p>效果图</p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtfy8sij4j311n0hq0wt.jpg" alt="效果图"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Docker</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Docker-容器间通信/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1240,19 +1253,11 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1264,7 +1269,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1272,15 +1289,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1288,11 +1301,7 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1304,7 +1313,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1316,11 +1333,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
+                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
+                <a href="javascript:void(0)" class="js-tag color5">Solr</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1328,11 +1345,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
             
             <div class="clearfix"></div>
