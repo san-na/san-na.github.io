@@ -400,6 +400,10 @@ var _hmt = _hmt || [];
 <p>部分敏感字段已删除</p>
 </blockquote>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> pyodbc</div><div class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> embed</div><div class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</div><div class="line"><span class="keyword">import</span> sys</div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line">client = MongoClient(connect=<span class="keyword">False</span>)</div><div class="line">db = client.cninfo</div><div class="line"></div><div class="line"></div><div class="line">server = <span class="string">'192.168.1.143'</span></div><div class="line">database = <span class="string">'auction'</span></div><div class="line">username = <span class="string">'sa'</span></div><div class="line">password = <span class="string">'pass'</span></div><div class="line">driver= <span class="string">'&#123;ODBC Driver 13 for SQL Server&#125;'</span></div><div class="line"></div><div class="line">CONNECT_STR = <span class="string">'DRIVER='</span>+driver+<span class="string">';PORT=1433;SERVER='</span>+server+<span class="string">';PORT=1443;DATABASE='</span>+database+<span class="string">';UID='</span>+username+<span class="string">';PWD='</span>+ password</div><div class="line"></div><div class="line">SELECT_DATA_STR = (<span class="string">"SELECT *****;"</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_data_from_datas</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        cursor.execute(SELECT_DATA_STR)</div><div class="line">        <span class="keyword">return</span> cursor.fetchall()</div><div class="line">    <span class="keyword">except</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'error'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">data2json</span><span class="params">(data)</span>:</span></div><div class="line">    <span class="string">""""将数据格式转换为json"""</span></div><div class="line"></div><div class="line">    post = data[<span class="number">4</span>] <span class="keyword">if</span> data[<span class="number">4</span>] <span class="keyword">else</span> <span class="string">''</span></div><div class="line">    addr = <span class="string">u'&#123;&#125;&#123;&#125;'</span>.format(data[<span class="number">5</span>], data[<span class="number">6</span>])</div><div class="line">    office_tel = data[<span class="number">8</span>] <span class="keyword">if</span> data[<span class="number">8</span>] <span class="keyword">else</span> <span class="string">''</span></div><div class="line">    mobile_tel = data[<span class="number">9</span>] <span class="keyword">if</span> data[<span class="number">9</span>] <span class="keyword">else</span> <span class="string">''</span></div><div class="line">    url = data[<span class="number">10</span>] <span class="keyword">if</span> data[<span class="number">10</span>] <span class="keyword">else</span> <span class="string">''</span></div><div class="line">    f_email1 = data[<span class="number">11</span>] <span class="keyword">if</span> data[<span class="number">11</span>] <span class="keyword">else</span> <span class="string">''</span></div><div class="line">    f_email2 = data[<span class="number">12</span>] <span class="keyword">if</span> data[<span class="number">12</span>] <span class="keyword">else</span> <span class="string">''</span></div><div class="line"></div><div class="line">    item = &#123;</div><div class="line"></div><div class="line">        <span class="string">"tips"</span>: tips_str</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> item</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">insert_to_mongo</span><span class="params">(json_list)</span>:</span></div><div class="line">    <span class="string">"""将数据插入mongo"""</span></div><div class="line">    db.sedb.insert_many(json_list)</div><div class="line">    <span class="keyword">pass</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    cnxn = pyodbc.connect(CONNECT_STR)</div><div class="line">    cursor = cnxn.cursor()</div><div class="line"></div><div class="line">    json_list = []</div><div class="line"></div><div class="line">    datas = get_data_from_datas()</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> datas:</div><div class="line">        json_list.append(data2json(i))</div><div class="line">        <span class="keyword">if</span> len(json_list) == <span class="number">2000</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">"2000 line data inserting……"</span></div><div class="line">            insert_to_mongo(json_list)</div><div class="line">            json_list = []</div><div class="line">    <span class="keyword">if</span> json_list:</div><div class="line">        <span class="keyword">print</span> <span class="string">"inserting &#123;&#125; line"</span>.format(len(json_list))</div><div class="line">        insert_to_mongo(json_list)</div><div class="line">        json_list = []</div></pre></td></tr></table></figure>
+<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><blockquote>
+<p>又有一个场景是像弄两个MongoDB的数据整合<br>于是就用Python编写了个多线程脚本，不断充源数据库中读取数据后存放到目标数据库中，代码如下</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</div><div class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> embed</div><div class="line"></div><div class="line"><span class="keyword">import</span> argparse</div><div class="line"><span class="keyword">import</span> threading</div><div class="line"><span class="keyword">import</span> Queue</div><div class="line"></div><div class="line"><span class="keyword">import</span> sys</div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding(<span class="string">'utf8'</span>)</div><div class="line"></div><div class="line">parser = argparse.ArgumentParser(description=<span class="string">'data migration'</span>)</div><div class="line">parser.add_argument(<span class="string">'thread'</span>, type=int, help=<span class="string">'write thread count'</span>)</div><div class="line">args = parser.parse_args()</div><div class="line"></div><div class="line">queue = Queue.Queue()</div><div class="line"></div><div class="line">host = <span class="string">'192.168.1.11'</span></div><div class="line">new_port = <span class="number">27018</span></div><div class="line"></div><div class="line">client = MongoClient(host=host)</div><div class="line">client15t = MongoClient(host=host, port=new_port)</div><div class="line"></div><div class="line">cninfo = client.cninfo</div><div class="line">sedb = cninfo.sedb</div><div class="line"></div><div class="line">social_db = client15t.social_engine</div><div class="line">hk = social_db.hongkong</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">while</span> hk.count():</div><div class="line">        result = &#123;&#125;</div><div class="line">        data = hk.find_one()</div><div class="line">        result[<span class="string">'realname'</span>] = data[<span class="string">'name'</span>]</div><div class="line">        result[<span class="string">'username'</span>] = data[<span class="string">'username'</span>]</div><div class="line">        result[<span class="string">'email'</span>] = data[<span class="string">'email'</span>]</div><div class="line">        result[<span class="string">'password'</span>] = data[<span class="string">'password'</span>]</div><div class="line">        result[<span class="string">'qq'</span>] = data[<span class="string">'phone'</span>]</div><div class="line">        result[<span class="string">'shenfenzheng'</span>] = data[<span class="string">'id_card'</span>]</div><div class="line">        result[<span class="string">'site'</span>] = <span class="string">'hk1t'</span></div><div class="line">        result[<span class="string">'tips'</span>] = <span class="string">u'ip:&#123;&#125;,addr:&#123;&#125;,source:&#123;&#125;'</span>.format(</div><div class="line">            data[<span class="string">'ip'</span>], data[<span class="string">'address'</span>], data[<span class="string">'source'</span>])</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">if</span> hk.find_one_and_delete(&#123;<span class="string">'_id'</span>: data[<span class="string">'_id'</span>]&#125;):</div><div class="line">                sedb.insert(result)</div><div class="line">                <span class="keyword">print</span> hk.count()</div><div class="line">        <span class="keyword">except</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">'Data has been deleted. '</span></div><div class="line">            <span class="keyword">pass</span></div><div class="line">        <span class="comment"># print data</span></div><div class="line"></div><div class="line"></div><div class="line">threads = []</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(args.thread):</div><div class="line">    t = threading.Thread(target=run)</div><div class="line">    t.start()</div><div class="line"><span class="keyword">for</span> t <span class="keyword">in</span> threads:</div><div class="line">    t.join()%</div></pre></td></tr></table></figure>
 
       
 
@@ -512,11 +516,11 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">TensorFlow</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">TensorFlow</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -1183,18 +1187,6 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
@@ -1207,15 +1199,27 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">FreeRADIUS</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color4">LVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1227,23 +1231,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
+                <a href="javascript:void(0)" class="js-tag color1">OSSIM</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1255,7 +1251,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">提权</a>
+                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1263,7 +1263,7 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
+                <a href="javascript:void(0)" class="js-tag color3">提权</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1275,11 +1275,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">运维</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
             
             <div class="clearfix"></div>
