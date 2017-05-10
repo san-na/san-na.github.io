@@ -1224,6 +1224,11 @@ var _hmt = _hmt || [];
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh  </span></div><div class="line"><span class="comment">#  </span></div><div class="line"><span class="comment">#chkconfig: 2345 80 90  </span></div><div class="line"><span class="comment">#description: mongodb  </span></div><div class="line"><span class="function"><span class="title">start</span></span>() &#123;  </div><div class="line">  /dat0/mongodb/bin/mongod</div><div class="line">&#125;  </div><div class="line"></div><div class="line"><span class="function"><span class="title">stop</span></span>() &#123;  </div><div class="line">   /dat0/mongodb/bin/mongod  --shutdown  </div><div class="line">&#125;  </div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span>  </div><div class="line">  start)  </div><div class="line"> start  </div><div class="line"> ;;  </div><div class="line">  stop)  </div><div class="line"> stop  </div><div class="line"> ;;  </div><div class="line">  restart)  </div><div class="line"> stop  </div><div class="line"> start  </div><div class="line"> ;;  </div><div class="line">  *)  </div><div class="line"> <span class="built_in">echo</span> $<span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart&#125;"</span>  </div><div class="line"> <span class="built_in">exit</span> 1  </div><div class="line"><span class="keyword">esac</span></div></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">chkconfig --add mongodb  </div><div class="line">chmod +x  mongodb  </div><div class="line">chkconfig mongodb on</div></pre></td></tr></table></figure>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><blockquote>
+<p>相同道理的还有，solr和Apache等自启动</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#chkconfig: 2345 80 90</span></div><div class="line"><span class="comment">#description: solr</span></div><div class="line"><span class="function"><span class="title">start</span></span>() &#123;</div><div class="line">/dat0/solr/bin/solr start -cloud <span class="_">-s</span> /dat0/solr/server/cloud/node1/solr</div><div class="line">/dat0/solr/bin/solr start -cloud <span class="_">-s</span> /dat0/solr/server/cloud/node2/solr -p 7574 -z localhost:9983</div><div class="line">/dat0/solr/bin/solr start -cloud <span class="_">-s</span> /dat0/solr/server/cloud/node3/solr -p 8984 -z localhost:9983</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="title">stop</span></span>() &#123;</div><div class="line">/dat0/solr/bin/solr stop -all</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span></div><div class="line">  start)</div><div class="line"> start</div><div class="line"> ;;</div><div class="line">  stop)</div><div class="line"> stop</div><div class="line"> ;;</div><div class="line">  restart)</div><div class="line"> stop</div><div class="line"> start</div><div class="line"> ;;</div><div class="line">  *)</div><div class="line"> <span class="built_in">echo</span> $<span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart&#125;"</span></div><div class="line"> <span class="built_in">exit</span> 1</div><div class="line"><span class="keyword">esac</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">!/bin/sh</div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#chkconfig: 2345 80 90</span></div><div class="line"><span class="comment">#description: apache</span></div><div class="line"><span class="function"><span class="title">start</span></span>() &#123;</div><div class="line">/usr/<span class="built_in">local</span>/apache2/bin/httpd</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="title">stop</span></span>() &#123;</div><div class="line">killall httpd</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span></div><div class="line">  start)</div><div class="line"> start</div><div class="line"> ;;</div><div class="line">  stop)</div><div class="line"> stop</div><div class="line"> ;;</div><div class="line">  restart)</div><div class="line"> stop</div><div class="line"> start</div><div class="line"> ;;</div><div class="line">  *)</div><div class="line"> <span class="built_in">echo</span> $<span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart&#125;"</span></div><div class="line"> <span class="built_in">exit</span> 1</div><div class="line"><span class="keyword">esac</span></div></pre></td></tr></table></figure>
 
       
 
@@ -1361,15 +1366,15 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1381,7 +1386,7 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1413,14 +1418,6 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Perl</a>
               </li>
              
@@ -1429,15 +1426,23 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">hydra</a>
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">提权</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">hydra</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1453,11 +1458,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+                <a href="javascript:void(0)" class="js-tag color2">others</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">others</a>
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
             
             <div class="clearfix"></div>
