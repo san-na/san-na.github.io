@@ -184,56 +184,6 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-使用msf进行FTP扫描" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/others/使用msf进行FTP扫描/">使用msf进行FTP扫描</a>
-    </h1>
-  
-
-        
-        <a href="/others/使用msf进行FTP扫描/" class="archive-article-date">
-  	<time datetime="2017-05-26T02:02:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/others/使用msf进行FTP扫描/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-Golang-折腾笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1031,6 +981,130 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-自动化运维工具-Ansible" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/自动化运维工具-Ansible/">自动化运维工具-Ansible</a>
+    </h1>
+  
+
+        
+        <a href="/devops/自动化运维工具-Ansible/" class="archive-article-date">
+  	<time datetime="2017-02-20T14:12:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h2><blockquote>
+<p>环境 MacOS</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pip install ansible</div></pre></td></tr></table></figure>
+<h2 id="2-配置"><a href="#2-配置" class="headerlink" title="2. 配置"></a>2. 配置</h2><blockquote>
+<p>创建hosts文件</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo mkdir -p /etc/ansible</div><div class="line">sudo vim /etc/ansible/hosts</div></pre></td></tr></table></figure>
+<h3 id="2-1-添加主机"><a href="#2-1-添加主机" class="headerlink" title="2.1 添加主机"></a>2.1 添加主机</h3><blockquote>
+<p>在hosts中加入相应的主机，也可以根据自己实际情况创建相应组,比如我的</p>
+<p>另外，如果修改了ssh默认端口，则在相应的ip后面加上端口</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[***]</div><div class="line">120.***.8.**:7788</div><div class="line"></div><div class="line">[***]</div><div class="line">***.***.***.230</div><div class="line"></div><div class="line"></div><div class="line">[local]</div><div class="line">192.168.1.180</div></pre></td></tr></table></figure>
+<blockquote>
+<p>还可以通过定义别名的方式将服务器信息写入hosts文件，如下<br>其中jumper为该服务器别名，可根据自己实际情况修改为其它任意字符串</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jumper ansible_ssh_user=ubuntu ansible_ssh_host=***.***.***.230</div></pre></td></tr></table></figure>
+<blockquote>
+<p>相关的参数还有</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">ansible_ssh_host</div><div class="line">      将要连接的远程主机名.与你想要设定的主机的别名不同的话,可通过此变量设置.</div><div class="line"></div><div class="line">ansible_ssh_port</div><div class="line">      ssh端口号.如果不是默认的端口号,通过此变量设置.</div><div class="line"></div><div class="line">ansible_ssh_user</div><div class="line">      默认的 ssh 用户名</div><div class="line"></div><div class="line">ansible_ssh_pass</div><div class="line">      ssh 密码(这种方式并不安全,我们强烈建议使用 --ask-pass 或 SSH 密钥)</div><div class="line"></div><div class="line">ansible_sudo_pass</div><div class="line">      sudo 密码(这种方式并不安全,我们强烈建议使用 --ask-sudo-pass)</div><div class="line"></div><div class="line">ansible_sudo_exe (new <span class="keyword">in</span> version 1.8)</div><div class="line">      sudo 命令路径(适用于1.8及以上版本)</div><div class="line"></div><div class="line">ansible_connection</div><div class="line">      与主机的连接类型.比如:<span class="built_in">local</span>, ssh 或者 paramiko. Ansible 1.2 以前默认使用 paramiko.1.2 以后默认使用 <span class="string">'smart'</span>,<span class="string">'smart'</span> 方式会根据是否支持 ControlPersist, 来判断<span class="string">'ssh'</span> 方式是否可行.</div><div class="line"></div><div class="line">ansible_ssh_private_key_file</div><div class="line">      ssh 使用的私钥文件.适用于有多个密钥,而你不想使用 SSH 代理的情况.</div><div class="line"></div><div class="line">ansible_shell_type</div><div class="line">      目标系统的shell类型.默认情况下,命令的执行使用 <span class="string">'sh'</span> 语法,可设置为 <span class="string">'csh'</span> 或 <span class="string">'fish'</span>.</div><div class="line"></div><div class="line">ansible_python_interpreter</div><div class="line">      目标主机的 python 路径.适用于的情况: 系统中有多个 Python, 或者命令路径不是<span class="string">"/usr/bin/python"</span>,比如  \*BSD, 或者 /usr/bin/python</div><div class="line">      不是 2.X 版本的 Python.我们不使用 <span class="string">"/usr/bin/env"</span> 机制,因为这要求远程用户的路径设置正确,且要求 <span class="string">"python"</span> 可执行程序名不可为 python以外的名字(实际有可能名为python26).</div><div class="line"></div><div class="line">      与 ansible_python_interpreter 的工作方式相同,可设定如 ruby 或 perl 的路径....</div></pre></td></tr></table></figure>
+<h3 id="2-2-测试连接主机"><a href="#2-2-测试连接主机" class="headerlink" title="2.2 测试连接主机"></a>2.2 测试连接主机</h3><blockquote>
+<p>添加hosts后，就通过ping module测试是否能连接相应的主机</p>
+<p>如果主机默认用户不是root，则可通过 -u 指定用户，如sudo ansible all -m ping  -k -u username</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">➜  ~ sudo ansible all -m ping  -k</div><div class="line">SSH password:</div><div class="line">***.***.***.230 | UNREACHABLE! =&gt; &#123;</div><div class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="string">"msg"</span>: <span class="string">"('Bad authentication type', [u'publickey']) (allowed_types=[u'publickey'])"</span>,</div><div class="line">    <span class="string">"unreachable"</span>: <span class="literal">true</span></div><div class="line">&#125;</div><div class="line">120.***.8.** | SUCCESS =&gt; &#123;</div><div class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line">&#125;</div><div class="line">192.168.1.180 | SUCCESS =&gt; &#123;</div><div class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="2-3-ansible-doc"><a href="#2-3-ansible-doc" class="headerlink" title="2.3 ansible-doc"></a>2.3 ansible-doc</h3><blockquote>
+<p>使用过程中可以通过ansible-doc 查看一些模块的介绍</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ ansible-doc -l | wc -l</div><div class="line">     773</div><div class="line">➜  ~ ansible-doc command</div></pre></td></tr></table></figure>
+<h3 id="2-4-ansible基本功能-copy文件"><a href="#2-4-ansible基本功能-copy文件" class="headerlink" title="2.4 ansible基本功能-copy文件"></a>2.4 ansible基本功能-copy文件</h3><blockquote>
+<p>实现将某文件copy到所有机器上，以nihao.py为例</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">➜  ~ sudo ansible all -m copy <span class="_">-a</span> <span class="string">"src=nihao.py dest=/tmp/ "</span> -k</div><div class="line">SSH password:</div><div class="line">***.***.***.** | SUCCESS =&gt; &#123;</div><div class="line">    <span class="string">"changed"</span>: <span class="literal">true</span>,</div><div class="line">    <span class="string">"checksum"</span>: <span class="string">"da39a3ee5e6b4b0d3255bfef95601890afd80709"</span>,</div><div class="line">    <span class="string">"dest"</span>: <span class="string">"/tmp/nihao.py"</span>,</div><div class="line">    <span class="string">"gid"</span>: 0,</div><div class="line">    <span class="string">"group"</span>: <span class="string">"root"</span>,</div><div class="line">    <span class="string">"md5sum"</span>: <span class="string">"d41d8cd98f00b204e9800998ecf8427e"</span>,</div><div class="line">    <span class="string">"mode"</span>: <span class="string">"0644"</span>,</div><div class="line">    <span class="string">"owner"</span>: <span class="string">"root"</span>,</div><div class="line">    <span class="string">"size"</span>: 0,</div><div class="line">    <span class="string">"src"</span>: <span class="string">"/root/.ansible/tmp/ansible-tmp-1489661516.77-128012169072532/source"</span>,</div><div class="line">    <span class="string">"state"</span>: <span class="string">"file"</span>,</div><div class="line">    <span class="string">"uid"</span>: 0</div><div class="line">&#125;</div><div class="line">192.168.1.180 | SUCCESS =&gt; &#123;</div><div class="line">    <span class="string">"changed"</span>: <span class="literal">true</span>,</div><div class="line">    <span class="string">"checksum"</span>: <span class="string">"da39a3ee5e6b4b0d3255bfef95601890afd80709"</span>,</div><div class="line">    <span class="string">"dest"</span>: <span class="string">"/tmp/nihao.py"</span>,</div><div class="line">    <span class="string">"gid"</span>: 0,</div><div class="line">    <span class="string">"group"</span>: <span class="string">"root"</span>,</div><div class="line">    <span class="string">"md5sum"</span>: <span class="string">"d41d8cd98f00b204e9800998ecf8427e"</span>,</div><div class="line">    <span class="string">"mode"</span>: <span class="string">"0644"</span>,</div><div class="line">    <span class="string">"owner"</span>: <span class="string">"root"</span>,</div><div class="line">    <span class="string">"size"</span>: 0,</div><div class="line">    <span class="string">"src"</span>: <span class="string">"/root/.ansible/tmp/ansible-tmp-1489661516.91-185355159665551/source"</span>,</div><div class="line">    <span class="string">"state"</span>: <span class="string">"file"</span>,</div><div class="line">    <span class="string">"uid"</span>: 0</div><div class="line">&#125;</div><div class="line">backup | SUCCESS =&gt; &#123;</div><div class="line">    <span class="string">"changed"</span>: <span class="literal">true</span>,</div><div class="line">    <span class="string">"checksum"</span>: <span class="string">"da39a3ee5e6b4b0d3255bfef95601890afd80709"</span>,</div><div class="line">    <span class="string">"dest"</span>: <span class="string">"/tmp/nihao.py"</span>,</div><div class="line">    <span class="string">"gid"</span>: 500,</div><div class="line">    <span class="string">"group"</span>: <span class="string">"ubuntu"</span>,</div><div class="line">    <span class="string">"md5sum"</span>: <span class="string">"d41d8cd98f00b204e9800998ecf8427e"</span>,</div><div class="line">    <span class="string">"mode"</span>: <span class="string">"0664"</span>,</div><div class="line">    <span class="string">"owner"</span>: <span class="string">"ubuntu"</span>,</div><div class="line">    <span class="string">"size"</span>: 0,</div><div class="line">    <span class="string">"src"</span>: <span class="string">"/home/ubuntu/.ansible/tmp/ansible-tmp-1489661517.06-86408822620129/source"</span>,</div><div class="line">    <span class="string">"state"</span>: <span class="string">"file"</span>,</div><div class="line">    <span class="string">"uid"</span>: 500</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>然后查看是否在服务器上</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">➜  ~ sudo ansible all -m <span class="built_in">command</span> <span class="_">-a</span> <span class="string">"ls -l /tmp/nihao.py"</span> -k</div><div class="line">SSH password:</div><div class="line">***.***.**.*** | SUCCESS | rc=0 &gt;&gt;</div><div class="line">-rw-r--r-- 1 root root 0 3月  16 18:51 /tmp/nihao.py</div><div class="line"></div><div class="line">120.132.8.73 | SUCCESS | rc=0 &gt;&gt;</div><div class="line">-rw-r--r-- 1 root root 0 Mar 16 00:51 /tmp/nihao.py</div><div class="line"></div><div class="line">backup | SUCCESS | rc=0 &gt;&gt;</div><div class="line">-rw-rw-r-- 1 ubuntu ubuntu 0 Mar 16 18:51 /tmp/nihao.py</div></pre></td></tr></table></figure>
+<h2 id="3-playbook"><a href="#3-playbook" class="headerlink" title="3. playbook"></a>3. playbook</h2><blockquote>
+<p>Ansible 的配置管理脚本称为playbook<br>每一个play必须包含以下两项</p>
+</blockquote>
+<ol>
+<li>host: 需要配置的主机</li>
+<li>task: 需要在这些主机上执行的任务</li>
+</ol>
+<blockquote>
+<p>还有一些常见(非必须)的有name sudo 和vars(变量与其值组成的list)</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/devops/自动化运维工具-Ansible/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1120,15 +1194,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1152,10 +1226,6 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Maltego</a>
               </li>
              
@@ -1165,6 +1235,10 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">社工</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
               </li>
              
               <li class="article-tag-list-item">
