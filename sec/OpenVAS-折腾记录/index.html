@@ -6,44 +6,34 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>数据处理 | SanNa&#39;s Blog</title>
+  <title>OpenVAS 折腾记录 | SanNa&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言
-最近在处理各种数据数据源一般有 普通文本、Access、csv、MSSQL等，比较杂乱而针对不同格式的处境，又要编写不同的脚本，将数据整理之后放入到MongoDB中记录如下：
+  <meta name="description" content="OpenVAS设计理念
+OpenVAS 是一款开放式的漏洞评估工具，主要用来检测目标网络或主机的安全性。用户通过浏览器或者专用客户端程序来下达扫描任务，服务器端负载授权，执行扫描操作并提供扫描结果。它既提供大量的免费扫描插件（NVT，Network Vulnerability Tests），也提供商业化的增强扫描插件（GSF，Greenbone Security Feed）
 
-文本格式
-场景: 存在相同格式的多个文本数据，文件结构如下
-
-
-代码实现
-由于数据不便于公开，所以之贴出部分关键代码具体思路是从文件中读取数据后拼接成dict，然后append到list里最后在通过pymongo的i">
+具体结构
+用户层接口">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据处理">
-<meta property="og:url" content="http://yoursite.com/others/数据处理/index.html">
+<meta property="og:title" content="OpenVAS 折腾记录">
+<meta property="og:url" content="http://yoursite.com/sec/OpenVAS-折腾记录/index.html">
 <meta property="og:site_name" content="SanNa's Blog">
-<meta property="og:description" content="前言
-最近在处理各种数据数据源一般有 普通文本、Access、csv、MSSQL等，比较杂乱而针对不同格式的处境，又要编写不同的脚本，将数据整理之后放入到MongoDB中记录如下：
+<meta property="og:description" content="OpenVAS设计理念
+OpenVAS 是一款开放式的漏洞评估工具，主要用来检测目标网络或主机的安全性。用户通过浏览器或者专用客户端程序来下达扫描任务，服务器端负载授权，执行扫描操作并提供扫描结果。它既提供大量的免费扫描插件（NVT，Network Vulnerability Tests），也提供商业化的增强扫描插件（GSF，Greenbone Security Feed）
 
-文本格式
-场景: 存在相同格式的多个文本数据，文件结构如下
-
-
-代码实现
-由于数据不便于公开，所以之贴出部分关键代码具体思路是从文件中读取数据后拼接成dict，然后append到list里最后在通过pymongo的i">
-<meta property="og:image" content="https://ww2.sinaimg.cn/large/006tNc79gy1fe50o5f4x0j30o4087t9f.jpg">
-<meta property="og:updated_time" content="2017-05-11T01:31:01.000Z">
+具体结构
+用户层接口">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ffyj5nyjckj30h80ad3z6.jpg">
+<meta property="og:image" content="https://leanote.com/api/file/getImage?fileId=5832c2bbab6441378100c7b4">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ffyj655ratj30mm08iwg0.jpg">
+<meta property="og:updated_time" content="2017-05-26T01:58:13.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数据处理">
-<meta name="twitter:description" content="前言
-最近在处理各种数据数据源一般有 普通文本、Access、csv、MSSQL等，比较杂乱而针对不同格式的处境，又要编写不同的脚本，将数据整理之后放入到MongoDB中记录如下：
+<meta name="twitter:title" content="OpenVAS 折腾记录">
+<meta name="twitter:description" content="OpenVAS设计理念
+OpenVAS 是一款开放式的漏洞评估工具，主要用来检测目标网络或主机的安全性。用户通过浏览器或者专用客户端程序来下达扫描任务，服务器端负载授权，执行扫描操作并提供扫描结果。它既提供大量的免费扫描插件（NVT，Network Vulnerability Tests），也提供商业化的增强扫描插件（GSF，Greenbone Security Feed）
 
-文本格式
-场景: 存在相同格式的多个文本数据，文件结构如下
-
-
-代码实现
-由于数据不便于公开，所以之贴出部分关键代码具体思路是从文件中读取数据后拼接成dict，然后append到list里最后在通过pymongo的i">
-<meta name="twitter:image" content="https://ww2.sinaimg.cn/large/006tNc79gy1fe50o5f4x0j30o4087t9f.jpg">
+具体结构
+用户层接口">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ffyj5nyjckj30h80ad3z6.jpg">
   
     <link rel="alternative" href="/atom.xml" title="SanNa&#39;s Blog" type="application/atom+xml">
   
@@ -209,51 +199,118 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-数据处理" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-OpenVAS-折腾记录" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      数据处理
+      OpenVAS 折腾记录
     </h1>
   
 
         
-        <a href="/others/数据处理/" class="archive-article-date">
-  	<time datetime="2017-03-22T12:43:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-22</time>
+        <a href="/sec/OpenVAS-折腾记录/" class="archive-article-date">
+  	<time datetime="2016-08-03T14:33:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-03</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
-<p>最近在处理各种数据<br>数据源一般有 普通文本、Access、csv、MSSQL等，比较杂乱<br>而针对不同格式的处境，又要编写不同的脚本，将数据整理之后放入到MongoDB中<br>记录如下：</p>
+        <h1 id="OpenVAS设计理念"><a href="#OpenVAS设计理念" class="headerlink" title="OpenVAS设计理念"></a>OpenVAS设计理念</h1><blockquote>
+<p>OpenVAS 是一款开放式的漏洞评估工具，主要用来检测目标网络或主机的安全性。用户通过浏览器或者专用客户端程序来下达扫描任务，服务器端负载授权，执行扫描操作并提供扫描结果。它既提供大量的免费扫描插件（NVT，Network Vulnerability Tests），也提供商业化的增强扫描插件（GSF，Greenbone Security Feed）</p>
 </blockquote>
-<h2 id="文本格式"><a href="#文本格式" class="headerlink" title="文本格式"></a>文本格式</h2><blockquote>
-<p>场景: 存在相同格式的多个文本数据，文件结构如下</p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fe50o5f4x0j30o4087t9f.jpg" alt=""></p>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><blockquote>
-<p>由于数据不便于公开，所以之贴出部分关键代码<br>具体思路是从文件中读取数据后拼接成dict，然后append到list里<br>最后在通过pymongo的insert_many将list插入到MongoDB中</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> embed</div><div class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</div><div class="line"></div><div class="line">client = MongoClient(connect=<span class="keyword">False</span>)</div><div class="line">db = client.info</div><div class="line"></div><div class="line"><span class="keyword">import</span> sys</div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line">FILE_LIST = [<span class="string">'1.txt'</span>, <span class="string">'2.txt'</span>, <span class="string">'3.txt'</span>, <span class="string">'4.txt'</span>]</div></pre></td></tr></table></figure>
-<h2 id="SQL-Server"><a href="#SQL-Server" class="headerlink" title="SQL Server"></a>SQL Server</h2><blockquote>
-<p>对于SQL Server的数据源，一般是mdf文件；直接附加到SQL Server 数据库中然后通过Python连接到数据库(使用pyodbc)，执行SQL语句……</p>
-</blockquote>
-<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><blockquote>
-<p>部分敏感字段已删除</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> pyodbc</div><div class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> embed</div><div class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</div><div class="line"><span class="keyword">import</span> sys</div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line">client = MongoClient(connect=<span class="keyword">False</span>)</div><div class="line">db = client.cninfo</div><div class="line"></div><div class="line"></div><div class="line">server = <span class="string">'192.168.1.143'</span></div><div class="line">database = <span class="string">'auction'</span></div><div class="line">username = <span class="string">'sa'</span></div><div class="line">password = <span class="string">'pass'</span></div><div class="line">driver= <span class="string">'&#123;ODBC Driver 13 for SQL Server&#125;'</span></div><div class="line"></div><div class="line">CONNECT_STR = <span class="string">'DRIVER='</span>+driver+<span class="string">';PORT=1433;SERVER='</span>+server+<span class="string">';PORT=1443;DATABASE='</span>+database+<span class="string">';UID='</span>+username+<span class="string">';PWD='</span>+ password</div><div class="line"></div><div class="line">SELECT_DATA_STR = (<span class="string">"SELECT *****;"</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_data_from_datas</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        cursor.execute(SELECT_DATA_STR)</div><div class="line">        <span class="keyword">return</span> cursor.fetchall()</div><div class="line">    <span class="keyword">except</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">'error'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">data2json</span><span class="params">(data)</span>:</span></div><div class="line">    <span class="string">""""将数据格式转换为json"""</span></div><div class="line"></div><div class="line">    post = data[<span class="number">4</span>] <span class="keyword">if</span> data[<span class="number">4</span>] <span class="keyword">else</span> <span class="string">''</span></div><div class="line">    addr = <span class="string">u'&#123;&#125;&#123;&#125;'</span>.format(data[<span class="number">5</span>], data[<span class="number">6</span>])</div><div class="line">    office_tel = data[<span class="number">8</span>] <span class="keyword">if</span> data[<span class="number">8</span>] <span class="keyword">else</span> <span class="string">''</span></div><div class="line">    mobile_tel = data[<span class="number">9</span>] <span class="keyword">if</span> data[<span class="number">9</span>] <span class="keyword">else</span> <span class="string">''</span></div><div class="line">    url = data[<span class="number">10</span>] <span class="keyword">if</span> data[<span class="number">10</span>] <span class="keyword">else</span> <span class="string">''</span></div><div class="line">    f_email1 = data[<span class="number">11</span>] <span class="keyword">if</span> data[<span class="number">11</span>] <span class="keyword">else</span> <span class="string">''</span></div><div class="line">    f_email2 = data[<span class="number">12</span>] <span class="keyword">if</span> data[<span class="number">12</span>] <span class="keyword">else</span> <span class="string">''</span></div><div class="line"></div><div class="line">    item = &#123;</div><div class="line"></div><div class="line">        <span class="string">"tips"</span>: tips_str</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> item</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">insert_to_mongo</span><span class="params">(json_list)</span>:</span></div><div class="line">    <span class="string">"""将数据插入mongo"""</span></div><div class="line">    db.sedb.insert_many(json_list)</div><div class="line">    <span class="keyword">pass</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    cnxn = pyodbc.connect(CONNECT_STR)</div><div class="line">    cursor = cnxn.cursor()</div><div class="line"></div><div class="line">    json_list = []</div><div class="line"></div><div class="line">    datas = get_data_from_datas()</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> datas:</div><div class="line">        json_list.append(data2json(i))</div><div class="line">        <span class="keyword">if</span> len(json_list) == <span class="number">2000</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">"2000 line data inserting……"</span></div><div class="line">            insert_to_mongo(json_list)</div><div class="line">            json_list = []</div><div class="line">    <span class="keyword">if</span> json_list:</div><div class="line">        <span class="keyword">print</span> <span class="string">"inserting &#123;&#125; line"</span>.format(len(json_list))</div><div class="line">        insert_to_mongo(json_list)</div><div class="line">        json_list = []</div></pre></td></tr></table></figure>
-<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><blockquote>
-<p>又有一个场景是像弄两个MongoDB的数据整合<br>于是就用Python编写了个多线程脚本，不断充源数据库中读取数据后存放到目标数据库中，代码如下</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</div><div class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> embed</div><div class="line"></div><div class="line"><span class="keyword">import</span> argparse</div><div class="line"><span class="keyword">import</span> threading</div><div class="line"><span class="keyword">import</span> Queue</div><div class="line"></div><div class="line"><span class="keyword">import</span> sys</div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding(<span class="string">'utf8'</span>)</div><div class="line"></div><div class="line">parser = argparse.ArgumentParser(description=<span class="string">'data migration'</span>)</div><div class="line">parser.add_argument(<span class="string">'thread'</span>, type=int, help=<span class="string">'write thread count'</span>)</div><div class="line">args = parser.parse_args()</div><div class="line"></div><div class="line">queue = Queue.Queue()</div><div class="line"></div><div class="line">host = <span class="string">'192.168.1.11'</span></div><div class="line">new_port = <span class="number">27018</span></div><div class="line"></div><div class="line">client = MongoClient(host=host)</div><div class="line">client15t = MongoClient(host=host, port=new_port)</div><div class="line"></div><div class="line">cninfo = client.cninfo</div><div class="line">sedb = cninfo.sedb</div><div class="line"></div><div class="line">social_db = client15t.social_engine</div><div class="line">hk = social_db.hongkong</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">while</span> hk.count():</div><div class="line">        result = &#123;&#125;</div><div class="line">        data = hk.find_one()</div><div class="line">        result[<span class="string">'realname'</span>] = data[<span class="string">'name'</span>]</div><div class="line">        result[<span class="string">'username'</span>] = data[<span class="string">'username'</span>]</div><div class="line">        result[<span class="string">'email'</span>] = data[<span class="string">'email'</span>]</div><div class="line">        result[<span class="string">'password'</span>] = data[<span class="string">'password'</span>]</div><div class="line">        result[<span class="string">'qq'</span>] = data[<span class="string">'phone'</span>]</div><div class="line">        result[<span class="string">'shenfenzheng'</span>] = data[<span class="string">'id_card'</span>]</div><div class="line">        result[<span class="string">'site'</span>] = <span class="string">'hk1t'</span></div><div class="line">        result[<span class="string">'tips'</span>] = <span class="string">u'ip:&#123;&#125;,addr:&#123;&#125;,source:&#123;&#125;'</span>.format(</div><div class="line">            data[<span class="string">'ip'</span>], data[<span class="string">'address'</span>], data[<span class="string">'source'</span>])</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">if</span> hk.find_one_and_delete(&#123;<span class="string">'_id'</span>: data[<span class="string">'_id'</span>]&#125;):</div><div class="line">                sedb.insert(result)</div><div class="line">                <span class="keyword">print</span> hk.count()</div><div class="line">        <span class="keyword">except</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">'Data has been deleted. '</span></div><div class="line">            <span class="keyword">pass</span></div><div class="line">        <span class="comment"># print data</span></div><div class="line"></div><div class="line"></div><div class="line">threads = []</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(args.thread):</div><div class="line">    t = threading.Thread(target=run)</div><div class="line">    t.start()</div><div class="line"><span class="keyword">for</span> t <span class="keyword">in</span> threads:</div><div class="line">    t.join()%</div></pre></td></tr></table></figure>
+<h2 id="具体结构"><a href="#具体结构" class="headerlink" title="具体结构"></a>具体结构</h2><p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ffyj5nyjckj30h80ad3z6.jpg" alt="具体结构"></p>
+<h2 id="用户层接口"><a href="#用户层接口" class="headerlink" title="用户层接口"></a>用户层接口</h2><p>Openvas-cli</p>
 <blockquote>
-<p>如果需要结合screen的话，可以通过screen -d -m 将相关任务放到screen中</p>
+<p>命令行接口: 通过OMP (OpenVAS Management Protocol) 从命令行访问 openvas 服务层的程序</p>
 </blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">如果要进行二次开发的话，可通过该命令行接口调用一些东西。</div></pre></td></tr></table></figure>
+<p>Greenbone Security Assistabt</p>
+<blockquote>
+<p>访问 web 端接口(gsad) 访问 opebvas 服务层的 web 接口，默认监听地址为 127.0.0.1，端口为 9392</p>
+</blockquote>
+<h2 id="服务层组件"><a href="#服务层组件" class="headerlink" title="服务层组件"></a>服务层组件</h2><p>openvas-manager</p>
+<blockquote>
+<p> 管理器：与接口通信，分配扫描任务, 数据库与用户(用户组)，并根据扫描结果生成评估报告，默认端口为 9390</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">OpenVAS管理协议(OMP)</div><div class="line">SQL数据库(sqlite)配置和扫描结果</div><div class="line">支持SSL</div><div class="line">高并发扫描任务</div><div class="line">管理和标记扫描结果</div><div class="line">预扫描</div><div class="line">用户管理</div></pre></td></tr></table></figure>
+<p>OpenVAS Scanner</p>
+<blockquote>
+<p>扫描器：调用各种漏洞测试插件，执行分配的扫描操作，默认端口为 9391</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">同时许多目标主机扫描</div><div class="line">OpenVAS传输协议(OTP)</div><div class="line">支持SSL</div><div class="line">支持 WMI（Windows Management Instrumentation,Windows 管理规范）是一项核心的 Windows 管理技术；用户可以使用 WMI 管理本地和远程计算机。</div><div class="line">等等</div></pre></td></tr></table></figure>
+<p>部分模块通信方式</p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=5832c2bbab6441378100c7b4" alt="通信方式"></p>
+<h1 id="OpenVAS安装步骤"><a href="#OpenVAS安装步骤" class="headerlink" title="OpenVAS安装步骤"></a>OpenVAS安装步骤</h1><p>环境 kali 2.0<br>源列表使用官方源</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">deb http://http.kali.org/kali kali-rolling main contrib non-free</div><div class="line"># For source package access, uncomment the following line</div><div class="line"># deb-src http://http.kali.org/kali kali-rolling main contrib non-free</div></pre></td></tr></table></figure>
+<p>更新系统</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">apt-get update</div><div class="line">apt-get upgrade</div><div class="line">apt-get dis-upgrade</div></pre></td></tr></table></figure>
+<p>安装openvas<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get install openvas</div><div class="line">openvas-setup</div></pre></td></tr></table></figure></p>
+<p>为了确认 OpenVAS 是否安装完成，可以使用 openvas-check-setup 对该服务进行检查,最终结果显示OK则表示安装成功。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openvas-check-setup</div></pre></td></tr></table></figure>
+<p>修改用户密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openvasmd --user=admin --new-password=123456</div></pre></td></tr></table></figure></p>
+<p>启动服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~  openvas-start                           </div><div class="line">Starting OpenVas Services</div></pre></td></tr></table></figure></p>
+<p>检查相应端口是否启用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">➜  ~  netstat -antp</div><div class="line">Active Internet connections (servers and established)</div><div class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    </div><div class="line">tcp        0      0 127.0.0.1:9390          0.0.0.0:*               LISTEN      1893/openvasmd      </div><div class="line">tcp        0      0 127.0.0.1:9391          0.0.0.0:*               LISTEN      1763/openvassd: Wai</div><div class="line">tcp        0      0 127.0.0.1:80            0.0.0.0:*               LISTEN      1796/gsad           </div><div class="line">tcp        0      0 127.0.0.1:9392          0.0.0.0:*               LISTEN      1723/gsad</div></pre></td></tr></table></figure></p>
+<p>创建相应环境<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">openvas-setup &amp;&amp; openvas-scapdata-sync &amp;&amp; openvas-certdata-sync &amp;&amp; openvas-check-setup &amp;&amp; openvas-stop</div><div class="line">openvasmd --create-user=admin --role=Admin</div><div class="line">openvasmd --user=admin --new-password=NEWPASSWORD</div><div class="line"></div><div class="line">openvas-start</div></pre></td></tr></table></figure></p>
+<p>出现上面的结果就可以打开<a href="https://127.0.0.1:9392,访问了。记住是HTTPS" target="_blank" rel="external">https://127.0.0.1:9392,访问了。记住是HTTPS</a></p>
+<h1 id="OpenVAS源码结构"><a href="#OpenVAS源码结构" class="headerlink" title="OpenVAS源码结构"></a>OpenVAS源码结构</h1><p>版本：OpenVAS-8<br>主要代码</p>
+<blockquote>
+<p>由C语言编写</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Libraries 8.0.7</div><div class="line">Scanner 5.0.5 	</div><div class="line">Manager 6.0.8 	</div><div class="line">Greenbone Security Assistant (GSA) 6.0.10</div></pre></td></tr></table></figure>
+<p>扩展代码</p>
+<blockquote>
+<p>由C语言编写</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Commandline Interface (CLI) 1.4.4</div><div class="line">openvas-smb 1.0.1</div></pre></td></tr></table></figure>
+<p>OSP</p>
+<blockquote>
+<p>(OpenVAS Scanner Protocol) OpenVAS扫描协议<br>由Python编写</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">OSPd 1.0.2</div><div class="line">OSPd-Ancor 1.0.0</div><div class="line">OSPd-debsecan 1.0.0</div><div class="line">OSPd-ovaldi 1.0.0</div><div class="line">OSPd-PaloAlto 1.0b1</div><div class="line">OSPd-w3af 1.0.0</div><div class="line">OSPd-Acunetix 1.0b1</div><div class="line">OSPd-ikescan 1.0b1</div><div class="line">OSPd-ikeprobe 1.0b1</div><div class="line">OSPd-ssh-keyscan 1.0b1</div><div class="line">OSPd-netstat 1.0b1</div></pre></td></tr></table></figure>
+<h1 id="OpenVAS源码结构-1"><a href="#OpenVAS源码结构-1" class="headerlink" title="OpenVAS源码结构"></a>OpenVAS源码结构</h1><h2 id="CLI"><a href="#CLI" class="headerlink" title="CLI"></a>CLI</h2><blockquote>
+<p>通过命令行操作OpenVAS services</p>
+</blockquote>
+<p>使用方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">可通过 omp --help查看该命令帮助信息</div></pre></td></tr></table></figure>
+<p>工作方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">通过OpenVAS管理协议 与openvas-manager进行通信</div></pre></td></tr></table></figure></p>
+<p>内置方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">通过文件内容进行链接--connection_from_file</div><div class="line">连接、断开 manager</div><div class="line">输出 任务、配置、标签等信息等</div></pre></td></tr></table></figure></p>
+<h2 id="Greenbone-Security-Assistant"><a href="#Greenbone-Security-Assistant" class="headerlink" title="Greenbone Security Assistant"></a>Greenbone Security Assistant</h2><blockquote>
+<p>Greenbone安全助理 提供了openvas的一个web管理界面，也支持一些命令行操作</p>
+</blockquote>
+<p>使用方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gsad --help</div></pre></td></tr></table></figure></p>
+<p>工作方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">通过OpenVAS管理协议 与openvas-manager进行通信</div></pre></td></tr></table></figure></p>
+<p>内置方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">用户相关操作，如添加、查找、设置时区、密码等、</div></pre></td></tr></table></figure></p>
+<p>代码文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">├── gsad_base.c</div><div class="line">├── gsad_base.h</div><div class="line">├── gsad.c</div><div class="line">├── gsad_log_conf.cmake_in</div><div class="line">├── gsad_omp.c</div><div class="line">├── gsad_omp.h</div><div class="line">├── tracef.h</div><div class="line">├── validator.c</div><div class="line">├── validator.h</div><div class="line">├── xslt_i18n.c</div><div class="line">└── xslt_i18n.h</div></pre></td></tr></table></figure></p>
+<h2 id="openvas-manager"><a href="#openvas-manager" class="headerlink" title="openvas-manager"></a>openvas-manager</h2><p>代码文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">├── logf.h</div><div class="line">├── lsc_crypt.h</div><div class="line">├── manage_acl.h</div><div class="line">├── manage_config_host_discovery.c</div><div class="line">├── manage_config_system_discovery.c</div><div class="line">├── manage.h</div><div class="line">├── manage_migrators.c</div><div class="line">├── manage_pg.c</div><div class="line">├── manage_pg_server.c</div><div class="line">├── manage_ranges_iana_tcp_2012.c</div><div class="line">├── manage_ranges_iana_tcp_udp_2012.c</div><div class="line">├── manage_sql.h</div><div class="line">├── manage_sqlite3.c</div><div class="line">├── manage_utils.c</div><div class="line">├── openvasmd.c</div><div class="line">├── otp.c</div><div class="line">├── ovas-mngr-comm.c</div><div class="line">├── ovas-mngr-comm.h</div><div class="line">├── scanner.c</div><div class="line">├── sql.c</div><div class="line">├── tracef.h</div><div class="line">└── types.h</div></pre></td></tr></table></figure></p>
+<h3 id="OpenVAS-Scanner"><a href="#OpenVAS-Scanner" class="headerlink" title="OpenVAS Scanner"></a>OpenVAS Scanner</h3><p>代码文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── attack.c    启动插件和管理多线程</div><div class="line">├── attack.h</div><div class="line">├── comm.c   使用NTP协议与Manager进行通信</div><div class="line">├── comm.h</div><div class="line">├── hosts.c   为测试主机创建新进程</div><div class="line">├── hosts.h</div><div class="line">├── log.c    日志管理</div><div class="line">├── log.h</div><div class="line">├── nasl_plugins.c    启动NASL 插件</div><div class="line">├── ntp.c     处理OTP协议</div><div class="line">├── ntp.h</div><div class="line">├── openvassd.c    运行OpenVAS-scanner</div><div class="line">├── otp.c      实现OpenVAS传输协议</div><div class="line">├── otp.h</div><div class="line">├── pluginlaunch.c   管理插件的启动进程</div><div class="line">├── pluginlaunch.h</div><div class="line">├── pluginload.c     从磁盘加载插件到内存中</div><div class="line">├── pluginload.h</div><div class="line">├── pluginscheduler.c   告诉openvassd下一步应该执行哪个插件</div><div class="line">├── pluginscheduler.h</div><div class="line">├── plugs_req.c    对特定插件进行检查</div><div class="line">├── plugs_req.h</div><div class="line">├── processes.c     创建新线程</div><div class="line">├── processes.h</div><div class="line">├── sighand.c     提供信号处理功能</div><div class="line">├── sighand.h</div><div class="line">├── utils.c     一些功能,主要进行文件的转换</div><div class="line">└── utils.h</div></pre></td></tr></table></figure></p>
+<h2 id="openvas-libraries"><a href="#openvas-libraries" class="headerlink" title="openvas-libraries"></a>openvas-libraries</h2><h3 id="base"><a href="#base" class="headerlink" title="base"></a>base</h3><p>代码文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">├── array.c    数组工具</div><div class="line">├── array.h</div><div class="line">├── credentials.c   证书对和三元组</div><div class="line">├── credentials.h</div><div class="line">├── cvss.c     CVSS功能函数</div><div class="line">├── cvss.h</div><div class="line">├── drop_privileges.c  降权</div><div class="line">├── drop_privileges.h</div><div class="line">├── gpgme_util.c</div><div class="line">├── gpgme_util.h</div><div class="line">├── nvti.c     通过API实现处理NVT信息数据集</div><div class="line">├── nvticache.c通过API实现处理NVT信息缓存</div><div class="line">├── nvticache.h</div><div class="line">├── nvti.h</div><div class="line">├── openvas_compress.c    数据压缩</div><div class="line">├── openvas_compress.h</div><div class="line">├── openvas_file.c</div><div class="line">├── openvas_file.h</div><div class="line">├── openvas_hosts.c</div><div class="line">├── openvas_hosts.h</div><div class="line">├── openvas_networking.c</div><div class="line">├── openvas_networking.h</div><div class="line">├── openvas_string.c</div><div class="line">├── openvas_string.h</div><div class="line">├── osp.c    API来处理OSP的实现</div><div class="line">├── osp.h</div><div class="line">├── pidfile.c</div><div class="line">├── pidfile.h</div><div class="line">├── pwpolicy.c    密码检查策略</div><div class="line">├── pwpolicy.h</div><div class="line">├── settings.c</div><div class="line">├── settings.h</div><div class="line">└── test-hosts.c</div></pre></td></tr></table></figure></p>
+<h2 id="nasl"><a href="#nasl" class="headerlink" title="nasl"></a>nasl</h2><blockquote>
+<p>NASL(Nessus Attack Scripting Language) 是一种为Nessus安全扫描器所设计的脚本语言。它的目的在于使每个人都可以在几分钟内对给定的安全漏洞写出测试代码，并允许人们分享他们的测试代码而不用担心自己使用的是什么操作系统。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line">├── arc4.c</div><div class="line">├── byteorder.h</div><div class="line">├── capture_packet.c</div><div class="line">├── capture_packet.h</div><div class="line">├── charcnv.c</div><div class="line">├── charset.h</div><div class="line">├── exec.c</div><div class="line">├── exec.h</div><div class="line">├── genrand.c</div><div class="line">├── hmacmd5.c</div><div class="line">├── hmacmd5.h</div><div class="line">├── iconv.c</div><div class="line">├── iconv.h</div><div class="line">├── lint.c</div><div class="line">├── md4.c</div><div class="line">├── md4.h</div><div class="line">├── md5.c</div><div class="line">├── md5.h</div><div class="line">├── nasl_builtin_find_service.c</div><div class="line">├── nasl_builtin_nmap.c</div><div class="line">├── nasl_builtin_openvas_tcp_scanner.c</div><div class="line">├── nasl_builtin_plugins.h</div><div class="line">├── nasl_builtin_synscan.c</div><div class="line">├── nasl.c</div><div class="line">├── nasl_cert.c</div><div class="line">├── nasl_cert.h</div><div class="line">├── nasl_cmd_exec.c</div><div class="line">├── nasl_cmd_exec.h</div><div class="line">├── nasl_crypto2.c</div><div class="line">├── nasl_crypto2.h</div><div class="line">├── nasl_crypto.c</div><div class="line">├── nasl_crypto.h</div><div class="line">├── nasl_debug.c</div><div class="line">├── nasl_debug.h</div><div class="line">├── nasl_func.c</div><div class="line">├── nasl_func.h</div><div class="line">├── nasl_global_ctxt.h</div><div class="line">├── nasl_grammar.y</div><div class="line">├── nasl.h</div><div class="line">├── nasl_host.c</div><div class="line">├── nasl_host.h</div><div class="line">├── nasl_http.c</div><div class="line">├── nasl_http.h</div><div class="line">├── nasl_init.c</div><div class="line">├── nasl_init.h</div><div class="line">├── nasl_isotime.c</div><div class="line">├── nasl_isotime.h</div><div class="line">├── nasl_lex_ctxt.c</div><div class="line">├── nasl_lex_ctxt.h</div><div class="line">├── nasl-lint.c</div><div class="line">├── nasl_misc_funcs.c</div><div class="line">├── nasl_misc_funcs.h</div><div class="line">├── nasl_packet_forgery.c</div><div class="line">├── nasl_packet_forgery.h</div><div class="line">├── nasl_packet_forgery_v6.c</div><div class="line">├── nasl_packet_forgery_v6.h</div><div class="line">├── nasl_raw.h</div><div class="line">├── nasl_scanner_glue.c</div><div class="line">├── nasl_scanner_glue.h</div><div class="line">├── nasl_signature.c</div><div class="line">├── nasl_signature.h</div><div class="line">├── nasl_smb.c</div><div class="line">├── nasl_smb.h</div><div class="line">├── nasl_snmp.c</div><div class="line">├── nasl_snmp.h</div><div class="line">├── nasl_socket.c</div><div class="line">├── nasl_socket.h</div><div class="line">├── nasl_ssh.c</div><div class="line">├── nasl_ssh.h</div><div class="line">├── nasl_text_utils.c</div><div class="line">├── nasl_text_utils.h</div><div class="line">├── nasl_tree.c</div><div class="line">├── nasl_tree.h</div><div class="line">├── nasl_var.c</div><div class="line">├── nasl_var.h</div><div class="line">├── nasl_wmi.c</div><div class="line">├── nasl_wmi.h</div><div class="line">├── ntlmssp.c</div><div class="line">├── ntlmssp.h</div><div class="line">├── openvas_smb_interface.h</div><div class="line">├── openvas_wmi_interface.h</div><div class="line">├── proto.h</div><div class="line">├── smb_crypt2.c</div><div class="line">├── smb_crypt.c</div><div class="line">├── smb_crypt.h</div><div class="line">├── smb.h</div><div class="line">├── smb_interface_stub.c</div><div class="line">├── smb_signing.c</div><div class="line">├── smb_signing.h</div><div class="line">├── strutils.c</div><div class="line">├── strutils.h</div><div class="line">├── time.c</div><div class="line">└── wmi_interface_stub.c</div></pre></td></tr></table></figure>
+<h3 id="openvas相关文件"><a href="#openvas相关文件" class="headerlink" title="openvas相关文件"></a>openvas相关文件</h3><p>更新插件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openvas-nvt-sync</div></pre></td></tr></table></figure>
+<p>插件目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/var/lib/openvas/plugins</div></pre></td></tr></table></figure>
+<p>同步数据库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openvas-scapdata-sync</div></pre></td></tr></table></figure>
+<p>数据库目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/var/lib/openvas/scap-data</div></pre></td></tr></table></figure></p>
+<h1 id="OSPD学习"><a href="#OSPD学习" class="headerlink" title="OSPD学习"></a>OSPD学习</h1><blockquote>
+<p>主要代码文件</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── __init__.py</div><div class="line">├── misc.py</div><div class="line">├── ospd.py</div><div class="line">├── ospd_ssh.py</div><div class="line">└── win_socket.py</div></pre></td></tr></table></figure>
+<blockquote>
+<p>misc.py<br>可以设置Scan相关信息，如新建Scan、设置[查看]</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">add_result</div><div class="line">results_iterator</div><div class="line">ids_iterator</div><div class="line">create_scan</div><div class="line">options</div><div class="line">progress</div></pre></td></tr></table></figure>
+<blockquote>
+<p>ospd.py<br>也可以获取和设置Scan的一些参数</p>
+</blockquote>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ffyj655ratj30mm08iwg0.jpg" alt=""></p>
 
       
 
@@ -293,19 +350,7 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据处理</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MongoDB</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SQL Server</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">OpenVAS</a>
         		</li>
       		
 		</ul>
@@ -317,7 +362,7 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
         		</li>
       		
 		</ul>
@@ -372,7 +417,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/others/数据处理/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/sec/OpenVAS-折腾记录/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -386,18 +431,18 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/devops/集中化管理平台-Saltstack/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/sec/Metasploit-MIDI文件解析远程代码执行/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          集中化管理平台-Saltstack
+          Metasploit-MIDI文件解析远程代码执行
         
       </div>
     </a>
   
   
-    <a href="/ml/TensorFlow环境搭建/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">TensorFlow环境搭建</div>
+    <a href="/sec/OSSIM-新建邮件提醒/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">OSSIM-新建邮件提醒</div>
       <i class="icon-circle-right"></i>
     </a>
   
