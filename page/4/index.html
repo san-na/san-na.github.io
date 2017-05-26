@@ -184,6 +184,114 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-OSSIM-Add-Linux-Agent" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/OSSIM-Add-Linux-Agent/">OSSIM-Add-Linux-Agent</a>
+    </h1>
+  
+
+        
+        <a href="/sec/OSSIM-Add-Linux-Agent/" class="archive-article-date">
+  	<time datetime="2016-07-21T14:01:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>OSSIM 添加 Linux代理</p>
+</blockquote>
+<h1 id="Env-CentOS6-6"><a href="#Env-CentOS6-6" class="headerlink" title="Env CentOS6.6"></a>Env CentOS6.6</h1><blockquote>
+<p>操作方法见 <a href="https://www.alienvault.com/documentation/usm-v5/ids-configuration/deploying-alienvault-hids.htm" target="_blank" rel="external">官网</a><br>干净的CentOS需要 先安装好wget 和gcc</p>
+<h1 id="下载源码安装"><a href="#下载源码安装" class="headerlink" title="下载源码安装"></a>下载源码安装</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> wget https://bintray.com/artifact/download/ossec/ossec-hids/ossec-hids-2.8.3.tar.gz</div><div class="line">tar -zxvf ossec-hids-2.8.3.tar.gz</div><div class="line">cd ossec-hids-2.8.3</div><div class="line">bash install.sh</div></pre></td></tr></table></figure>
+<p>然后就是根据提示进行安装，</p>
+<p>提取Key到agent文件(/var/ossec/binmanage_agents)</p>
+</blockquote>
+<ol>
+<li>选择语言<br><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtez5msmgj30hi08w752.jpg" alt="选择语言"></li>
+<li>提示安装gcc<br><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtf02z6uej30gp05m0sv.jpg" alt="安装gcc"></li>
+<li>选择安装模式 agent<br><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtf0ormqgj30dg0210sj.jpg" alt="选择安装模式"><br>4.相关信息设置默认就好<br><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtf12z26gj30ag02oglh.jpg" alt="相关信息设置默认就好"><br>5.根据相关情况填入Service IP或者主机名<br>……<br>安装成功后会给出服务启动和关闭的一些命令信息<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- 已正确完成系统配置.</div><div class="line"></div><div class="line">- 要启动 OSSEC HIDS:</div><div class="line">	/var/ossec/bin/ossec-control start</div><div class="line"></div><div class="line">- 要停止 OSSEC HIDS:</div><div class="line">	/var/ossec/bin/ossec-control stop</div><div class="line"></div><div class="line">- 要查看或修改系统配置,请编辑  /var/ossec/etc/ossec.conf</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="在OSSIM-Web-端添加Agent"><a href="#在OSSIM-Web-端添加Agent" class="headerlink" title="在OSSIM Web 端添加Agent"></a>在OSSIM Web 端添加Agent</h1><blockquote>
+<p>Environment &gt; Detection&gt;HIDS &gt; Agents &gt; Agent Control &gt; Add Agent.<br>选择相应主机后 Save</p>
+</blockquote>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtf1jnsgej30fo0csdgb.jpg" alt=""></p>
+<blockquote>
+<p>提取Key到agent文件(/var/ossec/binmanage_agents)</p>
+</blockquote>
+<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtf1wzmrpj30y804d3yu.jpg" alt=""></p>
+<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtf251g2hj30dp051aa8.jpg" alt=""></p>
+<blockquote>
+<p>agent启动成功</p>
+</blockquote>
+<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtf2dfr6aj30d803374d.jpg" alt="">)</p>
+<blockquote>
+<p>然后可在OSSIM中看到该Agent相关信息</p>
+</blockquote>
+<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtf2lyaobj30ea0ar74p.jpg" alt=""></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">OSSIM</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/OSSIM-Add-Linux-Agent/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-OSSIM-GNOME-GUIDE" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1263,109 +1371,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Xen-Server安装教程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/virtualization/Xen-Server安装教程/">Xen Server安装教程</a>
-    </h1>
-  
-
-        
-        <a href="/virtualization/Xen-Server安装教程/" class="archive-article-date">
-  	<time datetime="2015-12-20T12:14:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-12-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>安装环境VMware<br>首先下载 <a href="http://downloadns.citrix.com.edgesuite.net/11616/XenServer-7.0.0-main.iso" target="_blank" rel="external">IOS安装包</a></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">配置信息如下</div></pre></td></tr></table></figure>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1d" alt="配置信息"></p>
-<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">键盘选项默认，点OK继续</div></pre></td></tr></table></figure>
-<p>![<a href="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f19" target="_blank" rel="external">键盘</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">保持默认</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1c" alt="保持默认"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">accept 用户许可协议</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d28" alt="accept EULA"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">磁盘信息</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>默认虚拟存储为sda，点OK继续：</p>
-</blockquote>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d27" alt="磁盘信息"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">使用本地介质安装</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1a" alt="使用本地介质安装"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">不安装增强包</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d25" alt="不安装增强包"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">跳过测试</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=581560c4ab644162e1003f33" alt="跳过测试"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root密码</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=581560daab644164d4003d4d" alt="root密码"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">网络设置</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>测试使用，我就用DHCP了……</p>
-</blockquote>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1b" alt="图片标题"><br><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d26" alt="图片标题"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">时区设置</div><div class="line">asia</div><div class="line">shagnhai</div></pre></td></tr></table></figure>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58156109ab644162e1003f36" alt="时区设置"><br><img src="https://leanote.com/api/file/getImage?fileId=58156120ab644162e1003f3a" alt="时区设置"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">时间服务器</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58156134ab644162e1003f3e" alt="时间服务器"></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=5815613fab644162e1003f3f" alt="时间服务器"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">开始安装</div></pre></td></tr></table></figure></p>
-<p><img src="https://leanote.com/api/file/getImage?fileId=5815614fab644162e1003f44" alt="开始安装"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">安装完成</div></pre></td></tr></table></figure>
-<p><img src="https://leanote.com/api/file/getImage?fileId=58156196ab644164d4003d62" alt="安装完成"><br><img src="https://leanote.com/api/file/getImage?fileId=5815619eab644164d4003d63" alt="用户登录"><br><img src="https://leanote.com/api/file/getImage?fileId=581561a7ab644162e1003f48" alt="Web端显示"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/virtualization/Xen-Server安装教程/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
     </nav>
   
 
@@ -1456,19 +1464,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1520,19 +1528,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">

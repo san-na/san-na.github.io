@@ -184,6 +184,92 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-hydra-折腾笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/hydra-折腾笔记/">hydra 折腾笔记</a>
+    </h1>
+  
+
+        
+        <a href="/sec/hydra-折腾笔记/" class="archive-article-date">
+  	<time datetime="2016-09-20T10:18:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">output =subprocess.Popen(<span class="string">"hydra -l ftp -P wooyun.txt 192.168.1.20 ftp"</span>, shell=True,stdout=subprocess.PIPE).communicate()[0]</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">In [62]: &apos;successfully&apos; in output</div><div class="line"></div><div class="line">Out[62]: True</div></pre></td></tr></table></figure>
+<h1 id="相关文档"><a href="#相关文档" class="headerlink" title="相关文档"></a>相关文档</h1><blockquote>
+<p><a href="http://www.cnblogs.com/mchina/archive/2013/01/01/2840815.html" target="_blank" rel="external">http://www.cnblogs.com/mchina/archive/2013/01/01/2840815.html</a></p>
+</blockquote>
+<h1 id="备选方案"><a href="#备选方案" class="headerlink" title="备选方案"></a>备选方案</h1><blockquote>
+<p>全能暴力破解测试工具——Patator v0.5<br><a href="https://github.com/lanjelot/patator" target="_blank" rel="external">https://github.com/lanjelot/patator</a></p>
+</blockquote>
+<h1 id="python-捕获-shell-脚本的输出结果"><a href="#python-捕获-shell-脚本的输出结果" class="headerlink" title="python 捕获 shell 脚本的输出结果"></a>python 捕获 shell 脚本的输出结果</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line">output =Popen([<span class="string">"mycmd"</span>,<span class="string">"myarg"</span>], stdout=PIPE).communicate()[<span class="number">0</span>]</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line">p = subprocess.Popen([<span class="string">'ls'</span>,<span class="string">'-a'</span>], stdout=subprocess.PIPE, stderr=subprocess.PIPE)</div><div class="line">out, err = p.communicate()</div><div class="line"><span class="keyword">print</span> out</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># work on Unix/Linux only</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> commands</div><div class="line"><span class="keyword">print</span> commands.getstatusoutput(<span class="string">'wc -l file'</span>)[<span class="number">1</span>]</div></pre></td></tr></table></figure>
+<h1 id="Demo-Py-hydra"><a href="#Demo-Py-hydra" class="headerlink" title="[Demo] Py-hydra"></a>[Demo] Py-hydra</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line">通过Python操作Hydra进行相关服务弱口令扫描</div><div class="line">相关结果以json的形式返回</div><div class="line">'''</div><div class="line"></div><div class="line">__author__ = <span class="string">"SanNa"</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">import</span> signal</div><div class="line"></div><div class="line"><span class="comment"># 设置超时时间</span></div><div class="line">TIME_OUT = <span class="number">20</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_hydra</span><span class="params">(ip, service, username, password)</span>:</span></div><div class="line">    <span class="string">'''调用hydra进行破解</span></div><div class="line"></div><div class="line">    :param ip: 目标ip</div><div class="line">    :param service: 服务类型</div><div class="line">    :param username: 用户字典</div><div class="line">    :param password: 密码字典</div><div class="line"></div><div class="line">    :return str</div><div class="line">    '''</div><div class="line">    kwargs = &#123;</div><div class="line">            <span class="string">'ip'</span>: ip,</div><div class="line">            <span class="string">'service'</span>: service,</div><div class="line">            <span class="string">'username'</span>: username,</div><div class="line">            <span class="string">'password'</span>: password,</div><div class="line">            &#125;</div><div class="line">    command_str = <span class="string">"hydra -L &#123;username&#125; -P &#123;password&#125; &#123;ip&#125; &#123;service&#125;"</span></div><div class="line">    result = subprocess.Popen(command_str.format(**kwargs),</div><div class="line">                    shell=<span class="keyword">True</span>, stdout=subprocess.PIPE).communicate()[<span class="number">0</span>]</div><div class="line">    <span class="keyword">return</span> result</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">return_json</span><span class="params">(result)</span>:</span></div><div class="line">    <span class="string">'''从扫描结果中提出相关信息</span></div><div class="line"></div><div class="line">    :param result: 扫描结果</div><div class="line"></div><div class="line">    :return json</div><div class="line">    '''</div><div class="line">    ok_flag = <span class="string">'target successfully completed'</span></div><div class="line">    fail_flag = <span class="string">'0 valid passwords found'</span></div><div class="line">    data = &#123;</div><div class="line">            <span class="string">'login'</span>: <span class="keyword">None</span>,</div><div class="line">            <span class="string">'password'</span>: <span class="keyword">None</span>,</div><div class="line">            &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ok_flag <span class="keyword">in</span> result:</div><div class="line">        data[<span class="string">'status'</span>]  =  <span class="string">'success'</span></div><div class="line">        item = result.split(<span class="string">'\n'</span>)[<span class="number">5</span>]</div><div class="line">        data[<span class="string">'login'</span>] = item.split(<span class="string">' '</span>)[<span class="number">6</span>]</div><div class="line">        data[<span class="string">'password'</span>] = item.split(<span class="string">' '</span>)[<span class="number">10</span>]</div><div class="line">    <span class="keyword">elif</span> fail_flag <span class="keyword">in</span> result:</div><div class="line">        data[<span class="string">'status'</span>] = <span class="string">'fail'</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        data[<span class="string">'status'</span>] = <span class="string">'unknown error.'</span></div><div class="line">    <span class="keyword">return</span> json.dumps([data])</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">handler</span><span class="params">(signum, frame)</span>:</span></div><div class="line">    <span class="keyword">raise</span> AssertionError</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    ip = sys.argv[<span class="number">1</span>]</div><div class="line">    service = sys.argv[<span class="number">2</span>]</div><div class="line">    username = <span class="string">'username.txt'</span></div><div class="line">    password = <span class="string">'password.txt'</span></div><div class="line">    <span class="comment"># try:</span></div><div class="line">    <span class="comment">#     username = sys.argv[3]</span></div><div class="line">    <span class="comment"># except:</span></div><div class="line">    <span class="comment">#     username = 'ftp'</span></div><div class="line">    <span class="comment"># try:</span></div><div class="line">    <span class="comment">#     password = sys.argv[4]</span></div><div class="line">    <span class="comment"># except:</span></div><div class="line">    <span class="comment">#     password = 'ftp'</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'[*] Place wait...'</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="comment"># 超时设置</span></div><div class="line">        signal.signal(signal.SIGALRM, handler)</div><div class="line">        signal.alarm(TIME_OUT)</div><div class="line"></div><div class="line">        result = start_hydra(ip, service, username, password)</div><div class="line">        <span class="keyword">print</span> result</div><div class="line">        data = return_json(result)</div><div class="line">    <span class="keyword">except</span> AssertionError:</div><div class="line">        <span class="keyword">print</span> <span class="string">"TIMEOUT!"</span></div></pre></td></tr></table></figure>
+<h1 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  hydar  python test.py 192.168.1.55 ftp</div><div class="line">[*] Place wait...</div><div class="line">Hydra v8.1 (c) 2014 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes.</div><div class="line"></div><div class="line">Hydra (http://www.thc.org/thc-hydra) starting at 2016-06-02 12:41:32</div><div class="line">[DATA] max 16 tasks per 1 server, overall 64 tasks, 22425 login tries (l:69/p:325), ~21 tries per task</div><div class="line">[DATA] attacking service ftp on port 21</div><div class="line">[21][ftp] host: 192.168.1.55   login: ftp   password: ftp</div><div class="line">1 of 1 target successfully completed, 1 valid password found</div><div class="line">Hydra (http://www.thc.org/thc-hydra) finished at 2016-06-02 12:41:37</div><div class="line"></div><div class="line">[&#123;&quot;status&quot;: &quot;success&quot;, &quot;login&quot;: &quot;ftp&quot;, &quot;password&quot;: &quot;ftp&quot;&#125;]</div></pre></td></tr></table></figure>
+<h1 id="备选方案-1"><a href="#备选方案-1" class="headerlink" title="备选方案"></a>备选方案</h1><blockquote>
+<p>全能暴力破解测试工具——Patator v0.5<br><a href="https://github.com/lanjelot/patator" target="_blank" rel="external">https://github.com/lanjelot/patator</a></p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">hydra</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/hydra-折腾笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-MongoDB-开机自启动" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1068,117 +1154,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-OSSIM-Add-Linux-Agent" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/sec/OSSIM-Add-Linux-Agent/">OSSIM-Add-Linux-Agent</a>
-    </h1>
-  
-
-        
-        <a href="/sec/OSSIM-Add-Linux-Agent/" class="archive-article-date">
-  	<time datetime="2016-07-21T14:01:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>OSSIM 添加 Linux代理</p>
-</blockquote>
-<h1 id="Env-CentOS6-6"><a href="#Env-CentOS6-6" class="headerlink" title="Env CentOS6.6"></a>Env CentOS6.6</h1><blockquote>
-<p>操作方法见 <a href="https://www.alienvault.com/documentation/usm-v5/ids-configuration/deploying-alienvault-hids.htm" target="_blank" rel="external">官网</a><br>干净的CentOS需要 先安装好wget 和gcc</p>
-<h1 id="下载源码安装"><a href="#下载源码安装" class="headerlink" title="下载源码安装"></a>下载源码安装</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> wget https://bintray.com/artifact/download/ossec/ossec-hids/ossec-hids-2.8.3.tar.gz</div><div class="line">tar -zxvf ossec-hids-2.8.3.tar.gz</div><div class="line">cd ossec-hids-2.8.3</div><div class="line">bash install.sh</div></pre></td></tr></table></figure>
-<p>然后就是根据提示进行安装，</p>
-<p>提取Key到agent文件(/var/ossec/binmanage_agents)</p>
-</blockquote>
-<ol>
-<li>选择语言<br><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtez5msmgj30hi08w752.jpg" alt="选择语言"></li>
-<li>提示安装gcc<br><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtf02z6uej30gp05m0sv.jpg" alt="安装gcc"></li>
-<li>选择安装模式 agent<br><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtf0ormqgj30dg0210sj.jpg" alt="选择安装模式"><br>4.相关信息设置默认就好<br><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtf12z26gj30ag02oglh.jpg" alt="相关信息设置默认就好"><br>5.根据相关情况填入Service IP或者主机名<br>……<br>安装成功后会给出服务启动和关闭的一些命令信息<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- 已正确完成系统配置.</div><div class="line"></div><div class="line">- 要启动 OSSEC HIDS:</div><div class="line">	/var/ossec/bin/ossec-control start</div><div class="line"></div><div class="line">- 要停止 OSSEC HIDS:</div><div class="line">	/var/ossec/bin/ossec-control stop</div><div class="line"></div><div class="line">- 要查看或修改系统配置,请编辑  /var/ossec/etc/ossec.conf</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h1 id="在OSSIM-Web-端添加Agent"><a href="#在OSSIM-Web-端添加Agent" class="headerlink" title="在OSSIM Web 端添加Agent"></a>在OSSIM Web 端添加Agent</h1><blockquote>
-<p>Environment &gt; Detection&gt;HIDS &gt; Agents &gt; Agent Control &gt; Add Agent.<br>选择相应主机后 Save</p>
-</blockquote>
-<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtf1jnsgej30fo0csdgb.jpg" alt=""></p>
-<blockquote>
-<p>提取Key到agent文件(/var/ossec/binmanage_agents)</p>
-</blockquote>
-<p><img src="https://ww3.sinaimg.cn/large/006tNc79gy1fdtf1wzmrpj30y804d3yu.jpg" alt=""></p>
-<p><img src="https://ww4.sinaimg.cn/large/006tNc79gy1fdtf251g2hj30dp051aa8.jpg" alt=""></p>
-<blockquote>
-<p>agent启动成功</p>
-</blockquote>
-<p><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdtf2dfr6aj30d803374d.jpg" alt="">)</p>
-<blockquote>
-<p>然后可在OSSIM中看到该Agent相关信息</p>
-</blockquote>
-<p><img src="https://ww1.sinaimg.cn/large/006tNc79gy1fdtf2lyaobj30ea0ar74p.jpg" alt=""></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">OSSIM</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/sec/OSSIM-Add-Linux-Agent/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 
@@ -1269,19 +1247,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1333,19 +1311,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">

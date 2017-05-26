@@ -184,6 +184,130 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-自动化运维工具-Ansible" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/devops/自动化运维工具-Ansible/">自动化运维工具-Ansible</a>
+    </h1>
+  
+
+        
+        <a href="/devops/自动化运维工具-Ansible/" class="archive-article-date">
+  	<time datetime="2017-02-20T14:12:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h2><blockquote>
+<p>环境 MacOS</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pip install ansible</div></pre></td></tr></table></figure>
+<h2 id="2-配置"><a href="#2-配置" class="headerlink" title="2. 配置"></a>2. 配置</h2><blockquote>
+<p>创建hosts文件</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo mkdir -p /etc/ansible</div><div class="line">sudo vim /etc/ansible/hosts</div></pre></td></tr></table></figure>
+<h3 id="2-1-添加主机"><a href="#2-1-添加主机" class="headerlink" title="2.1 添加主机"></a>2.1 添加主机</h3><blockquote>
+<p>在hosts中加入相应的主机，也可以根据自己实际情况创建相应组,比如我的</p>
+<p>另外，如果修改了ssh默认端口，则在相应的ip后面加上端口</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[***]</div><div class="line">120.***.8.**:7788</div><div class="line"></div><div class="line">[***]</div><div class="line">***.***.***.230</div><div class="line"></div><div class="line"></div><div class="line">[local]</div><div class="line">192.168.1.180</div></pre></td></tr></table></figure>
+<blockquote>
+<p>还可以通过定义别名的方式将服务器信息写入hosts文件，如下<br>其中jumper为该服务器别名，可根据自己实际情况修改为其它任意字符串</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jumper ansible_ssh_user=ubuntu ansible_ssh_host=***.***.***.230</div></pre></td></tr></table></figure>
+<blockquote>
+<p>相关的参数还有</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">ansible_ssh_host</div><div class="line">      将要连接的远程主机名.与你想要设定的主机的别名不同的话,可通过此变量设置.</div><div class="line"></div><div class="line">ansible_ssh_port</div><div class="line">      ssh端口号.如果不是默认的端口号,通过此变量设置.</div><div class="line"></div><div class="line">ansible_ssh_user</div><div class="line">      默认的 ssh 用户名</div><div class="line"></div><div class="line">ansible_ssh_pass</div><div class="line">      ssh 密码(这种方式并不安全,我们强烈建议使用 --ask-pass 或 SSH 密钥)</div><div class="line"></div><div class="line">ansible_sudo_pass</div><div class="line">      sudo 密码(这种方式并不安全,我们强烈建议使用 --ask-sudo-pass)</div><div class="line"></div><div class="line">ansible_sudo_exe (new <span class="keyword">in</span> version 1.8)</div><div class="line">      sudo 命令路径(适用于1.8及以上版本)</div><div class="line"></div><div class="line">ansible_connection</div><div class="line">      与主机的连接类型.比如:<span class="built_in">local</span>, ssh 或者 paramiko. Ansible 1.2 以前默认使用 paramiko.1.2 以后默认使用 <span class="string">'smart'</span>,<span class="string">'smart'</span> 方式会根据是否支持 ControlPersist, 来判断<span class="string">'ssh'</span> 方式是否可行.</div><div class="line"></div><div class="line">ansible_ssh_private_key_file</div><div class="line">      ssh 使用的私钥文件.适用于有多个密钥,而你不想使用 SSH 代理的情况.</div><div class="line"></div><div class="line">ansible_shell_type</div><div class="line">      目标系统的shell类型.默认情况下,命令的执行使用 <span class="string">'sh'</span> 语法,可设置为 <span class="string">'csh'</span> 或 <span class="string">'fish'</span>.</div><div class="line"></div><div class="line">ansible_python_interpreter</div><div class="line">      目标主机的 python 路径.适用于的情况: 系统中有多个 Python, 或者命令路径不是<span class="string">"/usr/bin/python"</span>,比如  \*BSD, 或者 /usr/bin/python</div><div class="line">      不是 2.X 版本的 Python.我们不使用 <span class="string">"/usr/bin/env"</span> 机制,因为这要求远程用户的路径设置正确,且要求 <span class="string">"python"</span> 可执行程序名不可为 python以外的名字(实际有可能名为python26).</div><div class="line"></div><div class="line">      与 ansible_python_interpreter 的工作方式相同,可设定如 ruby 或 perl 的路径....</div></pre></td></tr></table></figure>
+<h3 id="2-2-测试连接主机"><a href="#2-2-测试连接主机" class="headerlink" title="2.2 测试连接主机"></a>2.2 测试连接主机</h3><blockquote>
+<p>添加hosts后，就通过ping module测试是否能连接相应的主机</p>
+<p>如果主机默认用户不是root，则可通过 -u 指定用户，如sudo ansible all -m ping  -k -u username</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">➜  ~ sudo ansible all -m ping  -k</div><div class="line">SSH password:</div><div class="line">***.***.***.230 | UNREACHABLE! =&gt; &#123;</div><div class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="string">"msg"</span>: <span class="string">"('Bad authentication type', [u'publickey']) (allowed_types=[u'publickey'])"</span>,</div><div class="line">    <span class="string">"unreachable"</span>: <span class="literal">true</span></div><div class="line">&#125;</div><div class="line">120.***.8.** | SUCCESS =&gt; &#123;</div><div class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line">&#125;</div><div class="line">192.168.1.180 | SUCCESS =&gt; &#123;</div><div class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="2-3-ansible-doc"><a href="#2-3-ansible-doc" class="headerlink" title="2.3 ansible-doc"></a>2.3 ansible-doc</h3><blockquote>
+<p>使用过程中可以通过ansible-doc 查看一些模块的介绍</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ~ ansible-doc -l | wc -l</div><div class="line">     773</div><div class="line">➜  ~ ansible-doc command</div></pre></td></tr></table></figure>
+<h3 id="2-4-ansible基本功能-copy文件"><a href="#2-4-ansible基本功能-copy文件" class="headerlink" title="2.4 ansible基本功能-copy文件"></a>2.4 ansible基本功能-copy文件</h3><blockquote>
+<p>实现将某文件copy到所有机器上，以nihao.py为例</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">➜  ~ sudo ansible all -m copy <span class="_">-a</span> <span class="string">"src=nihao.py dest=/tmp/ "</span> -k</div><div class="line">SSH password:</div><div class="line">***.***.***.** | SUCCESS =&gt; &#123;</div><div class="line">    <span class="string">"changed"</span>: <span class="literal">true</span>,</div><div class="line">    <span class="string">"checksum"</span>: <span class="string">"da39a3ee5e6b4b0d3255bfef95601890afd80709"</span>,</div><div class="line">    <span class="string">"dest"</span>: <span class="string">"/tmp/nihao.py"</span>,</div><div class="line">    <span class="string">"gid"</span>: 0,</div><div class="line">    <span class="string">"group"</span>: <span class="string">"root"</span>,</div><div class="line">    <span class="string">"md5sum"</span>: <span class="string">"d41d8cd98f00b204e9800998ecf8427e"</span>,</div><div class="line">    <span class="string">"mode"</span>: <span class="string">"0644"</span>,</div><div class="line">    <span class="string">"owner"</span>: <span class="string">"root"</span>,</div><div class="line">    <span class="string">"size"</span>: 0,</div><div class="line">    <span class="string">"src"</span>: <span class="string">"/root/.ansible/tmp/ansible-tmp-1489661516.77-128012169072532/source"</span>,</div><div class="line">    <span class="string">"state"</span>: <span class="string">"file"</span>,</div><div class="line">    <span class="string">"uid"</span>: 0</div><div class="line">&#125;</div><div class="line">192.168.1.180 | SUCCESS =&gt; &#123;</div><div class="line">    <span class="string">"changed"</span>: <span class="literal">true</span>,</div><div class="line">    <span class="string">"checksum"</span>: <span class="string">"da39a3ee5e6b4b0d3255bfef95601890afd80709"</span>,</div><div class="line">    <span class="string">"dest"</span>: <span class="string">"/tmp/nihao.py"</span>,</div><div class="line">    <span class="string">"gid"</span>: 0,</div><div class="line">    <span class="string">"group"</span>: <span class="string">"root"</span>,</div><div class="line">    <span class="string">"md5sum"</span>: <span class="string">"d41d8cd98f00b204e9800998ecf8427e"</span>,</div><div class="line">    <span class="string">"mode"</span>: <span class="string">"0644"</span>,</div><div class="line">    <span class="string">"owner"</span>: <span class="string">"root"</span>,</div><div class="line">    <span class="string">"size"</span>: 0,</div><div class="line">    <span class="string">"src"</span>: <span class="string">"/root/.ansible/tmp/ansible-tmp-1489661516.91-185355159665551/source"</span>,</div><div class="line">    <span class="string">"state"</span>: <span class="string">"file"</span>,</div><div class="line">    <span class="string">"uid"</span>: 0</div><div class="line">&#125;</div><div class="line">backup | SUCCESS =&gt; &#123;</div><div class="line">    <span class="string">"changed"</span>: <span class="literal">true</span>,</div><div class="line">    <span class="string">"checksum"</span>: <span class="string">"da39a3ee5e6b4b0d3255bfef95601890afd80709"</span>,</div><div class="line">    <span class="string">"dest"</span>: <span class="string">"/tmp/nihao.py"</span>,</div><div class="line">    <span class="string">"gid"</span>: 500,</div><div class="line">    <span class="string">"group"</span>: <span class="string">"ubuntu"</span>,</div><div class="line">    <span class="string">"md5sum"</span>: <span class="string">"d41d8cd98f00b204e9800998ecf8427e"</span>,</div><div class="line">    <span class="string">"mode"</span>: <span class="string">"0664"</span>,</div><div class="line">    <span class="string">"owner"</span>: <span class="string">"ubuntu"</span>,</div><div class="line">    <span class="string">"size"</span>: 0,</div><div class="line">    <span class="string">"src"</span>: <span class="string">"/home/ubuntu/.ansible/tmp/ansible-tmp-1489661517.06-86408822620129/source"</span>,</div><div class="line">    <span class="string">"state"</span>: <span class="string">"file"</span>,</div><div class="line">    <span class="string">"uid"</span>: 500</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>然后查看是否在服务器上</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">➜  ~ sudo ansible all -m <span class="built_in">command</span> <span class="_">-a</span> <span class="string">"ls -l /tmp/nihao.py"</span> -k</div><div class="line">SSH password:</div><div class="line">***.***.**.*** | SUCCESS | rc=0 &gt;&gt;</div><div class="line">-rw-r--r-- 1 root root 0 3月  16 18:51 /tmp/nihao.py</div><div class="line"></div><div class="line">120.132.8.73 | SUCCESS | rc=0 &gt;&gt;</div><div class="line">-rw-r--r-- 1 root root 0 Mar 16 00:51 /tmp/nihao.py</div><div class="line"></div><div class="line">backup | SUCCESS | rc=0 &gt;&gt;</div><div class="line">-rw-rw-r-- 1 ubuntu ubuntu 0 Mar 16 18:51 /tmp/nihao.py</div></pre></td></tr></table></figure>
+<h2 id="3-playbook"><a href="#3-playbook" class="headerlink" title="3. playbook"></a>3. playbook</h2><blockquote>
+<p>Ansible 的配置管理脚本称为playbook<br>每一个play必须包含以下两项</p>
+</blockquote>
+<ol>
+<li>host: 需要配置的主机</li>
+<li>task: 需要在这些主机上执行的任务</li>
+</ol>
+<blockquote>
+<p>还有一些常见(非必须)的有name sudo 和vars(变量与其值组成的list)</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/devops/自动化运维工具-Ansible/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-转存-GNU-Linux安全基线与加固-0-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1377,95 +1501,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-hydra-折腾笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/sec/hydra-折腾笔记/">hydra 折腾笔记</a>
-    </h1>
-  
-
-        
-        <a href="/sec/hydra-折腾笔记/" class="archive-article-date">
-  	<time datetime="2016-09-20T10:18:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">output =subprocess.Popen(<span class="string">"hydra -l ftp -P wooyun.txt 192.168.1.20 ftp"</span>, shell=True,stdout=subprocess.PIPE).communicate()[0]</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">In [62]: &apos;successfully&apos; in output</div><div class="line"></div><div class="line">Out[62]: True</div></pre></td></tr></table></figure>
-<h1 id="相关文档"><a href="#相关文档" class="headerlink" title="相关文档"></a>相关文档</h1><blockquote>
-<p><a href="http://www.cnblogs.com/mchina/archive/2013/01/01/2840815.html" target="_blank" rel="external">http://www.cnblogs.com/mchina/archive/2013/01/01/2840815.html</a></p>
-</blockquote>
-<h1 id="备选方案"><a href="#备选方案" class="headerlink" title="备选方案"></a>备选方案</h1><blockquote>
-<p>全能暴力破解测试工具——Patator v0.5<br><a href="https://github.com/lanjelot/patator" target="_blank" rel="external">https://github.com/lanjelot/patator</a></p>
-</blockquote>
-<h1 id="python-捕获-shell-脚本的输出结果"><a href="#python-捕获-shell-脚本的输出结果" class="headerlink" title="python 捕获 shell 脚本的输出结果"></a>python 捕获 shell 脚本的输出结果</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line">output =Popen([<span class="string">"mycmd"</span>,<span class="string">"myarg"</span>], stdout=PIPE).communicate()[<span class="number">0</span>]</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line">p = subprocess.Popen([<span class="string">'ls'</span>,<span class="string">'-a'</span>], stdout=subprocess.PIPE, stderr=subprocess.PIPE)</div><div class="line">out, err = p.communicate()</div><div class="line"><span class="keyword">print</span> out</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># work on Unix/Linux only</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> commands</div><div class="line"><span class="keyword">print</span> commands.getstatusoutput(<span class="string">'wc -l file'</span>)[<span class="number">1</span>]</div></pre></td></tr></table></figure>
-<h1 id="Demo-Py-hydra"><a href="#Demo-Py-hydra" class="headerlink" title="[Demo] Py-hydra"></a>[Demo] Py-hydra</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line">通过Python操作Hydra进行相关服务弱口令扫描</div><div class="line">相关结果以json的形式返回</div><div class="line">'''</div><div class="line"></div><div class="line">__author__ = <span class="string">"SanNa"</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">import</span> signal</div><div class="line"></div><div class="line"><span class="comment"># 设置超时时间</span></div><div class="line">TIME_OUT = <span class="number">20</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_hydra</span><span class="params">(ip, service, username, password)</span>:</span></div><div class="line">    <span class="string">'''调用hydra进行破解</span></div><div class="line"></div><div class="line">    :param ip: 目标ip</div><div class="line">    :param service: 服务类型</div><div class="line">    :param username: 用户字典</div><div class="line">    :param password: 密码字典</div><div class="line"></div><div class="line">    :return str</div><div class="line">    '''</div><div class="line">    kwargs = &#123;</div><div class="line">            <span class="string">'ip'</span>: ip,</div><div class="line">            <span class="string">'service'</span>: service,</div><div class="line">            <span class="string">'username'</span>: username,</div><div class="line">            <span class="string">'password'</span>: password,</div><div class="line">            &#125;</div><div class="line">    command_str = <span class="string">"hydra -L &#123;username&#125; -P &#123;password&#125; &#123;ip&#125; &#123;service&#125;"</span></div><div class="line">    result = subprocess.Popen(command_str.format(**kwargs),</div><div class="line">                    shell=<span class="keyword">True</span>, stdout=subprocess.PIPE).communicate()[<span class="number">0</span>]</div><div class="line">    <span class="keyword">return</span> result</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">return_json</span><span class="params">(result)</span>:</span></div><div class="line">    <span class="string">'''从扫描结果中提出相关信息</span></div><div class="line"></div><div class="line">    :param result: 扫描结果</div><div class="line"></div><div class="line">    :return json</div><div class="line">    '''</div><div class="line">    ok_flag = <span class="string">'target successfully completed'</span></div><div class="line">    fail_flag = <span class="string">'0 valid passwords found'</span></div><div class="line">    data = &#123;</div><div class="line">            <span class="string">'login'</span>: <span class="keyword">None</span>,</div><div class="line">            <span class="string">'password'</span>: <span class="keyword">None</span>,</div><div class="line">            &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ok_flag <span class="keyword">in</span> result:</div><div class="line">        data[<span class="string">'status'</span>]  =  <span class="string">'success'</span></div><div class="line">        item = result.split(<span class="string">'\n'</span>)[<span class="number">5</span>]</div><div class="line">        data[<span class="string">'login'</span>] = item.split(<span class="string">' '</span>)[<span class="number">6</span>]</div><div class="line">        data[<span class="string">'password'</span>] = item.split(<span class="string">' '</span>)[<span class="number">10</span>]</div><div class="line">    <span class="keyword">elif</span> fail_flag <span class="keyword">in</span> result:</div><div class="line">        data[<span class="string">'status'</span>] = <span class="string">'fail'</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        data[<span class="string">'status'</span>] = <span class="string">'unknown error.'</span></div><div class="line">    <span class="keyword">return</span> json.dumps([data])</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">handler</span><span class="params">(signum, frame)</span>:</span></div><div class="line">    <span class="keyword">raise</span> AssertionError</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    ip = sys.argv[<span class="number">1</span>]</div><div class="line">    service = sys.argv[<span class="number">2</span>]</div><div class="line">    username = <span class="string">'username.txt'</span></div><div class="line">    password = <span class="string">'password.txt'</span></div><div class="line">    <span class="comment"># try:</span></div><div class="line">    <span class="comment">#     username = sys.argv[3]</span></div><div class="line">    <span class="comment"># except:</span></div><div class="line">    <span class="comment">#     username = 'ftp'</span></div><div class="line">    <span class="comment"># try:</span></div><div class="line">    <span class="comment">#     password = sys.argv[4]</span></div><div class="line">    <span class="comment"># except:</span></div><div class="line">    <span class="comment">#     password = 'ftp'</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'[*] Place wait...'</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="comment"># 超时设置</span></div><div class="line">        signal.signal(signal.SIGALRM, handler)</div><div class="line">        signal.alarm(TIME_OUT)</div><div class="line"></div><div class="line">        result = start_hydra(ip, service, username, password)</div><div class="line">        <span class="keyword">print</span> result</div><div class="line">        data = return_json(result)</div><div class="line">    <span class="keyword">except</span> AssertionError:</div><div class="line">        <span class="keyword">print</span> <span class="string">"TIMEOUT!"</span></div></pre></td></tr></table></figure>
-<h1 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  hydar  python test.py 192.168.1.55 ftp</div><div class="line">[*] Place wait...</div><div class="line">Hydra v8.1 (c) 2014 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes.</div><div class="line"></div><div class="line">Hydra (http://www.thc.org/thc-hydra) starting at 2016-06-02 12:41:32</div><div class="line">[DATA] max 16 tasks per 1 server, overall 64 tasks, 22425 login tries (l:69/p:325), ~21 tries per task</div><div class="line">[DATA] attacking service ftp on port 21</div><div class="line">[21][ftp] host: 192.168.1.55   login: ftp   password: ftp</div><div class="line">1 of 1 target successfully completed, 1 valid password found</div><div class="line">Hydra (http://www.thc.org/thc-hydra) finished at 2016-06-02 12:41:37</div><div class="line"></div><div class="line">[&#123;&quot;status&quot;: &quot;success&quot;, &quot;login&quot;: &quot;ftp&quot;, &quot;password&quot;: &quot;ftp&quot;&#125;]</div></pre></td></tr></table></figure>
-<h1 id="备选方案-1"><a href="#备选方案-1" class="headerlink" title="备选方案"></a>备选方案</h1><blockquote>
-<p>全能暴力破解测试工具——Patator v0.5<br><a href="https://github.com/lanjelot/patator" target="_blank" rel="external">https://github.com/lanjelot/patator</a></p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">hydra</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/sec/hydra-折腾笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 
@@ -1556,19 +1594,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1620,19 +1658,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">

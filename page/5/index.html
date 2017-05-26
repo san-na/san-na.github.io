@@ -184,6 +184,106 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Xen-Server安装教程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/virtualization/Xen-Server安装教程/">Xen Server安装教程</a>
+    </h1>
+  
+
+        
+        <a href="/virtualization/Xen-Server安装教程/" class="archive-article-date">
+  	<time datetime="2015-12-20T12:14:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-12-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>安装环境VMware<br>首先下载 <a href="http://downloadns.citrix.com.edgesuite.net/11616/XenServer-7.0.0-main.iso" target="_blank" rel="external">IOS安装包</a></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">配置信息如下</div></pre></td></tr></table></figure>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1d" alt="配置信息"></p>
+<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">键盘选项默认，点OK继续</div></pre></td></tr></table></figure>
+<p>![<a href="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f19" target="_blank" rel="external">键盘</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">保持默认</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1c" alt="保持默认"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">accept 用户许可协议</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d28" alt="accept EULA"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">磁盘信息</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>默认虚拟存储为sda，点OK继续：</p>
+</blockquote>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d27" alt="磁盘信息"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">使用本地介质安装</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1a" alt="使用本地介质安装"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">不安装增强包</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d25" alt="不安装增强包"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">跳过测试</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=581560c4ab644162e1003f33" alt="跳过测试"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root密码</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=581560daab644164d4003d4d" alt="root密码"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">网络设置</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>测试使用，我就用DHCP了……</p>
+</blockquote>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644162e1003f1b" alt="图片标题"><br><img src="https://leanote.com/api/file/getImage?fileId=58155fa5ab644164d4003d26" alt="图片标题"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">时区设置</div><div class="line">asia</div><div class="line">shagnhai</div></pre></td></tr></table></figure>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58156109ab644162e1003f36" alt="时区设置"><br><img src="https://leanote.com/api/file/getImage?fileId=58156120ab644162e1003f3a" alt="时区设置"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">时间服务器</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58156134ab644162e1003f3e" alt="时间服务器"></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=5815613fab644162e1003f3f" alt="时间服务器"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">开始安装</div></pre></td></tr></table></figure></p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=5815614fab644162e1003f44" alt="开始安装"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">安装完成</div></pre></td></tr></table></figure>
+<p><img src="https://leanote.com/api/file/getImage?fileId=58156196ab644164d4003d62" alt="安装完成"><br><img src="https://leanote.com/api/file/getImage?fileId=5815619eab644164d4003d63" alt="用户登录"><br><img src="https://leanote.com/api/file/getImage?fileId=581561a7ab644162e1003f48" alt="Web端显示"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/virtualization/" class="article-tag-list-link color5">virtualization</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/virtualization/Xen-Server安装教程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Xen与Kvm" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1063,101 +1163,9 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-开发环境" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/others/开发环境/">开发环境</a>
-    </h1>
-  
-
-        
-        <a href="/others/开发环境/" class="archive-article-date">
-  	<time datetime="2014-11-20T10:30:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2014-11-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li><p>pyuthon git</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pacman -S ipython2 git python2-pip curl zsh python2-matplotlib ctags</div></pre></td></tr></table></figure>
-</li>
-<li><p>pip</p>
-</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pip2 install flask torndb mysql-python flask-sqlalchemy flask-login flask-wtf</div></pre></td></tr></table></figure>
-<ol>
-<li>mysql</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pacman -S mariadb libmariadbclient mariadb-clients</div><div class="line">sudo systemctl start mysqld</div><div class="line">sudo systemctl <span class="built_in">enable</span> mysqld</div></pre></td></tr></table></figure>
-<ol>
-<li><p>zsh</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get install zsh -y</div><div class="line">sh -c <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)</span>"</span></div></pre></td></tr></table></figure>
-</li>
-<li><p>可自动补齐输入和语法高亮的MySQL的开源命令行接口</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo pip2 install mycli</div><div class="line">#http://mycli.net/</div></pre></td></tr></table></figure>
-<ol>
-<li><p>vim</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">mv ~/.vim ~/.vim.orig</div><div class="line">mv ~/.vimrc ~/.vimrc.orig</div><div class="line"></div><div class="line">git <span class="built_in">clone</span> https://github.com/san-na/dot-vimrc.git ~/.vim</div><div class="line">ln <span class="_">-s</span> ~/.vim/vimrc ~/.vimrc</div><div class="line"></div><div class="line">git <span class="built_in">clone</span> https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle</div><div class="line"></div><div class="line">:BundleInstall</div></pre></td></tr></table></figure>
-</li>
-<li><p>ssh</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -b 4096 -C <span class="string">"email"</span></div></pre></td></tr></table></figure>
-</li>
-<li><p>Git</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">git config --global user.name <span class="string">'san-na'</span></div><div class="line">git config --global user.email <span class="string">"mail"</span></div><div class="line">git config --global color.ui=<span class="literal">true</span></div><div class="line">git config --global core.editor vim</div></pre></td></tr></table></figure>
-</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/others/开发环境/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
     </nav>
   
 
@@ -1248,19 +1256,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1312,19 +1320,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SQL Server</a>
+                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
