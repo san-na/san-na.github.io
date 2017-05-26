@@ -184,6 +184,274 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Linux取证分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/sec/Linux取证分析/">Linux取证分析</a>
+    </h1>
+  
+
+        
+        <a href="/sec/Linux取证分析/" class="archive-article-date">
+  	<time datetime="2016-06-26T13:26:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="进程隐藏相关原理"><a href="#进程隐藏相关原理" class="headerlink" title="进程隐藏相关原理"></a>进程隐藏相关原理</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><blockquote>
+<p>目前在 Linux 上隐藏进程的技术主要有两种</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( 1) 类似于 ps、top 等的命令能够列出包括 init 在内的所有重要的系统进程, 通过对他们的实现过程进行改造来实现进程隐藏, 具体做法是“劫持”ps 的关键系统调用 sys_getdents( ), 从而无法查看包含进程信息的目录。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( 2) ps 命令实际是通过读取 proc文件系统来向用户返回进程信息的, 而 proc 文件系统是通过文件系统( VFS) 接口来实现的, 因此通过劫持文件系统操作函数集( inode_operation 和 file_operations) 中的有关函数, 使得进程信息无法通过文件系统接口输出给用户。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>以上两种方法虽然都可实现进程隐藏, 但均是在较高的层次上实现的,<br>方法 1 虽然在 ps 时看似隐藏了某个进程, 但在 proc中该进程仍然对用户可见<br> 方法 2 是在 VFS 层对内核函数的劫持, 意味着需要先判断输出的系统信息是与进程有关的还是与进程无关的( 与进程无关的并无隐藏的必要)<br>并且这两种方法都无法满足仅对进程部分信息隐藏的需求, 在实际应用中不够灵活。实际上, 用户对进程信息的访问, 都是通过proc 文件系统完成的, 因此, 实现进程隐藏的根本途径是从 proc 入手, 准确地找出进程信息产生的关键点, 在这些关键点上做一些特殊的处理, 从而达到实现进程隐藏的目的。</p>
+</blockquote>
+<h2 id="Proc文件系统简介"><a href="#Proc文件系统简介" class="headerlink" title="Proc文件系统简介"></a>Proc文件系统简介</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">proc 文件系统是一个伪文件系统，它只存在内存当中，而不占用外存空间。它以文件系统的方式为访问系统内核数据的操作提供接口。用户和应用程序可以通过 proc 得到系统的信息，并可以改变内核的某些参数。由于系统的信息，如进程，是动态改变的，所以用户或应用程序读取 proc 文件时，proc 文件系统是动态从系统内核读出所需信息并提交的。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">基于/proc 文件系统如上所述的特殊性，其内的文件也常被称作虚拟文件，并具有一些独特的特点。例如，其中有些文件虽然使用查看命令查看时会返回大量信息，但文件本身的大小却会显示为 0 字节。此外，这些特殊文件中大多数文件的时间及日期属性通常为当前系统时间和日期，这跟它们随时会被刷新（存储于 RAM 中）有关。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">为了查看及使用上的方便，这些文件通常会按照相关性进行分类存储于不同的目录甚至子目录中，如/proc/scsi 目录中存储的就是当前系统上所有 SCSI 设备的相关信息，/proc/N 中存储的则是系统当前正在运行的进程的相关信息，其中 N 为正在运行的进程（可以想象得到，在某进程结束后其相关目录则会消失）。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">大多数虚拟文件可以使用文件查看命令如 cat、more 或者 less 进行查看，有些文件信息表述的内容可以一目了然，但也有文件的信息却不怎么具有可读性。不过，这些可读性较差的文件在使用一些命令如 apm、free、lspci 或 top 查看时却可以有着不错的表现。</div></pre></td></tr></table></figure>
+<h2 id="Proc文件系统目录结构"><a href="#Proc文件系统目录结构" class="headerlink" title="Proc文件系统目录结构"></a>Proc文件系统目录结构</h2><table>
+<thead>
+<tr>
+<th>目录名称</th>
+<th style="text-align:center">目录内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>apm</td>
+<td style="text-align:center">高级电源管理信息</td>
+</tr>
+<tr>
+<td>cmdline</td>
+<td style="text-align:center">内核命令行</td>
+</tr>
+<tr>
+<td>Cpuinfo</td>
+<td style="text-align:center">关于 Cpu 信息</td>
+</tr>
+<tr>
+<td>Devices</td>
+<td style="text-align:center">可以用到的设备（块设备/字符设备）</td>
+</tr>
+<tr>
+<td>Dma Used</td>
+<td style="text-align:center">DMS channels</td>
+</tr>
+<tr>
+<td>Filesystems</td>
+<td style="text-align:center">支持的文件系统</td>
+</tr>
+<tr>
+<td>Interrupts</td>
+<td style="text-align:center">中断的使用</td>
+</tr>
+<tr>
+<td>Ioports</td>
+<td style="text-align:center">I/O 端口的使用</td>
+</tr>
+<tr>
+<td>Kcore</td>
+<td style="text-align:center">内核核心印象</td>
+</tr>
+<tr>
+<td>Kmsg</td>
+<td style="text-align:center">内核消息</td>
+</tr>
+<tr>
+<td>Ksyms</td>
+<td style="text-align:center">内核符号表</td>
+</tr>
+<tr>
+<td>Loadavg</td>
+<td style="text-align:center">负载均衡</td>
+</tr>
+<tr>
+<td>Locks</td>
+<td style="text-align:center">内核锁</td>
+</tr>
+<tr>
+<td>Meminfo</td>
+<td style="text-align:center">内存信息</td>
+</tr>
+<tr>
+<td>Misc</td>
+<td style="text-align:center">Miscellaneous</td>
+</tr>
+<tr>
+<td>Modules</td>
+<td style="text-align:center">加载模块列表</td>
+</tr>
+<tr>
+<td>Mounts</td>
+<td style="text-align:center">加载的文件系统</td>
+</tr>
+<tr>
+<td>Partitions</td>
+<td style="text-align:center">系统识别的分区表</td>
+</tr>
+<tr>
+<td>Rtc</td>
+<td style="text-align:center">Real time clock</td>
+</tr>
+<tr>
+<td>Slabinfo</td>
+<td style="text-align:center">Slab pool info</td>
+</tr>
+<tr>
+<td>Stat</td>
+<td style="text-align:center">全面统计状态表 s</td>
+</tr>
+<tr>
+<td>Swaps</td>
+<td style="text-align:center">对换空间的利用情况</td>
+</tr>
+<tr>
+<td>Version</td>
+<td style="text-align:center">内核版本</td>
+</tr>
+<tr>
+<td>Uptime</td>
+<td style="text-align:center">系统正常运行时间</td>
+</tr>
+</tbody>
+</table>
+<h2 id="进程信息的创建过程"><a href="#进程信息的创建过程" class="headerlink" title="进程信息的创建过程"></a>进程信息的创建过程</h2><blockquote>
+<p>结合实际情况, 一个用户查看某个进程的信息有两种情形</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">( 1) 用 cat 之类的命令直接读取进程目录下的节点文件</div><div class="line">( 2) 用 ls 之类的命令列举所有的进程目录</div><div class="line">proc 对于这两种方式分别有不同的处理对于 ls 命令是调用 VFS 的 readdir( ) , 而对于cat 命令则会发生对一系列 lookup 函数的调用。</div></pre></td></tr></table></figure>
+<h2 id="进程隐藏的实现"><a href="#进程隐藏的实现" class="headerlink" title="进程隐藏的实现"></a>进程隐藏的实现</h2><blockquote>
+<p>通过以上对 proc 文件系统中生成进程信息实现过程的分析, 我们发现由于 Linux 缺乏模块化,难以找到一个统一的入口, 准确地对进程信息实现隐藏, 必须对实际应用中可能出现的情形 用 cat之类的命令直接读取进程目录下的节点文件和用 ls之类的命令列举所有的进程目录, 分别加以考虑。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">对函数 proc_pid_lookup 进行修改: 在步骤a 的末尾添加代码, 用于判断该进程号是否为隐藏进程的进程号, 如果是, 则跳转到我们定制的一个函数, 该函数可打印出? 该进程无法查看?之类的调试信息后返回上层调用者; 如果否, 则照常执行步骤b、c</div></pre></td></tr></table></figure></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">对函数 proc_pid_readdir 进行修改: 在步骤b 中, 当获取一个进程后, 先判断该进程是否为隐藏进程, 如果是则跳转到我们定制的一个函数, 打印出? 该进程无法查看?之类的调试信息后返回上层调用者; 如果否, 则照常执行步骤 b、c。对于进程部分信息的隐藏, 通过文章第 2 部分的分析, 实际上是选择数组 tgid_base_stuff 中哪些节点不被创建的问题, 对它的实现也要包括以下两部分:</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( 1) 对函数 proc_pident_lookup 进行修改: 在步骤 a 开始前添加代码, 用于判断要创建的节点是否为需隐藏的节点, 如果是, 则跳转到我们定制的一个函数, 打印出? 该节点无法查看?之类的调试信息后返回上层调用者; 如果否, 则照常执行步骤 b。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( 2) 对函数 proc_pident_readdir 进行修改: 在步骤 a 的末尾添加代码, 用于判断要创建的节点是否为需隐藏的节点, 如果是, 则跳转到我们定制的一个函数, 打印出? 该节点无法查看?之类的调试信息后转到步骤 c; 如果否, 则照常执行步骤 b、c。</div></pre></td></tr></table></figure>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">进程隐藏是实现进程保护的一种简单可行的方法之一, 虽然可以在从 proc 到 vfs 的各个层次上容易实现对某个进程的隐藏, 但是如果需要对进程部分信息灵活地进行隐藏, 必须在 proc 层准确地找出进程目录以及其下节点生成的关键点, 在这些关键点上来实现进程隐藏。由于 Linux 缺乏模块化的缺点, 在列举目录和查看节点文件时没有统一的入口点, 而这两种对进程信息的访问都会涉及到进程信的生成, 因此, 需要在内核中对每个进程目录或节点文件生成的地方一一做处理。本方法在内核级上分别实现了对进程全部信息以及进程部分信息的隐藏, 如能根据实际需求, 结合一定的隐藏策略, 比如指定某个系统中哪些进程应该被隐藏, 则在实际应用中更具价值。</div></pre></td></tr></table></figure>
+<h1 id="网络异常排查方法"><a href="#网络异常排查方法" class="headerlink" title="网络异常排查方法"></a>网络异常排查方法</h1><h2 id="Windows排查"><a href="#Windows排查" class="headerlink" title="Windows排查"></a>Windows排查</h2><blockquote>
+<p>查看目前的网络连接情况，定位可疑网络连接（结合业务访问排查）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -b -n (管理员权限)</div></pre></td></tr></table></figure></p>
+<p>通过网络连接进一步确认可疑连接的PID</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -ano</div></pre></td></tr></table></figure>
+<blockquote>
+<p>根据PID确定是那个进程</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tasklist | findstr xxx</div></pre></td></tr></table></figure>
+<blockquote>
+<p>确定此进程的用途以及可否杀死</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">taskkill /T /F /PID 3036</div></pre></td></tr></table></figure>
+<blockquote>
+<p>其他</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">若以上几步没有解决，使用PC Hunter（基于XueTr源码重新开发）工具对其进行深度排查</div></pre></td></tr></table></figure>
+<h2 id="Linux排查"><a href="#Linux排查" class="headerlink" title="Linux排查"></a>Linux排查</h2><blockquote>
+<p>确定系统自身的命令是否被恶意替换，如ls、netstat</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">使用chkrootkit、rkhunter类工具检查下是否存在恶意程序及恶意替换</div></pre></td></tr></table></figure>
+<blockquote>
+<p>查看linux自身的网络连接，并定位可疑程序的PID</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat  -antpl</div></pre></td></tr></table></figure>
+<blockquote>
+<p>根据pid查找执行文件的及其路径</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lsof -p PID</div></pre></td></tr></table></figure>
+<blockquote>
+<p>进一步排查</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /proc/pidnumber</div><div class="line">ls -ail</div></pre></td></tr></table></figure>
+<blockquote>
+<p>杀掉对应恶意程序或进程</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1 可将/proc/pidnumber 下的恶意程序直接rm –rf</div><div class="line">2 根据进程号直接杀死进程 kill -9 pidnumber</div></pre></td></tr></table></figure>
+<blockquote>
+<p>其他一些可能用到的命令</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1 分析access.log获得访问前10位的ip地址</div><div class="line">awk &apos;&#123;print $1&#125;&apos; access.log |sort|uniq -c|sort -nr|head -10</div><div class="line">2 查看连接某服务端口最多的的IP地址</div><div class="line">netstat -nat | grep &quot;192.168.1.15:1234&quot; |awk &apos;&#123;print $5&#125;&apos;|awk -F: &apos;&#123;print $1&#125;&apos;|sort|uniq -c|sort -nr|head -20</div></pre></td></tr></table></figure>
+<h1 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h1><h2 id="一些框架-工具"><a href="#一些框架-工具" class="headerlink" title="一些框架(工具)"></a>一些框架(工具)</h2><h3 id="内存取证工具"><a href="#内存取证工具" class="headerlink" title="内存取证工具"></a>内存取证工具</h3><blockquote>
+<p>Volatility  <a href="https://github.com/volatilityfoundation/volatility" target="_blank" rel="external">Github</a><br>介绍：<a href="http://www.freebuf.com/articles/system/26763.html" target="_blank" rel="external">http://www.freebuf.com/articles/system/26763.html</a></p>
+<h3 id="获取木马配置文件"><a href="#获取木马配置文件" class="headerlink" title="获取木马配置文件"></a>获取木马配置文件</h3><p>通过python脚本来获取木马中的配置文件，诸如ftp、ssh等信息，反向对黑客进行攻击。目前支持Adwind、Adzok、Albertino Advanced RAT等40多个木马。<br>RATDecoders  <a href="https://github.com/kevthehermit/RATDecoders" target="_blank" rel="external">Github</a></p>
+<h3 id="远程现场取证的事件应急响应框架"><a href="#远程现场取证的事件应急响应框架" class="headerlink" title="远程现场取证的事件应急响应框架"></a>远程现场取证的事件应急响应框架</h3><p>一个被安装在目标系统的Python 代理客户端，可以对Python基础设施进行管理和交流。<br>GRR Rapid Response    <a href="https://github.com/google/grr/tree/gh-pages" target="_blank" rel="external">Github</a></p>
+<h3 id="隐藏进程检测工具"><a href="#隐藏进程检测工具" class="headerlink" title="隐藏进程检测工具"></a>隐藏进程检测工具</h3><p><a href="https://security.tencent.com/index.php/opensource/detail/16" target="_blank" rel="external">Linux Rootkit (vfs hook) </a>是一个linux内核模块，是用于检测rootkit的一个小demo。通过读取此内核模块创建的虚拟文件，可检测通过Hook vfs 函数来隐藏的进程。大家可把他作为一个单一的检测工具，也可以集成到诸如OSSEC等HIDS里，通过周期性任务触发来检测并上报可疑事件。</p>
+<h3 id="使用方法："><a href="#使用方法：" class="headerlink" title="使用方法："></a>使用方法：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">照例就是解压之后 编译加载就好。</div><div class="line">unzip process_list.zip;cd process_list;make;make install</div></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><h3 id="系统："><a href="#系统：" class="headerlink" title="系统："></a>系统：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">uname -a     查看内核/操作系统/CPU信息</div><div class="line">cat /etc/issue</div><div class="line">cat /etc/redhat-release   查看操作系统版本</div><div class="line">cat /proc/cpuinfo    查看CPU信息</div><div class="line">hostname     查看计算机名</div><div class="line">lspci -tv     列出所有PCI设备</div><div class="line">lsusb -tv     列出所有USB设备</div><div class="line">lsmod      列出加载的内核模块</div><div class="line">env      查看环境变量</div></pre></td></tr></table></figure>
+<h3 id="资源："><a href="#资源：" class="headerlink" title="资源："></a>资源：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">free -m     查看内存使用量和交换区使用量</div><div class="line">df -h      查看各分区使用情况</div><div class="line">du -sh &lt;目录名&gt;    查看指定目录的大小</div><div class="line">grep MemTotal /proc/meminfo   查看内存总量</div><div class="line">grep MemFree /proc/meminfo   查看空闲内存量</div><div class="line">uptime     查看系统运行时间、用户数、负载</div><div class="line">cat /proc/loadavg    查看系统负载</div></pre></td></tr></table></figure>
+<h3 id="磁盘和分区："><a href="#磁盘和分区：" class="headerlink" title="磁盘和分区："></a>磁盘和分区：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mount | column -t    查看挂接的分区状态</div><div class="line">fdisk -l     查看所有分区</div><div class="line">swapon -s     查看所有交换分区</div><div class="line">hdparm -i /dev/hda    查看磁盘参数(仅适用于IDE设备)</div><div class="line">dmesg | grep IDE    查看启动时IDE设备检测状况</div></pre></td></tr></table></figure>
+<h3 id="网络："><a href="#网络：" class="headerlink" title="网络："></a>网络：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ifconfig     查看所有网络接口的属性</div><div class="line">iptables -L     查看防火墙设置</div><div class="line">route -n     查看路由表</div><div class="line">netstat -lntp     查看所有监听端口</div><div class="line">netstat -antp     查看所有已经建立的连接</div><div class="line">netstat -s     查看网络统计信息</div></pre></td></tr></table></figure>
+<h3 id="进程："><a href="#进程：" class="headerlink" title="进程："></a>进程：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ps -ef     查看所有进程</div><div class="line">top      实时显示进程状态（另一篇文章里面有详细的介绍）</div></pre></td></tr></table></figure>
+<blockquote>
+<p>ps命令可以列出正在运行的进程。以下命令可以列出当前系统上所有正在运行的进程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -A</div></pre></td></tr></table></figure></p>
+<p>这个命令列出的信息也许太多，不便于查看。你可以使用less命令通过一个管道输出，分页查看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -A | less</div></pre></td></tr></table></figure></p>
+<p>你也可以使用grep来对来做管道输出，查找出某个进程。例如，查找Firefox进程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -A | grep firefox</div></pre></td></tr></table></figure></p>
+<p>以树形显示进程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pstree命令同样可以显示进程信息，不过它是以树形式显示进程。</div></pre></td></tr></table></figure></p>
+<p>pgrep<br>给定一个搜索关键词，pgrep命令会返回所有匹配这个关键词的进程ID。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"> pgrep iceweasel    </div><div class="line">2074</div></pre></td></tr></table></figure></p>
+<p>也可以将这个命令与kill命令结合起来干掉一个特定的进程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~  kill $(pgrep iceweasel)</div><div class="line">➜  ~</div></pre></td></tr></table></figure></p>
+<p>或者使用</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~  pkill iceweasel</div><div class="line">➜  ~</div></pre></td></tr></table></figure>
+<h3 id="用户："><a href="#用户：" class="headerlink" title="用户："></a>用户：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">w      查看活动用户</div><div class="line">id &lt;用户名&gt;     查看指定用户信息</div><div class="line">last      查看用户登录日志</div><div class="line">cut -d: -f1 /etc/passwd   查看系统所有用户</div><div class="line">cut -d: -f1 /etc/group   查看系统所有组</div><div class="line">crontab -l     查看当前用户的计划任务</div></pre></td></tr></table></figure>
+<h3 id="服务："><a href="#服务：" class="headerlink" title="服务："></a>服务：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chkconfig –list    列出所有系统服务</div><div class="line">chkconfig –list | grep on   列出所有启动的系统服务</div></pre></td></tr></table></figure>
+<h3 id="程序："><a href="#程序：" class="headerlink" title="程序："></a>程序：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -qa     查看所有安装的软件包</div></pre></td></tr></table></figure>
+<h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><p><a href="http://www.freebuf.com/articles/system/50728.html" target="_blank" rel="external"> Linux入侵取证：从一次应急事件讲起 </a><br><a href="http://drops.wooyun.org/tips/4731" target="_blank" rel="external">Linux下基于内存分析的Rootkit检测方法</a><br><a href="http://mp.weixin.qq.com/s?src=3&amp;timestamp=1465201686&amp;ver=1&amp;signature=L1C7usG9nhuvVUS9dkoQ4L0C3uwt3mRI*sGWWChs3izNvMLlZGsDu6vZp0gpTnKRGlexFK16AZvIYiAcmOMATagCQk5ztoAKSux1OYqJv8O-28xlFiKm-aSQHMK3NzaG3sxjhjvZ1StjpW10xW28IA==" target="_blank" rel="external"> 如何分析 Linux 日志 </a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/sec/" class="article-tag-list-link color4">sec</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/sec/Linux取证分析/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Node-js学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1078,100 +1346,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Perl-学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/others/Perl-学习笔记/">Perl 学习笔记</a>
-    </h1>
-  
-
-        
-        <a href="/others/Perl-学习笔记/" class="archive-article-date">
-  	<time datetime="2015-08-10T03:25:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-08-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="交互式环境"><a href="#交互式环境" class="headerlink" title="交互式环境"></a>交互式环境</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜  ~ perl -e</div><div class="line">No code specified for -e.</div><div class="line">➜  ~ perl -e &apos;print &quot;Hello World&quot;&apos;</div><div class="line">Hello World%                                                                    </div><div class="line">➜  ~ perl -e &apos;print &quot;Hello World\n&quot;&apos;</div><div class="line">Hello World</div></pre></td></tr></table></figure>
-<h1 id="脚本式编程与注射"><a href="#脚本式编程与注射" class="headerlink" title="脚本式编程与注射"></a>脚本式编程与注射</h1><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/perl</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#This is single-line comments.</span></div><div class="line"><span class="keyword">print</span> <span class="string">"Hello, World\n"</span>;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">=pod comments</span></div><div class="line">This is multiline comment</div><div class="line">This is multiline comment</div><div class="line">This is multiline comment</div><div class="line">This is multiline comment</div><div class="line">=cut</div></pre></td></tr></table></figure>
-<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><blockquote>
-<p>Perl 是一种弱类型语言，所以变量不需要指定类型，Perl 解释器会根据上下文自动选择匹配类型。<br>三个基本的数据类型：标量、数组、哈希<br>Perl 为每个变量类型设置了独立的命令空间，所以不同类型的变量可以使用相同的名称，如 $foo 和 @foo 是两个不同的变量。</p>
-<h2 id="标量"><a href="#标量" class="headerlink" title="标量"></a>标量</h2><p>在变量名前加$表示是标量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#number</div><div class="line">$my_number=123;</div><div class="line"></div><div class="line">#string</div><div class="line">$my_str=&quot;123&quot;;</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h3 id="标量运算"><a href="#标量运算" class="headerlink" title="标量运算"></a>标量运算</h3><blockquote>
-<p>.可以用来链接两个标量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">print ( &quot;$my_number . $my_str\n&quot;);</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h3 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h3><blockquote>
-<p>分别表示当前执行脚本的文件名，行号，包名。<br>这些特殊字符是单独的标记，不能写在字符串中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">print &quot;FileName:&quot; . &quot;\t&quot;.__FILE__.&quot;\n&quot;;</div><div class="line">print &quot;LineNumber:&quot; . &quot;\t&quot;.__LINE__.&quot;\n&quot;;</div><div class="line">print &quot;PackageName:&quot; . &quot;\t&quot;.__PACKAGE__.&quot;\n&quot;;</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">FileName:	run.pl</div><div class="line">LineNumber:	28</div><div class="line">PackageName:	main</div></pre></td></tr></table></figure>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><blockquote>
-<p>数组变量以字符”@”开头，索引从0开始<br>也可以以 qw 开始定义数组</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@arr=(2,3,5);</div><div class="line">print @arr[2];</div><div class="line">@array = qw/这是 一个 数组/;</div></pre></td></tr></table></figure>
-<h3 id="数组序列号"><a href="#数组序列号" class="headerlink" title="数组序列号"></a>数组序列号</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">➜  ~ perl -e &quot;print(&quot;1..10&quot;,&quot;\n&quot;)&quot;</div><div class="line">12345678910n%</div></pre></td></tr></table></figure>
-<h2 id="哈希"><a href="#哈希" class="headerlink" title="哈希"></a>哈希</h2><blockquote>
-<p>哈希是一个无序的 key/value 对集合。可以使用键作为下标获取值<br>类似Python的字典<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">%hash=(&apos;name&apos;=&gt;&apos;LongLi&apos;,&apos;age&apos;=&gt;18);</div><div class="line">print  (%hash&#123;&apos;name&apos;&#125;, &quot;\n&quot;);</div><div class="line">print  (%hash&#123;&apos;age&apos;&#125;, &quot;\n&quot;);</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  test  ./run.pl  </div><div class="line">Hello, World</div><div class="line">nameLongLi</div><div class="line">age18</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Perl</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/others/" class="article-tag-list-link color2">others</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/others/Perl-学习笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1257,19 +1431,11 @@ var _hmt = _hmt || [];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">OSSEC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1281,7 +1447,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color3">安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Metasploit</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1289,15 +1459,31 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Maltego</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据挖掘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">社工</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">LVM</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
+                <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1313,15 +1499,7 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1329,11 +1507,23 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">提权</a>
+                <a href="javascript:void(0)" class="js-tag color1">TensorFlow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">hydra</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">提权</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1342,10 +1532,6 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">zabbix</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">
